@@ -1,12 +1,11 @@
-
-import Preloader from "./Preloader.js";
+import Preloader from "./scenes/Preloader.js";
 import Game from './game.js';
 
 export default new Phaser.Game({
     type: Phaser.AUTO,
     parent: 'app',
-    width: 800,
-    height: 600,
+    width: 800, //width mapy - 8000
+    height: 524,//height mapy - 5248
     physics: {
         default: 'arcade',
         arcade: {
@@ -16,6 +15,8 @@ export default new Phaser.Game({
     },
     scene: [Preloader, Game],
     scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
         zoom: 1
     }
 });
