@@ -2,16 +2,22 @@
 const express = require("express")
 const cors = require('cors')
 const app = express()
-const db = require("../database/database.js");
-
+const db = require("../../test2/database.js");
+const path = require('path');
 //server CORS
 app.use(cors())
 
 // Server port
-const HTTP_PORT = 8000
+const HTTP_PORT = 8080
 // Start server
 app.listen(HTTP_PORT, () => {
     console.log("Server running on port %PORT%".replace("%PORT%",HTTP_PORT))
+});
+// Statyczne pliki z gry Phaser
+app.use('/game', express.static(path.join(__dirname, '../GeoBoat')));
+
+app.get('/game', function (req, res) {
+    res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 app.get('/baza', (req, res) => {

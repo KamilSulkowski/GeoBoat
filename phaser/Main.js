@@ -1,7 +1,6 @@
-import Phaser from 'phaser';
 
 import Preloader from "./Preloader.js";
-import Game from '../phaser/Game.js';
+import Game from './Game.js';
 
 export default new Phaser.Game({
     type: Phaser.AUTO,
