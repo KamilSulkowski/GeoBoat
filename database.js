@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose()
 const md5 = require('md5')
 
-const DBSOURCE = "../GeoBoat/database/testowabaza2.sqlite"
+const DBSOURCE = "../GeoBoat/database/baza.sqlite"
 
 let db = new sqlite3.Database(DBSOURCE, (err) => {
     if (err) {
