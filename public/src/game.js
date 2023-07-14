@@ -1,10 +1,12 @@
-
 export default class Game extends Phaser.Scene {
     constructor() {
         super('game');
         this.boatSpeed = 0; //Zmienna do ustawiania prędkości łódki
         this.timer = 0;     //Zmienna do przeliczania czasu (używana przy łodzi atm)
         this.engine = 0;    //Zmienna do sprawdzania stanu rozpędu/hamowania łodzi
+        this.inZone = false;
+        this.text = null;
+
     }
     Preload(){
 
@@ -18,9 +20,24 @@ export default class Game extends Phaser.Scene {
 
         // Ustawienie łódki na środek ekranu
         this.boat = this.physics.add.sprite(bw * 0.5, bh * 0.5, "boat");
-
+        this.boat.setBounce(1, 1);
+        this.boat.setCollideWorldBounds(true);
         // Druga łódka do testów
         this.boat2 = this.physics.add.sprite((bw * 0.5) + 200, (bh * 0.5) + 200, "boat");
+
+        //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
+        //obiektem aktualnie może być łódka
+
+        this.physics.add.overlap(this.boat, this.boat2, () => {
+            this.inZone = true;
+            if (this.inZone === true && !this.text) {
+                this.text = this.add.text(this.boat2.x + 0 ,this.boat2.y - 50, 'Czy chcesz wejść na region ?')
+                    .setScale(1.5)
+                    .setBackgroundColor('#808080')
+                    .setColor('#000000')
+                    .setStyle({fontFamily: "Arial"});
+            }
+        });
     
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
@@ -43,6 +60,14 @@ export default class Game extends Phaser.Scene {
 
         this.cameras.main.startFollow(this.boat);
 
+        // Sprawdzenie, czy łódka opuściła obszar kolizji
+        this.inZone = false;
+        if (!this.inZone && !this.physics.overlap(this.boat, this.boat2)) {
+            if (this.text) {
+                this.text.destroy();
+                this.text = null;
+            }
+        }
         // Koordynaty środka kamery
         //console.log(this.cameras.main.midPoint)
     }
@@ -62,7 +87,7 @@ export default class Game extends Phaser.Scene {
         }
         if(this.keys.up?.isDown){
             // Jeżeli łódź się cofa, zatrzymaj ją
-            if(this.boatSpeed == -0.25 && this.timer >= 500){
+            if(this.boatSpeed === -0.25 && this.timer >= 500){
                 this.boatSpeed = 0;
                 this.timer = 0;
             } // Poruszanie łodzi (Rozpędzanie w czasie)
@@ -109,4 +134,5 @@ export default class Game extends Phaser.Scene {
             this.boat.x -= this.boatSpeed *dx;
         }
     }
+
 }
