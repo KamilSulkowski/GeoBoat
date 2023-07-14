@@ -2,13 +2,16 @@ export default class Game extends Phaser.Scene {
     constructor() {
         super('game');
         this.boatSpeed = 0; //Zmienna do ustawiania prędkości łódki
+        this.boatMaxSpeed = 4 // Maksymalna prędkość łodzi
+        this.boatMaxReverseSpeed = -0.5 // Maksymalna prędkość cofania łodzi
         this.timer = 0;     //Zmienna do przeliczania czasu (używana przy łodzi atm)
         this.engine = 0;    //Zmienna do sprawdzania stanu rozpędu/hamowania łodzi
-        this.inZone = false;
-        this.text = null;
+        this.inZone = false;//Flaga kolizji
+        this.text = null;   //Tekst wyświetlany po wjechaniu w inny obiekt (Port)
+        this.adrift = 0;    //Zmienna do kolizji odbicia
 
     }
-    Preload(){
+    preload(){
 
     }
 
@@ -18,16 +21,13 @@ export default class Game extends Phaser.Scene {
         const bw = this.cameras.main.width; // width main kamery
         const bh = this.cameras.main.height;// height main kamery
 
-        // Ustawienie łódki na środek ekranu
+        // Dodanie łódek (Łódź gracza i inne do testów)
         this.boat = this.physics.add.sprite(bw * 0.5, bh * 0.5, "boat");
-        this.boat.setBounce(1, 1);
-        this.boat.setCollideWorldBounds(true);
-        // Druga łódka do testów
         this.boat2 = this.physics.add.sprite((bw * 0.5) + 200, (bh * 0.5) + 200, "boat");
-
+        this.boat_collider = this.physics.add.sprite((bw * 0.5) + -100, (bh * 0.5), "boat");
+        
         //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
         //obiektem aktualnie może być łódka
-
         this.physics.add.overlap(this.boat, this.boat2, () => {
             this.inZone = true;
             if (this.inZone === true && !this.text) {
@@ -38,6 +38,10 @@ export default class Game extends Phaser.Scene {
                     .setStyle({fontFamily: "Arial"});
             }
         });
+        
+        // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
+        this.boat.setCollideWorldBounds(true);
+        this.physics.add.collider(this.boat, this.boat_collider, this.handleCollision, null, this);
     
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
@@ -49,7 +53,12 @@ export default class Game extends Phaser.Scene {
         // Poprawka: Ustawienie środka kamery na pozycję łodzi
         this.cameras.main.centerOn(this.boat.x, this.boat.y);
     }
-
+    // Funkcja kolizji, odbicie od lądu
+    handleCollision(){
+        console.log("KOLIZJA");
+        this.boatSpeed = -1;
+        this.adrift = 1;
+    }
     update(time, delta) {
         super.update(time, delta);
         this.timer += delta;
@@ -58,6 +67,7 @@ export default class Game extends Phaser.Scene {
         this.moveBoat(this.timer);
         this.boatEngine(this.engine, this.timer);
 
+        // Podążanie kamery
         this.cameras.main.startFollow(this.boat);
 
         // Sprawdzenie, czy łódka opuściła obszar kolizji
@@ -79,7 +89,18 @@ export default class Game extends Phaser.Scene {
         direction.setToPolar(this.boat.rotation, 1);
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
-
+        // Wyhamowanie przy dryfowaniu (odbiciu od lądu)
+        if(this.adrift === 1 && this.boatSpeed <= 0){
+            if(this.timer >= 100){
+                this.boatSpeed += 0.1;
+                this.timer = 0;
+            }
+            if(this.boatSpeed >= 0.001){
+                this.boatSpeed = 0;
+                this.adrift = 0;
+            }
+        }
+        // Obracanie
         if(this.keys.left?.isDown){
             this.boat.angle -= this.boatSpeed / 2;
         }else if(this.keys.right?.isDown){
@@ -107,21 +128,24 @@ export default class Game extends Phaser.Scene {
             this.engine = true;
         }
         if(this.keys.down?.isDown){
-            // Zatrzymywanie łodzi ("zrzucanie kotwicy")
-            if(this.boatSpeed > 0){
-                if(this.timer >= 100){
-                    this.boatSpeed -= 0.25;
-                    this.timer = 0;
-                    // Cofanie
-                    if(this.boatSpeed < 0){
-                        this.boatSpeed = -0.25;
-                        console.log(this.boatSpeed)
-                    }
+            //Zatrzymywanie/cofanie
+            this.boatStop()
+        }
+    }
+    // funkcja do zatrzymywania i cofania łodzi
+    boatStop(){
+        if(this.boatSpeed > 0){
+            if(this.timer >= 100){
+                this.boatSpeed -= 0.25;
+                this.timer = 0;
+                // Cofanie
+                if(this.boatSpeed < 0){
+                    this.boatSpeed = this.boatMaxReverseSpeed;
+                    console.log(this.boatSpeed)
                 }
             }
         }
     }
-
     // funkcja do utrzymywania prędkości łodzi
     boatEngine(engine, timer){
         // Wektor do sprawdzania rotacji łódki
