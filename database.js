@@ -1,5 +1,4 @@
 const sqlite3 = require('sqlite3').verbose()
-const md5 = require('md5')
 
 const DBSOURCE = "../GeoBoat/database/baza.sqlite"
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors')
 const app = express();
+const db = require('./database');
 
 //server CORS
 app.use(cors())
@@ -19,6 +20,23 @@ app.use(express.static('public'));
 app.get('/game', (req, res) => {
     res.sendFile('index.html');
 });
+
+app.get('/data', (req, res) => {
+    let sql = "SELECT * FROM odpowiedz";
+    let params = [];
+
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            res.status(401).json({"error":err.message});
+            return;
+        }
+        res.json({
+            "message":"success",
+            "data":rows
+        })
+    });
+});
+
 
 app.use(function(req, res){
     res.status(404);
