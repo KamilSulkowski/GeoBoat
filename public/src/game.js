@@ -16,17 +16,21 @@ export default class Game extends Phaser.Scene {
         const bw = this.cameras.main.width; // width main kamery
         const bh = this.cameras.main.height;// height main kamery
 
-        // ustawia wielkość kamery
-        this.cameras.main.setBounds(0, 0, 800, 600);
-
         // Ustawienie łódki na środek ekranu
         this.boat = this.physics.add.sprite(bw * 0.5, bh * 0.5, "boat");
-        
+
         // Druga łódka do testów
         this.boat2 = this.physics.add.sprite((bw * 0.5) + 200, (bh * 0.5) + 200, "boat");
     
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
+
+        // Ustawienie granic kamery na obszar gry
+        // Poprawka: Użyj pełnych wymiarów mapy, a nie wartości stałych
+        this.cameras.main.setBounds(0, 0, 8000, 5248);
+
+        // Poprawka: Ustawienie środka kamery na pozycję łodzi
+        this.cameras.main.centerOn(this.boat.x, this.boat.y);
     }
 
     update(time, delta) {
@@ -37,7 +41,6 @@ export default class Game extends Phaser.Scene {
         this.moveBoat(this.timer);
         this.boatEngine(this.engine, this.timer);
 
-        // kamera śledzi gracza
         this.cameras.main.startFollow(this.boat);
 
         // Koordynaty środka kamery
