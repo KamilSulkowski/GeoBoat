@@ -21,8 +21,8 @@ app.get('/game', (req, res) => {
     res.sendFile('index.html');
 });
 
-app.get('/data', (req, res) => {
-    let sql = "SELECT * FROM odpowiedz";
+app.get('/data/regiony', (req, res) => {
+    let sql = "SELECT * FROM region";
     let params = [];
 
     db.all(sql, params, (err, rows) => {
@@ -37,6 +37,80 @@ app.get('/data', (req, res) => {
     });
 });
 
+app.get('/data/kategorie', (req, res) => {
+    let sql = "SELECT * FROM kategoria";
+
+    db.all(sql, (err, rows) => {
+        if (err) {
+            res.status(401).json({"error":err.message});
+            return;
+        }
+        res.json({
+            "message":"success",
+            "data":rows
+        })
+    });
+});
+
+app.get('/data/pytania', (req, res) => {
+    let sql = "SELECT * FROM pytanie";
+
+    db.all(sql, (err, rows) => {
+        if (err) {
+            res.status(401).json({"error":err.message});
+            return;
+        }
+        res.json({
+            "message":"success",
+            "data":rows
+        })
+    });
+});
+
+app.get('/data/odpowiedzi', (req, res) => {
+    let sql = "SELECT * FROM odpowiedz";
+
+    db.all(sql, (err, rows) => {
+        if (err) {
+            res.status(401).json({"error":err.message});
+            return;
+        }
+        res.json({
+            "message":"success",
+            "data":rows
+        })
+    });
+});
+
+app.get('/data/uzytkownicy', (req, res) => {
+    let sql = "SELECT * FROM uzytkownik";
+
+    db.all(sql, (err, rows) => {
+        if (err) {
+            res.status(401).json({"error":err.message});
+            return;
+        }
+        res.json({
+            "message":"success",
+            "data":rows
+        })
+    });
+});
+
+app.get('/data/wynik', (req, res) => {
+    let sql = "SELECT * FROM wynik";
+
+    db.all(sql, (err, rows) => {
+        if (err) {
+            res.status(401).json({"error":err.message});
+            return;
+        }
+        res.json({
+            "message":"success",
+            "data":rows
+        })
+    });
+});
 
 app.use(function(req, res){
     res.status(404);
