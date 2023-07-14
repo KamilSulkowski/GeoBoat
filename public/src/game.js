@@ -59,8 +59,13 @@ export default class Game extends Phaser.Scene {
         }
         if(this.keys.up?.isDown){
             // Poruszanie łodzi (Rozpędzanie w czasie)
+            if(this.boatSpeed == -0.25 && this.timer >= 500){
+                this.boatSpeed = 0;
+                this.timer = 0;
+            }
             if(this.boatSpeed <= 4){
                 if(this.timer >= 100){
+                    console.log(this.timer)
                     this.boatSpeed += 0.1;
                     this.boat.y -= this.boatSpeed *dy;
                     this.boat.x -= this.boatSpeed *dx;
@@ -80,7 +85,8 @@ export default class Game extends Phaser.Scene {
                     this.boatSpeed -= 0.25;
                     this.timer = 0;
                     if(this.boatSpeed < 0){
-                        this.boatSpeed = 0;
+                        this.boatSpeed = -0.25;
+                        console.log(this.boatSpeed)
                     }
                 }
             }
