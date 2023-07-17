@@ -9,23 +9,23 @@ export default class Game extends Phaser.Scene {
         this.inZone = false;//Flaga kolizji
         this.text = null;   //Tekst wyświetlany po wjechaniu w inny obiekt (Port)
         this.adrift = 0;    //Zmienna do kolizji odbicia
-
+        this.currentMap = 'worldMap'; //Zmienna do zapamiętywania na jakiej mapie jest gracz
     }
     preload(){
 
     }
 
     create(){
-        // Ustawienie tła na niebieskie
-        this.cameras.main.setBackgroundColor('#87CEEB');
+
         const bw = this.cameras.main.width; // width main kamery
         const bh = this.cameras.main.height;// height main kamery
 
         // Dodanie łódek (Łódź gracza i inne do testów)
         this.boat = this.physics.add.sprite(bw * 0.5, bh * 0.5, "boat");
-        this.boat2 = this.physics.add.sprite((bw * 0.5) + 200, (bh * 0.5) + 200, "boat");
+        this.boat2 = this.physics.add.sprite((bw * 0.5) + 50, (bh * 0.5) , "boat");
         this.boat_collider = this.physics.add.sprite((bw * 0.5) + -100, (bh * 0.5), "boat");
-        
+        this.add.existing(this.boat);
+        this.add.existing(this.boat2);
         //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
         //obiektem aktualnie może być łódka
         this.physics.add.overlap(this.boat, this.boat2, () => {
@@ -36,13 +36,17 @@ export default class Game extends Phaser.Scene {
                     .setBackgroundColor('#808080')
                     .setColor('#000000')
                     .setStyle({fontFamily: "Arial"});
+                const keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+                keyE.on('down', () => {
+                    this.changeMap();
+                });
             }
         });
-        
+
         // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
         this.boat.setCollideWorldBounds(true);
         this.physics.add.collider(this.boat, this.boat_collider, this.handleCollision, null, this);
-    
+
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
 
@@ -52,7 +56,24 @@ export default class Game extends Phaser.Scene {
 
         // Poprawka: Ustawienie środka kamery na pozycję łodzi
         this.cameras.main.centerOn(this.boat.x, this.boat.y);
+
     }
+
+    //Funckja zmiany mapy po kliknięciu przycisku E
+    changeMap(){
+        console.log("zmiana mapy: " + this.currentMap + " inzone: " + this.inZone);
+        if (this.currentMap === 'worldMap') {
+            this.scene.stop('worldMap');
+
+            this.currentMap = 'regions';
+        } else if (this.currentMap === 'regions') {
+            this.scene.stop('regions');
+
+            this.currentMap = 'worldMap';
+        }
+    }
+
+
     // Funkcja kolizji, odbicie od lądu
     handleCollision(){
         console.log("KOLIZJA");
@@ -62,14 +83,12 @@ export default class Game extends Phaser.Scene {
     update(time, delta) {
         super.update(time, delta);
         this.timer += delta;
-
         // Poruszanie łodzią
         this.moveBoat(this.timer);
         this.boatEngine(this.engine, this.timer);
-
         // Podążanie kamery
         this.cameras.main.startFollow(this.boat);
-
+        console.log(this.currentMap);
         // Sprawdzenie, czy łódka opuściła obszar kolizji
         this.inZone = false;
         if (!this.inZone && !this.physics.overlap(this.boat, this.boat2)) {

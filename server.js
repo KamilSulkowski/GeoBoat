@@ -8,10 +8,6 @@ app.use(cors())
 
 // Server port
 const HTTP_PORT = 8081
-// Start server
-app.listen(HTTP_PORT, () => {
-    console.log("Server running on port %PORT%".replace("%PORT%",HTTP_PORT))
-});
 
 // Udostępnianie plików statycznych z folderu public
 app.use(express.static('public'));
@@ -40,4 +36,8 @@ app.get('/data', (req, res) => {
 
 app.use(function(req, res){
     res.status(404);
+});
+// Start server
+app.listen(HTTP_PORT, () => {
+    console.log("Server running on port %PORT%".replace("%PORT%",HTTP_PORT))
 });

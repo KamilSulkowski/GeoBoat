@@ -1,22 +1,23 @@
 import Preloader from "./scenes/Preloader.js";
 import Game from './game.js';
+import {Regions} from "./regions.js";
+import {WorldMap} from "./worldMap.js";
 
 export default new Phaser.Game({
     type: Phaser.AUTO,
     parent: 'app',
-    width: 1920, //width mapy - 8000
-    height: 1080,//height mapy - 5248
+    width: window.innerWidth, //width mapy - 8000
+    height: window.innerHeight,//height mapy - 5248
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: true
+            debug: false
         },
     },
-    scene: [Preloader, Game],
+    scene: [Preloader, Game, Regions, WorldMap],
     scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-        zoom: 1.7
+        mode: Phaser.Scale.RESIZE,
+        autoCenter: Phaser.Scale.CENTER_BOTH
     }
 });
