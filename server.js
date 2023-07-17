@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors')
 const app = express();
 const db = require('./database');
+const fs = require('fs');
 
 //server CORS
 app.use(cors())
@@ -28,27 +29,40 @@ app.get('/data/regiony', (req, res) => {
     db.all(sql, params, (err, rows) => {
         if (err) {
             res.status(401).json({"error":err.message});
-            return;
         }
-        res.json({
-            "message":"success",
-            "data":rows
-        })
+        else {
+            const regiony = JSON.stringify(rows);
+            fs.writeFile('./public/json_files/regiony.json', regiony, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    res.json(rows);
+                }
+            });
+        }
     });
 });
 
 app.get('/data/kategorie', (req, res) => {
     let sql = "SELECT * FROM kategoria";
+    let params = [];
 
-    db.all(sql, (err, rows) => {
+    db.all(sql, params, (err, rows) => {
         if (err) {
             res.status(401).json({"error":err.message});
-            return;
         }
-        res.json({
-            "message":"success",
-            "data":rows
-        })
+        else {
+            const kategorie = JSON.stringify(rows);
+            fs.writeFile('./public/json_files/kategorie.json', kategorie, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    res.json(rows);
+                }
+            });
+        }
     });
 });
 
@@ -109,6 +123,26 @@ app.get('/data/wynik', (req, res) => {
             "message":"success",
             "data":rows
         })
+    });
+});
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+app.post('/data/region/insert', (req, res) => {
+
+    const region = {
+        nazwa: req.body.nazwa
+    };
+
+    let sql = "INSERT INTO region (nazwa) VALUES (?)";
+
+    db.run(sql, [region.nazwa], function (err) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            res.status(200).send('Data inserted successfully');
+        }
     });
 });
 
