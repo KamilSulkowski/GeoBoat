@@ -54,6 +54,7 @@ export default class Game extends Phaser.Scene {
         // Poprawka: Ustawienie środka kamery na pozycję łodzi
         this.cameras.main.centerOn(this.boat.x, this.boat.y);
 
+        // Przykładowy zapis danych
         const dane = {
             nazwa: 'Polska'
         };
@@ -66,22 +67,20 @@ export default class Game extends Phaser.Scene {
         })
             .then(response => {
                 if (response.ok) {
-                    console.log('Data inserted successfully');
-                    // Handle success
+                    console.log('Dane zapisane pomyślnie');
                 } else {
                     console.error('Error:', response.statusText);
-                    // Handle error
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                // Handle error
             });
 
-
+        // Przykładowe wypisanie kategorii
         const kategorie = this.cache.json.get('kategorie');
         this.add.text(200, 200, kategorie[0].nazwa, { fontFamily: 'Arial', fontSize: 24, color: '#000000' });
 
+        //Przykładowe wypisanie regionu
         const regiony = this.cache.json.get('regiony');
         this.add.text(400, 400, regiony[0].nazwa, { fontFamily: 'Arial', fontSize: 24, color: '#000000' });
     }

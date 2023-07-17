@@ -3,13 +3,15 @@ const cors = require('cors')
 const app = express();
 const db = require('./database');
 const fs = require('fs');
+const bodyParser = require('body-parser');
 
-//server CORS
+app.use(bodyParser.json());
+
 app.use(cors())
 
-// Server port
+// Port serwera
 const HTTP_PORT = 8081
-// Start server
+// Start serwera
 app.listen(HTTP_PORT, () => {
     console.log("Server running on port %PORT%".replace("%PORT%",HTTP_PORT))
 });
@@ -125,8 +127,6 @@ app.get('/data/wynik', (req, res) => {
         })
     });
 });
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
 
 app.post('/data/region/insert', (req, res) => {
 
@@ -139,9 +139,9 @@ app.post('/data/region/insert', (req, res) => {
     db.run(sql, [region.nazwa], function (err) {
         if (err) {
             console.error(err);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send('Error');
         } else {
-            res.status(200).send('Data inserted successfully');
+            res.status(200).send('Dane zapisane poprawnie');
         }
     });
 });
