@@ -12,7 +12,8 @@ export default class Game extends Phaser.Scene {
 
     }
     preload(){
-
+        this.load.json('regiony', '../json_files/regiony.json');
+        this.load.json('kategorie', '../json_files/kategorie.json');
     }
 
     create(){
@@ -52,6 +53,37 @@ export default class Game extends Phaser.Scene {
 
         // Poprawka: Ustawienie środka kamery na pozycję łodzi
         this.cameras.main.centerOn(this.boat.x, this.boat.y);
+
+        const dane = {
+            nazwa: 'Polska'
+        };
+        fetch('/data/region/insert', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dane)
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Data inserted successfully');
+                    // Handle success
+                } else {
+                    console.error('Error:', response.statusText);
+                    // Handle error
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error
+            });
+
+
+        const kategorie = this.cache.json.get('kategorie');
+        this.add.text(200, 200, kategorie[0].nazwa, { fontFamily: 'Arial', fontSize: 24, color: '#000000' });
+
+        const regiony = this.cache.json.get('regiony');
+        this.add.text(400, 400, regiony[0].nazwa, { fontFamily: 'Arial', fontSize: 24, color: '#000000' });
     }
     // Funkcja kolizji, odbicie od lądu
     handleCollision(){
