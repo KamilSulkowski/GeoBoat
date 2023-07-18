@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "worldMap.json",
+    "activeFile": "regionMap.json",
     "automapping.whileDrawing": false,
     "expandedProjectPaths": [
         "tiled",
@@ -63,10 +63,10 @@
         },
         "regionMap.json": {
             "scale": 0.25,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 148,
-                "y": 954
+                "x": 142,
+                "y": 948
             }
         },
         "regionMap.json#tile": {
@@ -191,13 +191,13 @@
     "map.tileWidth": 16,
     "map.width": 8,
     "openFiles": [
-        "worldMap.json"
+        "regionMap.json"
     ],
     "project": "map.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "worldMap.json",
         "regionMap.json",
+        "worldMap.json",
         "tiled/test.xml",
         "tile.tsx",
         "mapa.json",
