@@ -29,17 +29,21 @@ export default class Game extends Phaser.Scene {
 
         // Dodanie łódek (Łódź gracza i inne do testów)
         this.boat = this.physics.add.sprite(cw * 0.5, ch * 0.5, "boat");
-        this.boat2 = this.physics.add.sprite((cw * 0.5) + 50, (ch * 0.5) , "boat");
-        this.boat_collider = this.physics.add.sprite((cw * 0.5) + -100, (ch * 0.5), "boat");
+        this.boat2 = this.physics.add.sprite((cw * 0.5) - 200, (ch * 0.5) , "PPH");
+        this.boat_collider = this.physics.add.sprite((cw * 0.5) - 300, (ch * 0.5), "CPH");
+        this.quiz_test = this.physics.add.sprite((cw * 0.5) , (ch * 0.5), "QPH");
 
-
+        // Zmiana obszaru kolizji dla gracza
+        this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
+        this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
+        this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
 
         //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
         //obiektem aktualnie może być łódka
         this.physics.add.overlap(this.boat, this.boat2, () => {
             this.inZone = true;
             if (this.inZone === true && !this.text) {
-                this.text = this.add.text(this.boat2.x + 0 ,this.boat2.y - 50, 'Czy chcesz wejść na region ?')
+                this.text = this.add.text(this.boat2.x + 0 ,this.boat2.y - 50, 'Wciśnij E, żeby przejść do regionu.')
                     .setScale(1.5)
                     .setBackgroundColor('#808080')
                     .setColor('#000000')
@@ -51,9 +55,28 @@ export default class Game extends Phaser.Scene {
             }
         });
 
+        //Wpływanie na quizy, alert
+        this.physics.add.overlap(this.boat, this.quiz_test, () => {
+            this.inZone = true;
+            if (this.inZone === true && !this.quizText) {
+                this.quizText = this.add.text(this.quiz_test.x + 0 ,this.quiz_test.y - 50, 'Wciśnij Q, żeby przejść do quizu.')
+                    .setScale(1.5)
+                    .setBackgroundColor('#808080')
+                    .setColor('#000000')
+                    .setStyle({fontFamily: "Arial"});
+                this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+                this.keyQ.on('down', () => {
+                    this.uiScene.toggleQuiz();
+                });
+            }
+        });
+
         // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
         //this.boat.setCollideWorldBounds(true);
         this.physics.add.collider(this.boat, this.boat_collider, this.handleCollision, null, this);
+
+        // Wejście do quizu
+        this.physics.add.collider(this.boat, this.quiz_test, this.handleQuiz, null, this);
 
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
@@ -96,6 +119,7 @@ export default class Game extends Phaser.Scene {
             this.uiScene.setHeartState()
         }
     }
+
     // Funkcje debuffa łodzi
     shipWrecked(){
         console.log("Shipwrecked")
@@ -138,6 +162,12 @@ export default class Game extends Phaser.Scene {
             if (this.text) {
                 this.text.destroy();
                 this.text = null;
+            }
+        }
+        if (!this.inZone && !this.physics.overlap(this.boat, this.quiz_test)) {
+            if (this.quizText) {
+                this.quizText.destroy();
+                this.quizText = null;
             }
         }
         // Koordynaty środka kamery

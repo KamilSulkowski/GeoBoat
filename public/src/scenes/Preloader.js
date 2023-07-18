@@ -1,5 +1,3 @@
-
-
 export default class Preloader extends Phaser.Scene {
 
     constructor() {
@@ -7,6 +5,10 @@ export default class Preloader extends Phaser.Scene {
     }
     preload() {
         this.load.spritesheet("boat", "assets/boat.png", {
+            frameWidth: 64,
+            frameHeight: 32
+        });
+        this.load.spritesheet("boatAnim", "assets/animation/boatAnimSheet.png", {
             frameWidth: 64,
             frameHeight: 32
         });
@@ -19,13 +21,17 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("menuLongBar", "assets/menuLongBar.png")
         this.load.image("rankBadge", "assets/rankBadge.png")
         this.load.image("profilePic", "assets/profilePic.png")
-        this.load.spritesheet("boatAnim", "assets/animation/boatAnimSheet.png", {
-            frameWidth: 64,
-            frameHeight: 32
-        });
         this.load.image('tiled', "assets/worldtiles.png");
+        this.load.image('fixWrench', "assets/fixWrench.png");
         this.load.tilemapTiledJSON('worldMap','Maps/worldMap.json');
         this.load.tilemapTiledJSON('regionMap', 'Maps/regionMap.json');
+
+
+
+        this.load.image("PPH", "assets/portPH.png")
+        this.load.image("CPH", "assets/collisionPH.png")
+        this.load.image("QPH", "assets/quizPH.png")
+        this.load.image('QTPH', "assets/quizTalkPH.png");
     }
     create() {
 
