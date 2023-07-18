@@ -145,7 +145,6 @@ export default class UI extends Phaser.Scene {
 
     //-------PROFIL MODAL-------
     toggleProfil() {
-        //PROFIL
         if (this.profileOpen) {
             this.closeProfil();
         } else {
@@ -159,26 +158,136 @@ export default class UI extends Phaser.Scene {
         const modalX = (this.bw - modalWidth) / 2;
         const modalY = (this.bh - modalHeight) / 2;
 
-        console.log("Profile");
         this.profileOpen = true;
-        this.profilmodal = this.add.graphics();
-        this.profilmodal.fillStyle(0xffffff, 0.95);
-        this.profilmodal.fillRoundedRect(modalX, modalY, modalWidth, modalHeight, 25);
+        this.profilModal = this.add.graphics();
+        this.profilModal.fillStyle(0xffffff, 0.95);
+        this.profilModal.fillRoundedRect(modalX, modalY, modalWidth, modalHeight, 25);
 
+        // Dodanie kwadratu po lewej górnej stronie
+        const squareSize = 150;
+        this.profilModal.fillStyle(0xcccccc, 2); // Kolor kwadratu (szary)
+        this.profilModal.fillRoundedRect(modalX+20, modalY+60, squareSize, squareSize);
+
+        // Dodanie obrazu nałożonego na kwadrat
+        this.profilePic = this.add.image(modalX+95, modalY+135, "profilePic");
+        this.profilePic.setScale(2)
+        this.profilePic.setDisplaySize(squareSize, squareSize)
+
+        // Dodanie linii pod napisem "Profil"
+        this.profilModal.fillStyle(0xCFB53B, 1); // Kolor linii (złoty)
+        this.profilModal.fillRect(modalX, modalY + 50, modalWidth,3);
+
+        // Dodanie linii nad tabelą
+        this.profilModal.fillStyle(0xCFB53B, 1); // Kolor linii (złoty)
+        this.profilModal.fillRect(modalX, modalY + 230, modalWidth,3);
+
+        //Dodanie prostokąta w którym będzie nazwa użytkownika
+        const rectWidth = 300;
+        const rectHeight = 40;
+        this.profilModal.fillStyle(0xcccccc, 2); // Kolor prostokąta (szary)
+        this.profilModal.fillRoundedRect(modalX+185, modalY+60, rectWidth, rectHeight);
+
+        //Dodanie prostokąta w którym będzie nazwa regionu
+        this.profilModal.fillStyle(0xcccccc, 2); // Kolor prostokąta (szary)
+        this.profilModal.fillRoundedRect(modalX+185, modalY+110, rectWidth, rectHeight);
+
+        //Dodanie prostokąta w którym będzie poziom użytkownika
+        this.profilModal.fillStyle(0xcccccc, 2); // Kolor prostokąta (szary)
+        this.profilModal.fillRoundedRect(modalX+185, modalY+160, rectWidth, rectHeight);
+
+        this.createTable()
+
+        // Tekst "Profil"
         this.profilText = this.add.text(modalX + modalWidth / 2, modalY + 20, 'Profil', {
             fontFamily: 'Arial',
             fontSize: '24px',
             fill: '#000000'
         });
         this.profilText.setOrigin(0.5);
+
+        // Tekst "Nazwa użytkownika"
+        this.userText = this.add.text((modalX + modalWidth / 2), modalY + 70, 'Nazwa użytkownika', {
+            fontFamily: 'Arial',
+            fontSize: '18px',
+            fill: '#000000'
+        });
+        this.profilText.setOrigin(0.5);
+
+        // Tekst "Region"
+        this.regionText = this.add.text(modalX + modalWidth / 2, modalY + 120, 'Region', {
+            fontFamily: 'Arial',
+            fontSize: '18px',
+            fill: '#000000'
+        });
+        // Tekst "Poziom"
+        this.lvlText = this.add.text(modalX + modalWidth / 2, modalY + 170, 'Poziom', {
+            fontFamily: 'Arial',
+            fontSize: '18px',
+            fill: '#000000'
+        });
     }
     closeProfil() {
         if (this.profileOpen) {
-            this.profilmodal.clear();
+            this.profilModal.clear();
             if (this.profilText) {
                 this.profilText.destroy();
             }
+            if (this.profilePic) {
+                this.profilePic.destroy();
+            }
+            if (this.tableContainer) {
+                this.tableContainer.destroy();
+            }
+            if (this.userText) {
+                this.userText.destroy();
+            }
+            if (this.regionText) {
+                this.regionText.destroy();
+            }
+            if (this.lvlText) {
+                this.lvlText.destroy();
+            }
             this.profileOpen = false;
+        }
+    }
+
+    createTable() {
+        const tableX = ((this.bw - 500) / 2)+30; // Pozycja X tabeli
+        const tableY = ((this.bh - 500) / 2)+230; // Pozycja Y tabeli
+        const cellWidth = 150; // Szerokość komórki tabeli
+        const cellHeight = 50; // Wysokość komórki tabeli
+        const numRows = 5; // Liczba wierszy w tabeli
+        const numCols = 3; // Liczba kolumn w tabeli
+
+        // Tworzenie kontenera na tabelę
+        this.tableContainer = this.add.container(tableX, tableY);
+
+        // Tworzenie tła tabeli
+        const tableBackground = this.add.graphics();
+        tableBackground.fillStyle(0xffffff);
+        tableBackground.fillRect(0, 0, cellWidth * numCols, cellHeight * numRows);
+        tableBackground.lineStyle(2, 0xCFB53B);
+        tableBackground.strokeRect(0, 0, cellWidth * numCols, cellHeight * numRows);
+        this.tableContainer.add(tableBackground);
+
+        // Tworzenie komórek tabeli
+        for (let row = 0; row < numRows; row++) {
+            for (let col = 0; col < numCols; col++) {
+                const cell = this.add.graphics();
+                cell.fillStyle(0xcccccc);
+                cell.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+                cell.lineStyle(2, 0xCFB53B);
+                cell.strokeRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+                this.tableContainer.add(cell);
+
+                const cellText = this.add.text(col * cellWidth + cellWidth / 2, row * cellHeight + cellHeight / 2, `Row ${row + 1}, Col ${col + 1}`, {
+                    fontFamily: 'Arial',
+                    fontSize: '16px',
+                    fill: '#000000'
+                });
+                cellText.setOrigin(0.5);
+                this.tableContainer.add(cellText);
+            }
         }
     }
 }

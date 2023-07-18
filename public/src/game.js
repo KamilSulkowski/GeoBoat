@@ -90,7 +90,6 @@ export default class Game extends Phaser.Scene {
                 this.inZoneKey.destroy();
             }
         }
-        console.log(this.inZone);
     }
 
 
