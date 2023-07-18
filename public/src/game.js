@@ -1,3 +1,4 @@
+import {setWynik, setOdp, zablokujPytanie, odblokujPytanie} from './data_access/data_access.js';
 
 export default class Game extends Phaser.Scene {
     constructor() {
@@ -17,10 +18,25 @@ export default class Game extends Phaser.Scene {
         this.shipDamaged = false;//Flaga stanu statku (naprawa/sprawny)
     }
     preload(){
-
+        this.load.json('regiony', '../json_files/regiony.json');
+        this.load.json('kategorie', '../json_files/kategorie.json');
+        this.load.json('pytania', '../json_files/pytania.json');
+        this.load.json('odpowiedzi', '../json_files/odpowiedzi.json');
+        this.load.json('odpowiedz_uzytkownika', '../json_files/odpowiedz_uzytkownika.json');
+        this.load.json('uzytkownicy', '../json_files/uzytkownicy.json');
+        this.load.json('wynik', '../json_files/wynik.json');
     }
 
     create(){
+        // Dane z bazy do użytku
+        const regiony = this.cache.json.get('regiony');
+        const kategorie = this.cache.json.get('kategorie');
+        const pytania = this.cache.json.get('pytania');
+        const odpowiedzi = this.cache.json.get('odpowiedzi');
+        const uzytkownicy = this.cache.json.get('uzytkownicy');
+        let odpowiedz_uzytkownika = this.cache.json.get('odpowiedz_uzytkownika');
+        let wynik = this.cache.json.get('wynik');
+
         //Pobranie wartości z pliku UI.js
         this.uiScene = this.scene.get('ui');
 
@@ -65,6 +81,9 @@ export default class Game extends Phaser.Scene {
         this.scene.sendToBack('regionMap');
         this.currentMap = 'regionMap';
 
+        // Przykładowe wypisania
+        // this.add.text(200, 200, kategorie[0].nazwa, { fontFamily: 'Arial', fontSize: 24, color: '#000000' });
+        // this.add.text(400, 400, parseInt(odpowiedz_uzytkownika[0].czasOdpowiedzi) + 1);
     }
 
     //Funckja zmiany mapy po kliknięciu przycisku E
