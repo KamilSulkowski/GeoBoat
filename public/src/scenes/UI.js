@@ -58,6 +58,7 @@ export default class UI extends Phaser.Scene {
         // Zębatka (menu - modal)
         this.menu = this.add.image(this.bw-48, this.bh-(this.bh-48), "menuCog")
         this.menu.setInteractive();
+        this.menu.on('pointerdown', this.toggleModal, this);
         this.input.keyboard.on('keydown-ESC', this.toggleModal, this);
 
         // Ranking
@@ -66,6 +67,7 @@ export default class UI extends Phaser.Scene {
         // Ikona użytkownika
         this.profilePic = this.add.image(this.bw*0.5-100, this.bh-(this.bh-48), "profilePic")
         this.profilePic.setInteractive();
+        this.profilePic.on('pointerdown', this.toggleProfil, this);
         this.input.keyboard.on('keydown-P', this.toggleProfil, this);
 
     }
