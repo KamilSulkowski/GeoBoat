@@ -4,6 +4,7 @@ export default class UI extends Phaser.Scene {
         super('ui');
         this.HP = 3; //Zmienna do sprawdzania stanu życia łodzi
         this.menuOpen = false;
+        this.profileOpen = false;
     }
     create() {
         this.gameScene = this.scene.get('game');
@@ -64,6 +65,8 @@ export default class UI extends Phaser.Scene {
 
         // Ikona użytkownika
         this.profilePic = this.add.image(this.bw*0.5-100, this.bh-(this.bh-48), "profilePic")
+        this.profilePic.setInteractive();
+        this.input.keyboard.on('keydown-P', this.toggleProfil, this);
 
     }
     // Obracanie strzałką kompasu
@@ -101,29 +104,33 @@ export default class UI extends Phaser.Scene {
             this.HP += 1;
         }
 
-        // Menu - modal
+        //-------MENU MODAL-------
         toggleModal() {
             if (this.menuOpen) {
               this.closeModal();
             } else {
               this.showModal();
             }
-          }
-        showModal() {
-            const modalWidth = 500;
-            const modalHeight = 500;
-            const modalX = (this.bw - modalWidth) / 2;
-            const modalY = (this.bh - modalHeight) / 2;
+        }
+    showModal() {
+        const modalWidth = 500;
+        const modalHeight = 500;
+        const modalX = (this.bw - modalWidth) / 2;
+        const modalY = (this.bh - modalHeight) / 2;
 
-            console.log("Modal")
-            this.menuOpen = true;
-            this.modal = this.add.graphics();
-            this.modal.fillStyle(0xffffff, 0.95);
-            this.modal.fillRoundedRect(modalX, modalY, modalWidth, modalHeight, 25);
+        console.log("Modal");
+        this.menuOpen = true;
+        this.modal = this.add.graphics();
+        this.modal.fillStyle(0xffffff, 0.95);
+        this.modal.fillRoundedRect(modalX, modalY, modalWidth, modalHeight, 25);
 
-            this.menuText = this.add.text(modalX + modalWidth / 2, modalY + 20, 'Opcje', { fontFamily: 'Arial', fontSize: '24px', fill: '#000000' });
-            this.menuText.setOrigin(0.5);
-          }
+        this.menuText = this.add.text(modalX + modalWidth / 2, modalY + 20, 'Opcje', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#000000'
+        });
+        this.menuText.setOrigin(0.5);
+    }
         closeModal() {
         if (this.menuOpen) {
             this.modal.clear();
@@ -132,5 +139,44 @@ export default class UI extends Phaser.Scene {
               }
             this.menuOpen = false;
         }
-        }  
+    }
+
+    //-------PROFIL MODAL-------
+    toggleProfil() {
+        //PROFIL
+        if (this.profileOpen) {
+            this.closeProfil();
+        } else {
+            this.showProfil();
+        }
+    }
+
+    showProfil() {
+        const modalWidth = 500;
+        const modalHeight = 500;
+        const modalX = (this.bw - modalWidth) / 2;
+        const modalY = (this.bh - modalHeight) / 2;
+
+        console.log("Profile");
+        this.profileOpen = true;
+        this.profilmodal = this.add.graphics();
+        this.profilmodal.fillStyle(0xffffff, 0.95);
+        this.profilmodal.fillRoundedRect(modalX, modalY, modalWidth, modalHeight, 25);
+
+        this.profilText = this.add.text(modalX + modalWidth / 2, modalY + 20, 'Profil', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#000000'
+        });
+        this.profilText.setOrigin(0.5);
+    }
+    closeProfil() {
+        if (this.profileOpen) {
+            this.profilmodal.clear();
+            if (this.profilText) {
+                this.profilText.destroy();
+            }
+            this.profileOpen = false;
+        }
+    }
 }
