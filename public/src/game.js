@@ -128,14 +128,14 @@ export default class Game extends Phaser.Scene {
         console.log("zmiana mapy1: " + this.currentMap + " inzone: " + this.inZone);
         if (this.currentMap === 'worldMap') {
             this.currentMap = 'regionMap';
+            this.scene.stop('worldMap');
             this.scene.launch('regionMap');
             this.scene.sendToBack('regionMap');
-            this.scene.stop('worldMap');
         } else if (this.currentMap === 'regionMap') {
             this.currentMap = 'worldMap';
+            this.scene.stop('regionMap');
             this.scene.launch('worldMap');
             this.scene.sendToBack('worldMap');
-            this.scene.stop('regionMap');
         }
         console.log("zmiana mapy2: " + this.currentMap + " inzone: " + this.inZone);
     }

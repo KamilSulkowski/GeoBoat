@@ -1,12 +1,4 @@
 { "compressionlevel":-1,
- "editorsettings":
-    {
-     "export":
-        {
-         "format":"json",
-         "target":"worldMap.tmj"
-        }
-    },
  "height":250,
  "infinite":false,
  "layers":[
