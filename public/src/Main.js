@@ -1,5 +1,6 @@
 import Preloader from "./scenes/Preloader.js";
 import Game from './game.js';
+import UI from "./scenes/UI.js";
 import {WorldMap} from "./worldMap.js";
 import {RegionMap} from "./regionMap.js";
 export default new Phaser.Game({
@@ -11,10 +12,10 @@ export default new Phaser.Game({
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: false
+            debug: true
         },
     },
-    scene: [Preloader, Game, WorldMap, RegionMap],
+    scene: [Preloader, Game, UI, WorldMap, RegionMap],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH

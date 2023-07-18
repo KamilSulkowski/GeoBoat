@@ -12,12 +12,17 @@ export default class Game extends Phaser.Scene {
         this.text = null;   //Tekst wyświetlany po wjechaniu w inny obiekt (Port)
         this.adrift = 0;    //Zmienna do kolizji odbicia
         this.currentMap = null; //Zmienna do zapamiętywania na jakiej mapie jest gracz
+        this.shipCooldown = 0;//Zmienna do sprawdzania czasu naprawy
+        this.shipRepairTime = 10000 //Zmienna czasu naprawy 10000 = 10s
+        this.shipDamaged = false;//Flaga stanu statku (naprawa/sprawny)
     }
     preload(){
 
     }
 
     create(){
+        //Pobranie wartości z pliku UI.js
+        this.uiScene = this.scene.get('ui');
 
         const cw = this.cameras.main.width; // width main kamery
         const ch = this.cameras.main.height;// height main kamery
@@ -85,10 +90,42 @@ export default class Game extends Phaser.Scene {
         console.log("KOLIZJA");
         this.boatSpeed = -1;
         this.adrift = 1;
+
+        // Zmiana życia łodzi, jak ma 0 HP to i tak już jest
+        if(this.uiScene.HP > 0){
+            this.uiScene.setHeartState()
+        }
+    }
+    // Funkcje debuffa łodzi
+    shipWrecked(){
+        console.log("Shipwrecked")
+        this.shipCooldown = 0;
+        this.boatMaxSpeed = 0;
+    }
+    shipDebuff(){
+        if(this.shipDamaged && this.shipCooldown >= this.shipRepairTime){
+            if(this.uiScene.HP === 3){
+                this.shipDamaged = false;
+                
+            }else{
+                console.log("Naprawiono")
+                this.boatMaxSpeed = 4;
+                this.uiScene.recoverHeart();
+            }
+            this.shipCooldown = 0;
+        }
     }
     update(time, delta) {
         super.update(time, delta);
         this.timer += delta;
+        this.shipCooldown += delta;
+        // Cooldown debuffa (Naprawa łodzi w czasie)
+        this.shipDebuff()
+
+        // Zmiana strzałki kompasu w zależności od pozycji łodzi
+        if(this.uiScene){
+            this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
+        }
         // Poruszanie łodzią
         this.moveBoat(this.timer);
         this.boatEngine(this.engine, this.timer);
@@ -137,7 +174,7 @@ export default class Game extends Phaser.Scene {
                 this.boatSpeed = 0;
                 this.timer = 0;
             } // Poruszanie łodzi (Rozpędzanie w czasie)
-            if(this.boatSpeed <= 4){
+            if(this.boatSpeed <= this.boatMaxSpeed){
                 if(this.timer >= 100){
                     console.log(this.timer)
                     this.boatSpeed += 0.1;
@@ -163,12 +200,11 @@ export default class Game extends Phaser.Scene {
             if(this.timer >= 100){
                 this.boatSpeed -= 0.25;
                 this.timer = 0;
-                // Cofanie
-                if(this.boatSpeed < 0){
-                    this.boatSpeed = this.boatMaxReverseSpeed;
-                    console.log(this.boatSpeed)
-                }
-            }
+            }// cofanie
+        }else if(this.boatSpeed < 0){
+            this.boatSpeed = this.boatMaxReverseSpeed;
+            this.adrift = 1;
+            console.log(this.boatSpeed)
         }
     }
     // funkcja do utrzymywania prędkości łodzi
