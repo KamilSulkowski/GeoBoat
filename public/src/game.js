@@ -84,6 +84,10 @@ export default class Game extends Phaser.Scene {
         // Przykładowe wypisania
         // this.add.text(200, 200, kategorie[0].nazwa, { fontFamily: 'Arial', fontSize: 24, color: '#000000' });
         // this.add.text(400, 400, parseInt(odpowiedz_uzytkownika[0].czasOdpowiedzi) + 1);
+
+        // Przykładowa podmiana parametrów łodzi
+        // this.boatMaxSpeed = parseInt(uzytkownicy[0].maxPredkoscLodzi);
+        // this.add.text(400, 400, this.boatMaxSpeed);
     }
 
     //Funckja zmiany mapy po kliknięciu przycisku E

@@ -51,4 +51,6 @@ export function odblokujPytanie(idPyt) {
         idPytania: idPyt
     };
     fetchThen('/dane/odblokowaniePytania', pytanie)
+
+    //DO ZROBIENIA UPGRADE UŻYTKOWNIKA!!!!!!!!
 }
