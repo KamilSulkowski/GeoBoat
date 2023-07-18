@@ -1,3 +1,3 @@
 # GeoBoat'
 
-npm install cors express phaser@3.23 sqlite3
+npm run start -> automatyczne instalowanie i uruchomienie serwera lokalnego
