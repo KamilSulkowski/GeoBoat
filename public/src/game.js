@@ -9,6 +9,7 @@ export default class Game extends Phaser.Scene {
         this.timer = 0;     //Zmienna do przeliczania czasu (używana przy łodzi atm)
         this.engine = 0;    //Zmienna do sprawdzania stanu rozpędu/hamowania łodzi
         this.inZone = false;//Flaga kolizji
+        this.inZoneKey = null; //Zmienna do zapamiętywania klawisza do wchodzenia na region
         this.text = null;   //Tekst wyświetlany po wjechaniu w inny obiekt (Port)
         this.adrift = 0;    //Zmienna do kolizji odbicia
         this.currentMap = null; //Zmienna do zapamiętywania na jakiej mapie jest gracz
@@ -30,9 +31,7 @@ export default class Game extends Phaser.Scene {
         // Dodanie łódek (Łódź gracza i inne do testów)
         this.boat = this.physics.add.sprite(cw * 0.5, ch * 0.5, "boat");
         this.boat2 = this.physics.add.sprite((cw * 0.5) + 50, (ch * 0.5) , "boat");
-        this.boat_collider = this.physics.add.sprite((cw * 0.5) + -100, (ch * 0.5), "boat");
-
-
+        this.boat_collider = this.physics.add.sprite((cw * 0.5) + 500, (ch * 0.5), "boat");
 
         //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
         //obiektem aktualnie może być łódka
@@ -44,10 +43,8 @@ export default class Game extends Phaser.Scene {
                     .setBackgroundColor('#808080')
                     .setColor('#000000')
                     .setStyle({fontFamily: "Arial"});
-                const keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
-                keyE.on('down', () => {
-                    this.changeMap();
-                });
+                this.inZoneKey = this.input.keyboard.addKey('E')
+                this.inZoneKey.on('down', () => {this.changeMap()});
             }
         });
 
@@ -66,22 +63,34 @@ export default class Game extends Phaser.Scene {
         this.currentMap = 'regionMap';
 
     }
+    update(time, delta) {
 
-    //Funckja zmiany mapy po kliknięciu przycisku E
-    changeMap(){
-        console.log("zmiana mapy1: " + this.currentMap + " inzone: " + this.inZone);
-        if (this.currentMap === 'worldMap') {
-            this.currentMap = 'regionMap';
-            this.scene.launch('regionMap');
-            this.scene.sendToBack('regionMap');
-            this.scene.stop('worldMap');
-        } else if (this.currentMap === 'regionMap') {
-            this.currentMap = 'worldMap';
-            this.scene.launch('worldMap');
-            this.scene.sendToBack('worldMap');
-            this.scene.stop('regionMap');
+        super.update(time, delta);
+        this.timer += delta;
+        this.shipCooldown += delta;
+        // Cooldown debuffa (Naprawa łodzi w czasie)
+        this.shipDebuff()
+
+        // Zmiana strzałki kompasu w zależności od pozycji łodzi
+        if(this.uiScene){
+            this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
         }
-        console.log("zmiana mapy2: " + this.currentMap + " inzone: " + this.inZone);
+        // Poruszanie łodzią
+        this.moveBoat(this.timer);
+        this.boatEngine(this.engine, this.timer);
+        // Podążanie kamery
+        this.cameras.main.startFollow(this.boat);
+
+        // Sprawdzenie, czy łódka opuściła obszar kolizji
+        this.inZone = false;
+        if (this.inZone === false && this.physics.overlap(this.boat, this.boat2) === false) {
+            if (this.text) {
+                this.text.destroy();
+                this.text = null;
+                this.inZoneKey.destroy();
+            }
+        }
+        console.log(this.inZone);
     }
 
 
@@ -115,33 +124,21 @@ export default class Game extends Phaser.Scene {
             this.shipCooldown = 0;
         }
     }
-    update(time, delta) {
-        super.update(time, delta);
-        this.timer += delta;
-        this.shipCooldown += delta;
-        // Cooldown debuffa (Naprawa łodzi w czasie)
-        this.shipDebuff()
 
-        // Zmiana strzałki kompasu w zależności od pozycji łodzi
-        if(this.uiScene){
-            this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
+    changeMap() {
+        console.log("zmiana mapy1: " + this.currentMap + " inzone: " + this.inZone);
+        if (this.currentMap === 'worldMap') {
+            this.currentMap = 'regionMap';
+            this.scene.launch('regionMap');
+            this.scene.sendToBack('regionMap');
+            this.scene.stop('worldMap');
+        } else if (this.currentMap === 'regionMap') {
+            this.currentMap = 'worldMap';
+            this.scene.launch('worldMap');
+            this.scene.sendToBack('worldMap');
+            this.scene.stop('regionMap');
         }
-        // Poruszanie łodzią
-        this.moveBoat(this.timer);
-        this.boatEngine(this.engine, this.timer);
-        // Podążanie kamery
-        this.cameras.main.startFollow(this.boat);
-
-        // Sprawdzenie, czy łódka opuściła obszar kolizji
-        this.inZone = false;
-        if (!this.inZone && !this.physics.overlap(this.boat, this.boat2)) {
-            if (this.text) {
-                this.text.destroy();
-                this.text = null;
-            }
-        }
-        // Koordynaty środka kamery
-        //console.log(this.cameras.main.midPoint)
+        console.log("zmiana mapy2: " + this.currentMap + " inzone: " + this.inZone);
     }
 
     // Funkcja do sterowania łodzią

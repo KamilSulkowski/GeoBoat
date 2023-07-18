@@ -21,9 +21,6 @@ export class WorldMap extends Phaser.Scene {
 
         this.currentMap = this.worldMap;
 
-        //  Ustawienie środka kamery na pozycję łodzi
-        //this.cameras.main.centerOn(this.boat.x, this.boat.y);
-
     }
 
     update(time, delta) {
