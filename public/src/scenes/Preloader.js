@@ -1,3 +1,5 @@
+
+
 export default class Preloader extends Phaser.Scene {
 
     constructor() {
@@ -15,5 +17,7 @@ export default class Preloader extends Phaser.Scene {
     create() {
 
         this.scene.start('game');
+
+
     }
 }

@@ -1,8 +1,7 @@
 import Preloader from "./scenes/Preloader.js";
 import Game from './game.js';
-import {Regions} from "./regions.js";
 import {WorldMap} from "./worldMap.js";
-
+import {RegionMap} from "./regionMap.js";
 export default new Phaser.Game({
     type: Phaser.AUTO,
     parent: 'app',
@@ -15,7 +14,7 @@ export default new Phaser.Game({
             debug: false
         },
     },
-    scene: [Preloader, Game, Regions, WorldMap],
+    scene: [Preloader, Game, WorldMap, RegionMap],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
