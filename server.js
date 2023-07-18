@@ -24,11 +24,10 @@ app.get('/game', (req, res) => {
     res.sendFile('index.html');
 });
 
-app.get('/data/regiony', (req, res) => {
+app.get('/dane/regiony', (req, res) => {
     let sql = "SELECT * FROM region";
-    let params = [];
 
-    db.all(sql, params, (err, rows) => {
+    db.all(sql,  (err, rows) => {
         if (err) {
             res.status(401).json({"error":err.message});
         }
@@ -46,11 +45,10 @@ app.get('/data/regiony', (req, res) => {
     });
 });
 
-app.get('/data/kategorie', (req, res) => {
+app.get('/dane/kategorie', (req, res) => {
     let sql = "SELECT * FROM kategoria";
-    let params = [];
 
-    db.all(sql, params, (err, rows) => {
+    db.all(sql,   (err, rows) => {
         if (err) {
             res.status(401).json({"error":err.message});
         }
@@ -68,80 +66,187 @@ app.get('/data/kategorie', (req, res) => {
     });
 });
 
-app.get('/data/pytania', (req, res) => {
+app.get('/dane/pytania', (req, res) => {
     let sql = "SELECT * FROM pytanie";
 
     db.all(sql, (err, rows) => {
         if (err) {
             res.status(401).json({"error":err.message});
-            return;
         }
-        res.json({
-            "message":"success",
-            "data":rows
-        })
+        else {
+            const pytania = JSON.stringify(rows);
+            fs.writeFile('./public/json_files/pytania.json', pytania, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    res.json(rows);
+                }
+            });
+        }
     });
 });
 
-app.get('/data/odpowiedzi', (req, res) => {
+app.get('/dane/odpowiedzi', (req, res) => {
     let sql = "SELECT * FROM odpowiedz";
 
     db.all(sql, (err, rows) => {
         if (err) {
             res.status(401).json({"error":err.message});
-            return;
         }
-        res.json({
-            "message":"success",
-            "data":rows
-        })
+        else {
+            const odpowiedzi = JSON.stringify(rows);
+            fs.writeFile('./public/json_files/odpowiedzi.json', odpowiedzi, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    res.json(rows);
+                }
+            });
+        }
     });
 });
 
-app.get('/data/uzytkownicy', (req, res) => {
+app.get('/dane/uzytkownicy', (req, res) => {
     let sql = "SELECT * FROM uzytkownik";
 
     db.all(sql, (err, rows) => {
         if (err) {
             res.status(401).json({"error":err.message});
-            return;
         }
-        res.json({
-            "message":"success",
-            "data":rows
-        })
+        else {
+            const pytania = JSON.stringify(rows);
+            fs.writeFile('./public/json_files/uzytkownicy.json', pytania, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    res.json(rows);
+                }
+            });
+        }
     });
 });
 
-app.get('/data/wynik', (req, res) => {
+app.get('/dane/wynik', (req, res) => {
     let sql = "SELECT * FROM wynik";
 
     db.all(sql, (err, rows) => {
         if (err) {
             res.status(401).json({"error":err.message});
-            return;
         }
-        res.json({
-            "message":"success",
-            "data":rows
-        })
+        else {
+            const wynik = JSON.stringify(rows);
+            fs.writeFile('./public/json_files/wynik.json', wynik, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    res.json(rows);
+                }
+            });
+        }
     });
 });
 
-app.post('/data/region/insert', (req, res) => {
+app.get('/dane/odp', (req, res) => {
+    let sql = "SELECT * FROM odpowiedzUzytkownika";
 
-    const region = {
-        nazwa: req.body.nazwa
+    db.all(sql, (err, rows) => {
+        if (err) {
+            res.status(401).json({"error":err.message});
+        }
+        else {
+            const odpowiedz = JSON.stringify(rows);
+            fs.writeFile('./public/json_files/odpowiedz_uzytkownika.json', odpowiedz, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    res.json(rows);
+                }
+            });
+        }
+    });
+});
+
+app.post('/dane/odpowiedzgracza', (req, res) => {
+
+    const odp = {
+        idOdpowiedzi: req.body.idOdpowiedzi,
+        czasOdpowiedzi: req.body.czasOdpowiedzi,
+        nazwaUzytkownika: req.body.nazwaUzytkownika
     };
 
-    let sql = "INSERT INTO region (nazwa) VALUES (?)";
+    let sql = "UPDATE odpowiedzUzytkownika SET idOdpowiedzi = ?, czasOdpowiedzi = ?, nazwaUzytkownika = ? WHERE id = 1";
 
-    db.run(sql, [region.nazwa], function (err) {
+    db.run(sql, [odp.idOdpowiedzi, odp.czasOdpowiedzi, odp.nazwaUzytkownika], function (err) {
         if (err) {
             console.error(err);
             res.status(500).send('Error');
         } else {
-            res.status(200).send('Dane zapisane poprawnie');
+            res.status(200).send('Dane zapisano poprawnie');
+        }
+    });
+});
+
+//Zapisywanie wyniku quizu gracza (zmiana pojedynczego rekordu)
+app.post('/dane/zapiswyniku', (req, res) => {
+
+    const wynik = {
+        punktyZdobyte: req.body.punktyZdobyte,
+        punktyDoZdobycia: req.body.punktyDoZdobycia,
+        zdobyteXP: req.body.zdobyteXP,
+        czas: req.body.czas
+    };
+
+    let sql = "UPDATE wynik SET punktyZdobyte = ?, punktyDoZdobycia = ?, zdobyteXP = ?, czasLaczny = ? WHERE id = 1";
+
+    db.run(sql, [wynik.punktyZdobyte, wynik.punktyDoZdobycia, wynik.zdobyteXP, wynik.czas], function (err) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error');
+        } else {
+            res.status(200).send('Dane zapisano poprawnie');
+        }
+    });
+});
+
+//Blokowanie pytania
+app.post('/dane/blokadaPytania', (req, res) => {
+
+    const pytanie = {
+        idPytania: req.body.idPytania
+    };
+
+    let sql = "UPDATE pytanie SET czyZablokowane = 1 WHERE id = ?";
+
+    db.run(sql, [pytanie.idPytania], function (err) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error');
+        } else {
+            res.status(200).send('Dane zapisano poprawnie');
+        }
+    });
+});
+
+//Odblokowanie pytania
+app.post('/dane/odblokowaniePytania', (req, res) => {
+
+    const pytanie = {
+        idPytania: req.body.idPytania
+    };
+
+    let sql = "UPDATE pytanie SET czyZablokowane = 0 WHERE id = ?";
+
+    db.run(sql, [pytanie.idPytania], function (err) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error');
+        } else {
+            res.status(200).send('Dane zapisano poprawnie');
         }
     });
 });
