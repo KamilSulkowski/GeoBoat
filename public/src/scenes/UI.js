@@ -377,6 +377,8 @@ export default class UI extends Phaser.Scene {
         this.quizCharacterImage = this.add.image(modalX + 110, modalY + 150, 'QTPH');
         this.quizCharacterImage.setScale(0.75); // Adjust the scale of the image as needed
 
+        //---------------------------------------
+
         // Treść pytania
         this.quizQuestionTextContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.';
         this.quizQuestionText = this.add.text(modalX + modalWidth / 2 + 380, modalY + 235, this.quizQuestionTextContent,
@@ -390,30 +392,67 @@ export default class UI extends Phaser.Scene {
         this.modal.strokeLineShape(LineSep2);
 
         // Odpowiedzi
-        this.quizTextContentAnswerA = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        this.quizTextContentAnswerB = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        this.quizTextContentAnswerC = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        this.quizTextContentAnswerD = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        const answerTexts = [
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        ];
 
-        this.quizAnswerTextA = this.add.text(modalX + modalWidth / 2, modalY + 300, this.quizTextContentAnswerA,
-        { fontFamily: 'Arial', fontSize: '22px', fill: '#000000', wordWrap: { width: 760, useAdvancedWrap: true }});
-        this.quizAnswerTextA.setOrigin(0.5);
-        this.quizAnswerTextA.setBackgroundColor('#f0f0f0');
-
-        this.quizAnswerTextB = this.add.text(modalX + modalWidth / 2, modalY + 380, this.quizTextContentAnswerB,
-        { fontFamily: 'Arial', fontSize: '22px', fill: '#000000', wordWrap: { width: 760, useAdvancedWrap: true }});
-        this.quizAnswerTextB.setOrigin(0.5);
-        this.quizAnswerTextB.setBackgroundColor('#f0f0f0');
+        const fontSize = '22px';
+        const textColor = '#000000';
+        const wordWrapWidth = 760;
+        const backgroundColor = '#f0f0f0';
         
-        this.quizAnswerTextC = this.add.text(modalX + modalWidth / 2, modalY + 460, this.quizTextContentAnswerC,
-        { fontFamily: 'Arial', fontSize: '22px', fill: '#000000', wordWrap: { width: 760, useAdvancedWrap: true }});
-        this.quizAnswerTextC.setOrigin(0.5);
-        this.quizAnswerTextC.setBackgroundColor('#f0f0f0');
+        const yOffset = 300;
+        const yOffsetIncrement = 60;
 
-        this.quizAnswerTextD = this.add.text(modalX + modalWidth / 2, modalY + 540, this.quizTextContentAnswerD,
-        { fontFamily: 'Arial', fontSize: '22px', fill: '#000000', wordWrap: { width: 760, useAdvancedWrap: true }});
-        this.quizAnswerTextD.setOrigin(0.5);
-        this.quizAnswerTextD.setBackgroundColor('#f0f0f0');
+        this.quizAnswerTexts = [];
+
+        for (let i = 0; i < answerTexts.length; i++) {
+            this.quizAnswerText = this.add.text(modalX + modalWidth / 2, modalY + yOffset + yOffsetIncrement * i, answerTexts[i], {
+                fontFamily: 'Arial',
+                fontSize: fontSize,
+                fill: textColor,
+                wordWrap: { width: wordWrapWidth, useAdvancedWrap: true }
+
+            });
+            this.quizAnswerText.setOrigin(0.5);
+            this.quizAnswerText.setBackgroundColor(backgroundColor);
+            this.quizAnswerText.setInteractive({ useHandCursor: true });
+            this.quizAnswerText.on('pointerdown', () => {
+                handleAnswerClick(i);
+            });
+            this.quizAnswerTexts.push(this.quizAnswerText);
+        }
+
+        const handleAnswerClick = (index) => {
+            for (let i = 0; i < this.quizAnswerTexts.length; i++) {
+                this.quizAnswerTexts[i].setBackgroundColor(backgroundColor);
+            }
+            this.quizAnswerTexts[index].setBackgroundColor('#aaffaa');
+            this.selectedAnswerIndex = index; // Zapamiętanie indeksu wybranej odpowiedzi
+            this.submitButton.visible = true;
+        };
+        
+        //Przycisk odpowiedzi
+        this.submitButton = this.add.text(modalX + modalWidth / 2 + 290, modalY + modalHeight - 50, 'Submit', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#ffffff',
+            backgroundColor: '#007bff',
+            padding: {
+                x: 20,
+                y: 10,
+            },
+        });
+        this.submitButton.setOrigin(0.5);
+        this.submitButton.setInteractive({ useHandCursor: true });
+        this.submitButton.visible = false;
+
+        this.submitButton.on('pointerdown', () => {
+            console.log('Selected answer index:', this.selectedAnswerIndex);
+        });
 
     }
 
@@ -424,12 +463,15 @@ export default class UI extends Phaser.Scene {
                 this.menuText.destroy();
                 this.quizCharacterImage.destroy();
                 this.quizQuestionText.destroy();
-                this.quizAnswerTextA.destroy();
-                this.quizAnswerTextB.destroy();
-                this.quizAnswerTextC.destroy();
-                this.quizAnswerTextD.destroy();
+                for (this.quizAnswerText of this.quizAnswerTexts) {
+                    this.quizAnswerText.destroy();
+                }
+                if(this.submitButton){
+                    this.submitButton.destroy();
+                }
               }
             this.quizOpen = false;
+            // this.quizAnswerButtons = [];
         }
     }
 

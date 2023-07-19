@@ -32,7 +32,7 @@ export default class Game extends Phaser.Scene {
         this.boat = this.physics.add.sprite(cw * 0.5, ch * 0.5, "boat");
         this.boat2 = this.physics.add.sprite((cw * 0.5) - 200, (ch * 0.5) , "PPH");
         this.boat_collider = this.physics.add.sprite((cw * 0.5) - 300, (ch * 0.5), "CPH");
-        this.quiz_test = this.physics.add.sprite((cw * 0.5) - 100, (ch * 0.5), "QPH");
+        this.quiz_test = this.physics.add.sprite((cw * 0.5), (ch * 0.5), "QPH");
 
         // Zmiana obszaru kolizji dla gracza
         this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
