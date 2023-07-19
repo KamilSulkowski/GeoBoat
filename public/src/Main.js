@@ -3,6 +3,7 @@ import Game from './game.js';
 import UI from "./scenes/UI.js";
 import {WorldMap} from "./worldMap.js";
 import {RegionMap} from "./regionMap.js";
+import Quiz from "./scenes/Quiz.js";
 export default new Phaser.Game({
     type: Phaser.AUTO,
     parent: 'app',
@@ -15,7 +16,7 @@ export default new Phaser.Game({
             debug: true
         },
     },
-    scene: [Preloader, Game, UI, WorldMap, RegionMap],
+    scene: [Preloader, Game, UI, WorldMap, RegionMap, Quiz],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH

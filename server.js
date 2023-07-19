@@ -171,6 +171,28 @@ app.get('/dane/odp', (req, res) => {
     });
 });
 
+// app.get('/dane/konkretneodpowiedzi', (req, res) => {
+//     const customParam = 1;
+//     const sql = "SELECT * FROM odpowiedz WHERE idPytania = ?";
+//
+//     db.all(sql, { $customParam: customParam }, (err, rows) => {
+//         if (err) {
+//             res.status(401).json({"error":err.message});
+//         }
+//         else {
+//             const odpowiedzi = JSON.stringify(rows);
+//             fs.writeFile('./public/json_files/odpowiedzi.json', odpowiedzi, (err) => {
+//                 if (err) {
+//                     console.error(err);
+//                     res.status(500).send('Internal Server Error');
+//                 } else {
+//                     res.json(rows);
+//                 }
+//             });
+//         }
+//     });
+// });
+
 app.post('/dane/odpowiedzgracza', (req, res) => {
 
     const odp = {

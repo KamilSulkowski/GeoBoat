@@ -51,6 +51,28 @@ export function odblokujPytanie(idPyt) {
         idPytania: idPyt
     };
     fetchThen('/dane/odblokowaniePytania', pytanie)
-
-    //DO ZROBIENIA UPGRADE UŻYTKOWNIKA!!!!!!!!
 }
+
+// export function getOdpowiedzi(idPyt) {
+//     const pytanie = {
+//         idPytania: idPyt
+//     };
+//     fetch('/dane/konkretneodpowiedzi', {
+//         method: 'GET',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(pytanie)
+//     })
+//         .then(response => {
+//             if (response.ok) {
+//                 console.log('Dane zapisano pomyślnie');
+//             } else {
+//                 console.error('Error:', response.statusText);
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         });
+// }
+//DO ZROBIENIA UPGRADE UŻYTKOWNIKA!!!!!!!!
