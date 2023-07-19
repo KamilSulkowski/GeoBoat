@@ -16,9 +16,13 @@ export default class UI extends Phaser.Scene {
         this.bh = this.cameras.main.height;// height main kamery
 
         // HUD
-        this.hpBar = this.add.sprite(this.bw-(this.bw-90), this.bh-(this.bh-58), "menuBar")
-        this.userBar = this.add.sprite(this.bw*0.5, this.bh-(this.bh-44), "menuLongBar")
-        this.rightBar = this.add.sprite(this.bw-90, this.bh-(this.bh-58), "menuBar")
+        this.hpBar = this.add.sprite(this.bw-(this.bw-90), this.bh-(this.bh-60), "menuBar")
+        this.hpBar.scale = 1.7;
+        this.userBar = this.add.sprite(this.bw*0.5, this.bh-(this.bh-46), "menuLongBar")
+        this.userBar.scale = 1.7;
+        this.rightBar = this.add.sprite(this.bw-90, this.bh-(this.bh-60), "menuBar")
+        this.rightBar.scale = 1.7;
+
 
 
         // Kontener na UI życia gracza (3 serca)
@@ -29,46 +33,48 @@ export default class UI extends Phaser.Scene {
             key: "fullHeart",
             setXY:{
                 x: this.bw-(this.bw-47),
-                y: this.bh-(this.bh-36),
-                stepX: 42
+                y: this.bh-(this.bh-20),
+                stepX: 43
             },
             quantity: 3
         })
         this.heartsArray = this.hearts.getChildren();
         
         // Stan (tekst pod hp)
-        this.stateText = this.add.text(this.bw-(this.bw-32), this.bh-(this.bh-56), 'W pełni sprawna')
+        this.stateText = this.add.text(this.bw-(this.bw-30), this.bh-(this.bh-50), 'W pełni sprawna')
         .setScale(1)
         .setColor('#ffffff')
         .setStyle({fontFamily: "Arial"});
 
         // Tekst o użytkowniku i regionie
-        this.userText = this.add.text(this.bw*0.5-49, this.bh-(this.bh-24), 'Giga Ryba')
+        this.userText = this.add.text(this.bw*0.5-49, this.bh-(this.bh-12), 'Giga Ryba')
         .setScale(1)
         .setFontSize(20)
         .setColor('#ffffff')
         .setStyle({fontFamily: "Arial"});
-        this.regionText = this.add.text(this.bw*0.5-48, this.bh-(this.bh-58), 'Region: Jamajka')
+        this.regionText = this.add.text(this.bw*0.5-48, this.bh-(this.bh-52), 'Region: Jamajka')
         .setScale(1)
         .setFontSize(12)
         .setColor('#ffffff')
         .setStyle({fontFamily: "Arial"});
 
         // Kompas
-        const compassH = this.add.image(this.bw-128, this.bh-(this.bh-48), "compassHead")
-        this.compassA = this.add.image(this.bw-128, this.bh-(this.bh-48), "compassArrow")
+        const compassH = this.add.image(this.bw-126, this.bh-(this.bh-38), "compassHead")
+        this.compassA = this.add.image(this.bw-126, this.bh-(this.bh-38), "compassArrow")
 
         // Zębatka (menu - modal)
-        this.menu = this.add.image(this.bw-48, this.bh-(this.bh-48), "menuCog")
+        this.menu = this.add.image(this.bw-54, this.bh-(this.bh-38), "menuCog")
         this.menu.setInteractive();
         this.menu.on('pointerdown', this.toggleModal, this);
         this.input.keyboard.on('keydown-ESC', this.toggleModal, this);
 
         // Ranking
-        this.rankMenu = this.add.image(this.bw*0.5+100, this.bh-(this.bh-48), "rankBadge")
+        this.rankMenu = this.add.image(this.bw*0.5+100, this.bh-(this.bh-40), "rankBadge")
 
         // Ikona użytkownika
-        this.profilePic = this.add.image(this.bw*0.5-100, this.bh-(this.bh-48), "profilePic")
+        this.profileBorder = this.add.image(this.bw*0.5-100, this.bh-(this.bh-40), "profileBorder")
+        this.profileBorder.scale = 2;
+        this.profilePic = this.add.image(this.bw*0.5-100, this.bh-(this.bh-40), "profilePic")
         this.profilePic.setInteractive();
         this.profilePic.on('pointerdown', this.toggleProfil, this);
         this.input.keyboard.on('keydown-P', this.toggleProfil, this);
@@ -77,7 +83,7 @@ export default class UI extends Phaser.Scene {
         this.fillExpBar = this.add.graphics();
         this.ExpBar = this.add.graphics();
         this.ExpBar.fillStyle(0x222222, 0.3);
-        this.ExpBar.fillRect(this.bw-(this.bw-22), this.bh-(this.bh-84), this.bw-(this.bw-140), this.bh-(this.bh-28));
+        this.ExpBar.fillRect(this.bw-(this.bw-20), this.bh-(this.bh-84), this.bw-(this.bw-140), this.bh-(this.bh-28));
         this.expText = this.add.text(this.bw-(this.bw-65), this.bh-(this.bh-92), 'Poziom 1')
         .setScale(1)
         .setFontSize(14)
@@ -89,7 +95,7 @@ export default class UI extends Phaser.Scene {
         this.fillSpeedBar.fillStyle(0x7dff45, 1)
         this.SpeedBar = this.add.graphics();
         this.SpeedBar.fillStyle(0x222222, 0.3);
-        this.SpeedBar.fillRect(this.bw-158, this.bh-(this.bh-84), this.bw-(this.bw-140), this.bh-(this.bh-28));
+        this.SpeedBar.fillRect(this.bw-160, this.bh-(this.bh-84), this.bw-(this.bw-140), this.bh-(this.bh-28));
         this.speedText = this.add.text(this.bw-115, this.bh-(this.bh-92), '0 / Mph')
         .setScale(1)
         .setFontSize(14)
@@ -153,12 +159,13 @@ export default class UI extends Phaser.Scene {
             if(this.gameScene.boatSpeed > 0){
                 this.fillSpeedValue = 32 * this.gameScene.boatSpeed
                 this.fillSpeedBar.fillStyle(0x7dff45, 1)
+                this.speedText.setText(8*(Math.round(this.gameScene.boatSpeed * 10)/10) + " / Mph");
             }else if(this.gameScene.boatSpeed < 0){
                 this.fillSpeedValue = 5 * this.gameScene.boatSpeed
                 this.fillSpeedBar.fillStyle(0xff4564, 1)
+                this.speedText.setText(8*(Math.round(-this.gameScene.boatSpeed * 10)/10) + " / Mph");
             }
-            this.fillSpeedBar.fillRect(this.bw-153, this.bh-(this.bh-88), this.fillSpeedValue, this.bh-(this.bh-20));
-            this.speedText.setText(8*(Math.round(this.gameScene.boatSpeed * 10)/10) + " / Mph");
+            this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), this.fillSpeedValue, this.bh-(this.bh-20));
         }
         //-------MENU MODAL-------
         toggleModal() {
@@ -174,7 +181,6 @@ export default class UI extends Phaser.Scene {
             const modalX = (this.bw - modalWidth) / 2;
             const modalY = (this.bh - modalHeight) / 2;
 
-            console.log("Modal");
             this.menuOpen = true;
             this.modal = this.add.graphics();
             this.modal.fillStyle(0xffffff, 0.95);
@@ -377,8 +383,50 @@ export default class UI extends Phaser.Scene {
         this.quizCharacterImage = this.add.image(modalX + 110, modalY + 150, 'QTPH');
         this.quizCharacterImage.setScale(0.75); // Adjust the scale of the image as needed
 
+        //---------------------------------------
+        this.QnAIndex = 0;
+        this.QnA = [
+            {
+                question: 'Question 1: Lorem ipsum dolor sit amet?',
+                answers: [
+                    'Answer 1A',
+                    'Answer 1B',
+                    'Answer 1C',
+                    'Answer 1D',
+                ],
+            },
+            {
+                question: 'Question 2: consectetur adipiscing elit?',
+                answers: [
+                    'Answer 2A',
+                    'Answer 2B',
+                    'Answer 2C',
+                    'Answer 2D',
+                ],
+            },
+            {
+                question: 'Question 3: consectetur adipiscing elit?',
+                answers: [
+                    'Answer 3A',
+                    'Answer 3B',
+                    'Answer 3C',
+                    'Answer 3D',
+                ],
+            },
+            // Tutaj z bazy przypisujemy pytanie do question, odpowiedzi do answers
+        ];
+        this.drawQuestionAndAnswers()
+    }
+    drawQuestionAndAnswers(){
+        const modalWidth = 800;
+        const modalHeight = 600;
+        const modalX = (this.bw - modalWidth) / 2;
+        const modalY = (this.bh - modalHeight) / 2;
+
         // Treść pytania
-        this.quizQuestionTextContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.';
+        const tempQuestion = this.QnA[this.QnAIndex]    // <--
+
+        this.quizQuestionTextContent = tempQuestion.question
         this.quizQuestionText = this.add.text(modalX + modalWidth / 2 + 380, modalY + 235, this.quizQuestionTextContent,
         { fontFamily: 'Arial', fontSize: '24px', fill: '#000000', wordWrap: { width: 580, useAdvancedWrap: true }});
         this.quizQuestionText.setOrigin(1);
@@ -390,31 +438,104 @@ export default class UI extends Phaser.Scene {
         this.modal.strokeLineShape(LineSep2);
 
         // Odpowiedzi
-        this.quizTextContentAnswerA = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        this.quizTextContentAnswerB = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        this.quizTextContentAnswerC = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        this.quizTextContentAnswerD = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        const answerTexts = tempQuestion.answers    // <--
 
-        this.quizAnswerTextA = this.add.text(modalX + modalWidth / 2, modalY + 300, this.quizTextContentAnswerA,
-        { fontFamily: 'Arial', fontSize: '22px', fill: '#000000', wordWrap: { width: 760, useAdvancedWrap: true }});
-        this.quizAnswerTextA.setOrigin(0.5);
-        this.quizAnswerTextA.setBackgroundColor('#f0f0f0');
-
-        this.quizAnswerTextB = this.add.text(modalX + modalWidth / 2, modalY + 380, this.quizTextContentAnswerB,
-        { fontFamily: 'Arial', fontSize: '22px', fill: '#000000', wordWrap: { width: 760, useAdvancedWrap: true }});
-        this.quizAnswerTextB.setOrigin(0.5);
-        this.quizAnswerTextB.setBackgroundColor('#f0f0f0');
+        const fontSize = '22px';
+        const textColor = '#000000';
+        const wordWrapWidth = 760;
+        const backgroundColor = '#f0f0f0';
         
-        this.quizAnswerTextC = this.add.text(modalX + modalWidth / 2, modalY + 460, this.quizTextContentAnswerC,
-        { fontFamily: 'Arial', fontSize: '22px', fill: '#000000', wordWrap: { width: 760, useAdvancedWrap: true }});
-        this.quizAnswerTextC.setOrigin(0.5);
-        this.quizAnswerTextC.setBackgroundColor('#f0f0f0');
+        const yOffset = 300;
+        const yOffsetIncrement = 60;
 
-        this.quizAnswerTextD = this.add.text(modalX + modalWidth / 2, modalY + 540, this.quizTextContentAnswerD,
-        { fontFamily: 'Arial', fontSize: '22px', fill: '#000000', wordWrap: { width: 760, useAdvancedWrap: true }});
-        this.quizAnswerTextD.setOrigin(0.5);
-        this.quizAnswerTextD.setBackgroundColor('#f0f0f0');
+        this.quizAnswerTexts = [];
 
+        for (let i = 0; i < answerTexts.length; i++) {
+            this.quizAnswerText = this.add.text(modalX + modalWidth / 2, modalY + yOffset + yOffsetIncrement * i, answerTexts[i], {
+                fontFamily: 'Arial',
+                fontSize: fontSize,
+                fill: textColor,
+                wordWrap: { width: wordWrapWidth, useAdvancedWrap: true }
+
+            });
+            this.quizAnswerText.setOrigin(0.5);
+            this.quizAnswerText.setBackgroundColor(backgroundColor);
+            this.quizAnswerText.setInteractive({ useHandCursor: true });
+            this.quizAnswerText.on('pointerdown', () => {
+                handleAnswerClick(i);
+            });
+            this.quizAnswerTexts.push(this.quizAnswerText);
+        }
+
+        const handleAnswerClick = (index) => {
+            for (let i = 0; i < this.quizAnswerTexts.length; i++) {
+                this.quizAnswerTexts[i].setBackgroundColor(backgroundColor);
+            }
+            this.quizAnswerTexts[index].setBackgroundColor('#aaffaa');
+            this.selectedAnswerIndex = index; // Zapamiętanie indeksu wybranej odpowiedzi
+            this.submitButton.visible = true;
+        };
+
+        // Liczba pytań
+        this.QuestionNumberDisplayedContent = (this.QnAIndex+1) + " / " + (this.QnA.length)
+        console.log(this.QuestionNumberDisplayedContent)
+        this.QuestionNumberDisplayed = this.add.text(modalX + modalWidth / 2 - 340, modalY + modalHeight - 45, this.QuestionNumberDisplayedContent, {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#000000',
+            padding: {
+                x: 20,
+                y: 10,
+            },
+        });
+        this.QuestionNumberDisplayed.setOrigin(0.5);
+
+        //Przycisk odpowiedzi
+        this.submitButton = this.add.text(modalX + modalWidth / 2 + 303, modalY + modalHeight - 45, 'Zatwierdź', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#ffffff',
+            backgroundColor: '#007bff',
+            padding: {
+                x: 20,
+                y: 10,
+            },
+        });
+        this.submitButton.setOrigin(0.5);
+        this.submitButton.setInteractive({ useHandCursor: true });
+        this.submitButton.visible = false;
+
+        this.submitButton.on('pointerdown', () => {
+            if(this.QnAIndex+1 != this.QnA.length){
+                this.quizQuestionText.destroy();
+                for (this.quizAnswerText of this.quizAnswerTexts) {
+                    this.quizAnswerText.destroy();
+                }
+                if(this.submitButton){
+                    this.submitButton.destroy();
+                }
+                this.QuestionNumberDisplayed.destroy();
+                this.QnAIndex += 1;
+                this.drawQuestionAndAnswers();
+
+            }else if(this.QnAIndex+1 === this.QnA.length){
+                this.modal.clear();
+                 if (this.menuText) {
+                    this.menuText.destroy();
+                    this.quizCharacterImage.destroy();
+                    this.quizQuestionText.destroy();
+                    for (this.quizAnswerText of this.quizAnswerTexts) {
+                        this.quizAnswerText.destroy();
+                    }
+                    if(this.submitButton){
+                        this.submitButton.destroy();
+                    }
+                    this.QuestionNumberDisplayed.destroy();
+                    this.quizOpen = false;
+                }
+            }
+            console.log('Selected answer index:', this.selectedAnswerIndex);
+        });
     }
 
     closeQuiz(){
@@ -424,12 +545,16 @@ export default class UI extends Phaser.Scene {
                 this.menuText.destroy();
                 this.quizCharacterImage.destroy();
                 this.quizQuestionText.destroy();
-                this.quizAnswerTextA.destroy();
-                this.quizAnswerTextB.destroy();
-                this.quizAnswerTextC.destroy();
-                this.quizAnswerTextD.destroy();
+                for (this.quizAnswerText of this.quizAnswerTexts) {
+                    this.quizAnswerText.destroy();
+                }
+                if(this.submitButton){
+                    this.submitButton.destroy();
+                }
+                this.QuestionNumberDisplayed.destroy();
               }
             this.quizOpen = false;
+            // this.quizAnswerButtons = [];
         }
     }
 

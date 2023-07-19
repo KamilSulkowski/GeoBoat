@@ -20,10 +20,13 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("compassArrow", "assets/compassArrow.png")
         this.load.image("compassHead", "assets/compassHead.png")
         this.load.image("menuCog", "assets/menuCog.png")
-        this.load.image("menuBar", "assets/menuBar.png")
-        this.load.image("menuLongBar", "assets/menuLongBar.png")
+        this.load.image("menuBar", "assets/board1.png")
+        this.load.image("menuLongBar", "assets/board2.png")
         this.load.image("rankBadge", "assets/rankBadge.png")
         this.load.image("profilePic", "assets/profilePic.png")
+        this.load.image("profileBorder", "assets/profileBorder.png")
+        this.load.image('tiled', "assets/worldtiles.png");
+
         this.load.image('fixWrench', "assets/fixWrench.png");
         this.load.image('tile', "assets/worldtiles.png");
 
