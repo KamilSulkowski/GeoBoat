@@ -378,9 +378,49 @@ export default class UI extends Phaser.Scene {
         this.quizCharacterImage.setScale(0.75); // Adjust the scale of the image as needed
 
         //---------------------------------------
+        this.QnAIndex = 0;
+        this.QnA = [
+            {
+                question: 'Question 1: Lorem ipsum dolor sit amet?',
+                answers: [
+                    'Answer 1A',
+                    'Answer 1B',
+                    'Answer 1C',
+                    'Answer 1D',
+                ],
+            },
+            {
+                question: 'Question 2: consectetur adipiscing elit?',
+                answers: [
+                    'Answer 2A',
+                    'Answer 2B',
+                    'Answer 2C',
+                    'Answer 2D',
+                ],
+            },
+            {
+                question: 'Question 3: consectetur adipiscing elit?',
+                answers: [
+                    'Answer 3A',
+                    'Answer 3B',
+                    'Answer 3C',
+                    'Answer 3D',
+                ],
+            },
+            // Tutaj z bazy przypisujemy pytanie do question, odpowiedzi do answers
+        ];
+        this.drawQuestionAndAnswers()
+    }
+    drawQuestionAndAnswers(){
+        const modalWidth = 800;
+        const modalHeight = 600;
+        const modalX = (this.bw - modalWidth) / 2;
+        const modalY = (this.bh - modalHeight) / 2;
 
         // Treść pytania
-        this.quizQuestionTextContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.';
+        const tempQuestion = this.QnA[this.QnAIndex]    // <--
+
+        this.quizQuestionTextContent = tempQuestion.question
         this.quizQuestionText = this.add.text(modalX + modalWidth / 2 + 380, modalY + 235, this.quizQuestionTextContent,
         { fontFamily: 'Arial', fontSize: '24px', fill: '#000000', wordWrap: { width: 580, useAdvancedWrap: true }});
         this.quizQuestionText.setOrigin(1);
@@ -392,12 +432,7 @@ export default class UI extends Phaser.Scene {
         this.modal.strokeLineShape(LineSep2);
 
         // Odpowiedzi
-        const answerTexts = [
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        ];
+        const answerTexts = tempQuestion.answers    // <--
 
         const fontSize = '22px';
         const textColor = '#000000';
@@ -434,7 +469,7 @@ export default class UI extends Phaser.Scene {
             this.selectedAnswerIndex = index; // Zapamiętanie indeksu wybranej odpowiedzi
             this.submitButton.visible = true;
         };
-        
+
         //Przycisk odpowiedzi
         this.submitButton = this.add.text(modalX + modalWidth / 2 + 290, modalY + modalHeight - 50, 'Submit', {
             fontFamily: 'Arial',
@@ -451,9 +486,34 @@ export default class UI extends Phaser.Scene {
         this.submitButton.visible = false;
 
         this.submitButton.on('pointerdown', () => {
+            if(this.QnAIndex+1 != this.QnA.length){
+                this.quizQuestionText.destroy();
+                for (this.quizAnswerText of this.quizAnswerTexts) {
+                    this.quizAnswerText.destroy();
+                }
+                if(this.submitButton){
+                    this.submitButton.destroy();
+                }
+                console.log(this.QnA.length);
+                this.QnAIndex += 1;
+                this.drawQuestionAndAnswers();
+            }else if(this.QnAIndex+1 === this.QnA.length){
+                this.modal.clear();
+                 if (this.menuText) {
+                    this.menuText.destroy();
+                    this.quizCharacterImage.destroy();
+                    this.quizQuestionText.destroy();
+                    for (this.quizAnswerText of this.quizAnswerTexts) {
+                        this.quizAnswerText.destroy();
+                    }
+                    if(this.submitButton){
+                        this.submitButton.destroy();
+                    }
+                    console.log(this.QnA.length);
+                }
+            }
             console.log('Selected answer index:', this.selectedAnswerIndex);
         });
-
     }
 
     closeQuiz(){
