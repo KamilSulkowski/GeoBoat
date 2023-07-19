@@ -3,6 +3,8 @@ import Game from './game.js';
 import UI from "./scenes/UI.js";
 import {WorldMap} from "./worldMap.js";
 import {RegionMap} from "./regionMap.js";
+//import Wrap from '../../node_modules/phaser3-rex-plugins/plugins/text/wrap.js';
+//import { Wrap } from "phaser3-rex-plugins";
 export default new Phaser.Game({
     type: Phaser.AUTO,
     parent: 'app',
@@ -12,6 +14,7 @@ export default new Phaser.Game({
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
+            pixelArt: true,
             debug: true
         },
     },
