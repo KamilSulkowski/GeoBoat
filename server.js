@@ -173,9 +173,9 @@ app.get('/dane/odp', (req, res) => {
 
 // app.get('/dane/konkretneodpowiedzi', (req, res) => {
 //     const customParam = 1;
-//     const sql = "SELECT * FROM odpowiedz WHERE idPytania = ?";
+//     const sql = "SELECT * FROM odpowiedz WHERE idPytania = :abc";
 //
-//     db.all(sql, { $customParam: customParam }, (err, rows) => {
+//     db.all(sql, { abc: customParam }, (err, rows) => {
 //         if (err) {
 //             res.status(401).json({"error":err.message});
 //         }
