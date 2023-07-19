@@ -1,3 +1,4 @@
+import {WorldMap} from "./worldMap.js";
 
 export default class Game extends Phaser.Scene {
     constructor() {
@@ -18,13 +19,13 @@ export default class Game extends Phaser.Scene {
         this.shipDamaged = false;//Flaga stanu statku (naprawa/sprawny)
     }
     preload(){
-
     }
 
     create(){
+
+
         //Pobranie wartości z pliku UI.js
         this.uiScene = this.scene.get('ui');
-
         const cw = this.cameras.main.width; // width main kamery
         const ch = this.cameras.main.height;// height main kamery
 
@@ -78,9 +79,10 @@ export default class Game extends Phaser.Scene {
         // Poprawka: Ustawienie środka kamery na pozycję łodzi
         this.cameras.main.centerOn(this.boat.x, this.boat.y);
 
-        this.scene.launch('regionMap');
-        this.scene.sendToBack('regionMap');
-        this.currentMap = 'regionMap';
+        //this.scene.add('worldMap');
+        this.scene.launch('worldMap');
+        this.scene.sendToBack('worldMap');
+        this.currentMap = 'worldMap';
 
     }
     update(time, delta) {

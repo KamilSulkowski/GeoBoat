@@ -1,11 +1,11 @@
 {
-  "name": "test3",
+  "name": "geoboat",
   "version": "1.0.0",
   "description": "",
   "main": "public/index.html",
   "scripts": {
     "start": "",
-    "prestart": "npm install cors express md5 phaser sqlite3",
+    "prestart": "npm install cors express md5 phaser sqlite3 body-parser fs phaser3-rex-plugins",
     "poststart": "node server.js"
   },
   "keywords": [],

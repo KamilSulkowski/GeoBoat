@@ -24,7 +24,6 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("menuLongBar", "assets/menuLongBar.png")
         this.load.image("rankBadge", "assets/rankBadge.png")
         this.load.image("profilePic", "assets/profilePic.png")
-        this.load.image('tiled', "assets/worldtiles.png");
         this.load.image('fixWrench', "assets/fixWrench.png");
         this.load.image('tile', "assets/worldtiles.png");
 

@@ -1,0 +1,105 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "tiled/regionmap.xml",
+    "automapping.whileDrawing": true,
+    "expandedProjectPaths": [
+        "tiled",
+        "."
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "tiled/regionmap.xml": {
+            "scale": 0.75,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 6390.666666666666,
+                "y": 3908.6666666666665
+            }
+        },
+        "tiled/regionmap.xml#tile": {
+            "scaleInDock": 1
+        },
+        "tiled/regionmap.xml#tiled": {
+            "scaleInDock": 1
+        },
+        "tiled/rule1.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 218.75,
+                "y": 99.5
+            }
+        },
+        "tiled/rule1.tmx#tiled": {
+            "scaleInDock": 1
+        },
+        "tiled/rule1tmx.tmx": {
+            "scale": 5.262109375,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 76.58525721921164,
+                "y": 73.82970826219285
+            }
+        },
+        "tiled/rule1tmx.tmx#tiled": {
+            "scaleInDock": 1
+        },
+        "tiled/rule2.tmx": {
+            "scale": 3,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 45.83333333333334,
+                "y": 71
+            }
+        },
+        "tiled/rule2.tmx#tiled": {
+            "scaleInDock": 1
+        },
+        "tiled/worldmap.xml": {
+            "scale": 3,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 4911,
+                "y": 2741.833333333333
+            }
+        },
+        "tiled/worldmap.xml#tiled": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/OW/Desktop/grywalizacja/statki/Maps/tiled",
+    "last.externalTilesetPath": "C:/Users/OW/Desktop/grywalizacja/statki",
+    "last.imagePath": "C:/Users/OW/Desktop/grywalizacja/statki",
+    "map.height": 8,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.renderOrder": null,
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 8,
+    "openFiles": [
+        "tiled/regionmap.xml",
+        "tiled/worldmap.xml",
+        "tiled/rule1tmx.tmx"
+    ],
+    "project": "map.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "tiled/worldmap.xml",
+        "tiled/rule1tmx.tmx",
+        "tiled/regionmap.xml",
+        "tiled/rule1.tmx",
+        "tiled/rule2.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

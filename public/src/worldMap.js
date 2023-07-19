@@ -1,7 +1,6 @@
 export class WorldMap extends Phaser.Scene {
     constructor() {
-        super('worldMap');
-
+        super('worldMap');;
     }
 
     preload() {
@@ -9,33 +8,45 @@ export class WorldMap extends Phaser.Scene {
     }
 
     create() {
-
         //Pobranie wartości z pliku game.js
         this.worldMapScene = this.scene.get('game');
+        this.physics.world.enable(this.worldMapScene.boat);
+
 
         this.worldMap = this.make.tilemap({key: 'worldMap'});
+
         const tileSetWorld = this.worldMap.addTilesetImage('tile', 'tile');
-        const water = this.worldMap.createStaticLayer('water', tileSetWorld);
-        const deepwater = this.worldMap.createStaticLayer('deepwater', tileSetWorld);
-        const ground = this.worldMap.createStaticLayer('ground', tileSetWorld);
         const extra = this.worldMap.createStaticLayer('extra', tileSetWorld);
+        const water = this.worldMap.createStaticLayer('water', tileSetWorld);
+        const ground = this.worldMap.createStaticLayer('ground', tileSetWorld);
+        const deepwater = this.worldMap.createStaticLayer('deepwater', tileSetWorld);
+
 
         water.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
         deepwater.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
         ground.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
         extra.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
 
-        // Dodaj fizykę do warstw
-        this.physics.world.enable([deepwater, ground, extra]);
 
-        // Utwórz kolizję dla warstw
-        this.physics.add.collider(this.worldMapScene.boat, deepwater);
+        this.physics.world.setBounds(0, 0, 8000, 4000); // Ustaw granice świata
+
+        // this.physics.world.gravity.y = 0;
+       // this.physics.world.enable([water, ground, deepwater, extra]); // Dodaj fizykę do warstw
+
+        // Ustaw kolizję dla odpowiednich kafelków na warstwach
+
+        // Ustawianie kolizji na podstawie indeksów kafelków
+        ground.setCollisionByProperty({collider: true});
+        deepwater.setCollisionByProperty({collider: true});
+        extra.setCollisionByProperty({collider: true});
         this.physics.add.collider(this.worldMapScene.boat, ground);
+        this.physics.add.collider(this.worldMapScene.boat, deepwater);
         this.physics.add.collider(this.worldMapScene.boat, extra);
 
 
-        // Set the bounds and center the camera on the boat
-        this.cameras.main.setBounds(0, 0, this.worldMap.widthInPixels, this.worldMap.heightInPixels);
+        this.worldMapScene.boat.setPosition(3150, 1750);
+        this.worldMapScene.boat2.setPosition(3150, 1680);
+        this.worldMapScene.quiz_test.setPosition(-3150, -1900);
 
         this.cameras.main.startFollow(this.worldMapScene.boat);
 

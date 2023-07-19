@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "regionMap.json",
+    "activeFile": "worldMap.json",
     "automapping.whileDrawing": false,
     "expandedProjectPaths": [
         "tiled",
@@ -51,22 +51,23 @@
         },
         "mapa.json": {
             "scale": 0.125,
-            "selectedLayer": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 3516,
-                "y": 2296
+                "x": 3776,
+                "y": 2300
             }
         },
         "mapa.json#tile": {
             "dynamicWrapping": false,
-            "scaleInDock": 0.5
+            "scaleInDock": 2,
+            "scaleInEditor": 1
         },
         "regionMap.json": {
             "scale": 0.25,
-            "selectedLayer": 1,
+            "selectedLayer": -1,
             "viewCenter": {
-                "x": 142,
-                "y": 948
+                "x": 136,
+                "y": 946
             }
         },
         "regionMap.json#tile": {
@@ -92,6 +93,18 @@
             }
         },
         "tiled/mapa.json#tile": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tiled/mapa.xml": {
+            "scale": 0.109375,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 3986.2857142857147,
+                "y": 2317.7142857142853
+            }
+        },
+        "tiled/mapa.xml#tile": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
@@ -165,23 +178,26 @@
             "scaleInDock": 1
         },
         "worldMap.json": {
-            "scale": 0.125,
-            "selectedLayer": 0,
+            "scale": 0.33,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 3744,
-                "y": 2084
+                "x": 6821.212121212121,
+                "y": 2210.606060606061
             }
         },
         "worldMap.json#tile": {
-            "scaleInDock": 1,
+            "scaleInDock": 2,
             "scaleInEditor": 1
+        },
+        "worldMap.json#tile2": {
+            "scaleInDock": 1
         },
         "worldMap.json#tiled": {
             "scaleInDock": 1
         }
     },
     "last.exportedFilePath": "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/Maps",
-    "last.externalTilesetPath": "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/assets",
+    "last.externalTilesetPath": "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/Maps",
     "last.imagePath": "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/assets",
     "map.height": 8,
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
@@ -191,23 +207,23 @@
     "map.tileWidth": 16,
     "map.width": 8,
     "openFiles": [
-        "regionMap.json"
+        "worldMap.json"
     ],
     "project": "map.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "regionMap.json",
         "worldMap.json",
-        "tiled/test.xml",
-        "tile.tsx",
+        "tiled/mapa.xml",
         "mapa.json",
+        "tile.tsx",
+        "regionMap.json",
+        "tiled/test.xml",
         "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/tile.tsx",
         "tiled/mapa.json",
         "C:/Users/Rockl/Downloads/Maps/tiled/mapa.json",
         "C:/Users/Rockl/Downloads/Maps/worldMap.json",
         "tiled/rule1tmx.tmx",
-        "tiled/worldmap.xml",
-        "tiled/regionmap.xml"
+        "tiled/worldmap.xml"
     ],
     "tileset.embedInMap": true,
     "tileset.lastUsedFilter": "Wszystkie pliki (*)",
