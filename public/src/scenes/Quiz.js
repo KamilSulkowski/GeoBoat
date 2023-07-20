@@ -30,7 +30,6 @@ function prepareQuiz(kategoria) {
 }
 
 export function showQuiz(){
-    console.log("xd");
     this.load.json('pytania', '../json_files/pytania.json');
     this.load.json('odpowiedzi', '../json_files/odpowiedzi.json');
     const modalWidth = 800;

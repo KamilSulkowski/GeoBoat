@@ -357,10 +357,10 @@ export default class UI extends Phaser.Scene {
 
     toggleQuiz(){
         if (this.quizOpen) {
-            console.log("xdddd")
+            console.log("quiz close")
             closeQuiz.call(this);
         } else {
-            console.log("aha")
+            console.log("quiz open")
             showQuiz.call(this);
         }
     }
