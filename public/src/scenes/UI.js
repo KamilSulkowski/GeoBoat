@@ -14,7 +14,7 @@ export default class UI extends Phaser.Scene {
         this.load.json('odpowiedzi', '../json_files/odpowiedzi.json');
     }
     create() {
-        this.gameScene = this.scene.get('game');
+        this.gameScene = this.scene.get('worldMap');
         // Pobranie wysokości/długości sceny
         this.bw = this.cameras.main.width; // width main kamery
         this.bh = this.cameras.main.height;// height main kamery

@@ -89,7 +89,8 @@ export default class Game extends Phaser.Scene {
         // Poprawka: Ustawienie środka kamery na pozycję łodzi
         this.cameras.main.centerOn(this.boat.x, this.boat.y);
 
-        this.scene.launch('worldMap');
+        // Utworzenie instancji klasy WorldMap i przekazanie referencji łodzi
+        this.scene.start('worldMap'); // Przekazujemy łódź jako drugi argument
         this.scene.sendToBack('worldMap');
         this.currentMap = 'worldMap';
 
@@ -170,16 +171,19 @@ export default class Game extends Phaser.Scene {
 
     changeMap() {
         console.log("zmiana mapy1: " + this.currentMap + " inzone: " + this.inZone);
-        if (this.currentMap === 'worldMap') {
-            this.currentMap = 'regionMap';
-            this.scene.stop('worldMap');
-            this.scene.launch('regionMap');
-            this.scene.sendToBack('regionMap');
-        } else if (this.currentMap === 'regionMap') {
-            this.currentMap = 'worldMap';
-            this.scene.stop('regionMap');
-            this.scene.launch('worldMap');
-            this.scene.sendToBack('worldMap');
+        switch (this.currentMap) {
+            case 'worldMap':
+                this.currentMap = 'regionMap';
+                this.scene.stop('worldMap');
+                this.scene.launch('regionMap');
+                this.scene.sendToBack('regionMap');
+                break;
+            case 'regionMap':
+                this.currentMap = 'worldMap';
+                this.scene.stop('regionMap');
+                this.scene.launch('worldMap');
+                this.scene.sendToBack('worldMap');
+                break;
         }
         console.log("zmiana mapy2: " + this.currentMap + " inzone: " + this.inZone);
     }
