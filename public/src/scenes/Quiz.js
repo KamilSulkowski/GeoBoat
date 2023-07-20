@@ -53,7 +53,8 @@ export function showQuiz(){
 
     // Postać co będzie se ruszać ustami jak pytanie będzie lecieć
     this.quizCharacterImage = this.add.image(modalX + 110, modalY + 150, 'pirate');
-    this.quizCharacterImage.setScale(0.75); // Adjust the scale of the image as needed
+    this.quizCharacterImage.setScale(0.75);
+
 
     //---------------------------------------
     const pytania = this.cache.json.get('pytania');

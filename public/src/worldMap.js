@@ -51,7 +51,7 @@ export class WorldMap extends Phaser.Scene {
 
         this.worldMapScene.boat.setPosition(3150, 1750);
         this.worldMapScene.boat2.setPosition(3150, 1680);
-        this.worldMapScene.quiz_test.setPosition(2850, 1750);
+        this.worldMapScene.quiz_test.setPosition(3150, 1750);
 
         this.cameras.main.startFollow(this.worldMapScene.boat);
 

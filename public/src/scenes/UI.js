@@ -8,6 +8,7 @@ export default class UI extends Phaser.Scene {
         this.quizOpen = false;
         this.fillSpeedValue = 0;
         this.speedDecreaseRate = 0.1;
+        this.rankingFlag = false;
     }
     preload() {
         this.load.json('pytania', '../json_files/pytania.json');
@@ -286,7 +287,7 @@ export default class UI extends Phaser.Scene {
     this.rank2.setOrigin(0.5);
     this.rank2.setInteractive();
     this.rank2.on('pointerdown', () => {
-        this.drawRanking();
+        if(this.rankingFlag){this.drawRanking();}
     });
 
     // this.rank3 = this.add.text(modalX + modalWidth - 80, modalY + 80, 'Ranking jakiś', {
@@ -308,6 +309,30 @@ export default class UI extends Phaser.Scene {
 
     }
     drawRanking(){
+        // Pobieramy sobie gdzieś tu info o graczach
+
+        //
+        // Przypisujemy info o graczach
+        this.Players = [
+            {
+                name: "Małpa D. Luźny",
+                XP: 31,
+                Level: 1,
+            },
+            {
+                name: "Edward NowaBrama",
+                XP: 51,
+                Level: 2,
+            },
+            {
+                name: "Jacek Wróblewski",
+                XP: 18,
+                Level: 1,
+            },
+        ]
+        //
+
+
 
     }
     closeRanking() {

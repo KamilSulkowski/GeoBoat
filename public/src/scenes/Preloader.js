@@ -19,7 +19,7 @@ export default class Preloader extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32
         });
-        this.load.spritesheet("repairAnim", "assets/animation/piratSheet.png", {
+        this.load.spritesheet("pirateAnim", "assets/animation/piratSheet.png", {
             frameWidth: 256,
             frameHeight: 256
         });
