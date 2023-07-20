@@ -32,6 +32,47 @@ export class WorldMap extends Phaser.Scene {
         //Pobranie wartości z pliku UI.js
         this.uiScene = this.scene.get('ui');
 
+        // Ładowanie mapy
+        this.worldMap = this.make.tilemap({key: 'worldMap', tileWidth: 16, tileHeight: 16});
+
+        this.tileSetWorld = this.worldMap.addTilesetImage('tile', 'tile',16,16);
+        this.extra = this.worldMap.createStaticLayer('extra', this.tileSetWorld,0,0);
+        this.water = this.worldMap.createStaticLayer('water', this.tileSetWorld,0,0);
+        this.ground = this.worldMap.createStaticLayer('ground', this.tileSetWorld,0,0);
+        this.deepwater = this.worldMap.createStaticLayer('deepwater', this.tileSetWorld,0,0);
+
+        this.water.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
+        this.deepwater.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
+        this.ground.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
+        this.extra.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
+
+
+        this.physics.world.setBounds(0, 0, 8000, 4000); // Ustaw granice świata
+
+        this.deepwater.setCollisionByProperty({collides: true});
+        this.ground.setCollisionByProperty({collides: true});
+        this.extra.setCollisionByProperty({collides: true});
+
+        const debugGraphics = this.add.graphics().setAlpha(0.75);
+        this.ground.renderDebug(debugGraphics, {
+            tileColor: null, // Color of non-colliding tiles,
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        });
+        this.deepwater.renderDebug(debugGraphics, {
+            tileColor: null, // Color of non-colliding tiles,
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        });
+        this.extra.renderDebug(debugGraphics, {
+            tileColor: null, // Color of non-colliding tiles,
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        });
+
+        this.currentMap = 'worldMap';
+
+        // ładowanie łódki
         this.boat = this.physics.add.sprite(this.boatRespawnX, this.boatRespawny, "boat");
         this.boat2 = this.physics.add.sprite(3150, 1680 , "PPH");
         // Zmiana obszaru kolizji dla gracza
@@ -82,28 +123,7 @@ export class WorldMap extends Phaser.Scene {
         this.keys = this.input.keyboard.createCursorKeys();
 
 
-        this.worldMap = this.make.tilemap({key: 'worldMap', tileWidth: 16, tileHeight: 16});
 
-        this.tileSetWorld = this.worldMap.addTilesetImage('tile', 'tile',16,16);
-        this.extra = this.worldMap.createStaticLayer('extra', this.tileSetWorld,0,0);
-        this.water = this.worldMap.createStaticLayer('water', this.tileSetWorld,0,0);
-        this.ground = this.worldMap.createStaticLayer('ground', this.tileSetWorld,0,0);
-        this.deepwater = this.worldMap.createStaticLayer('deepwater', this.tileSetWorld,0,0);
-
-        this.water.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
-        this.deepwater.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
-        this.ground.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
-        this.extra.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
-
-
-        this.physics.world.setBounds(0, 0, 8000, 4000); // Ustaw granice świata
-
-
-        this.ground.setCollisionByProperty({collider: true});
-        this.deepwater.setCollisionByProperty({collider: true});
-        this.extra.setCollisionByProperty({collider: true});
-
-        this.currentMap = 'worldMap';
 
     }
 
