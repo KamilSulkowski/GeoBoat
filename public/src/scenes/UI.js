@@ -59,8 +59,9 @@ export default class UI extends Phaser.Scene {
         .setStyle({fontFamily: "Arial"});
 
         // Kompas
-        const compassH = this.add.image(this.bw-126, this.bh-(this.bh-38), "compassHead")
+        this.compassH = this.add.image(this.bw-126, this.bh-(this.bh-38), "compassHead")
         this.compassA = this.add.image(this.bw-126, this.bh-(this.bh-38), "compassArrow")
+        this.compassH.scale = 0.5;
 
         // Zębatka (menu - modal)
         this.menu = this.add.image(this.bw-54, this.bh-(this.bh-38), "menuCog")
@@ -69,11 +70,12 @@ export default class UI extends Phaser.Scene {
         this.input.keyboard.on('keydown-ESC', this.toggleModal, this);
 
         // Ranking
+        this.rankBorder = this.add.image(this.bw*0.5+100, this.bh-(this.bh-40), "profileBorder")
         this.rankMenu = this.add.image(this.bw*0.5+100, this.bh-(this.bh-40), "rankBadge")
+
 
         // Ikona użytkownika
         this.profileBorder = this.add.image(this.bw*0.5-100, this.bh-(this.bh-40), "profileBorder")
-        this.profileBorder.scale = 2;
         this.profilePic = this.add.image(this.bw*0.5-100, this.bh-(this.bh-40), "profilePic")
         this.profilePic.setInteractive();
         this.profilePic.on('pointerdown', this.toggleProfil, this);
@@ -103,9 +105,16 @@ export default class UI extends Phaser.Scene {
         .setStyle({fontFamily: "Georgia"});
 
         // Identyfikator zniszczonej łodzi
-        this.wrench = this.add.image(this.gameScene.boat.x, this.gameScene.boat.y, "fixWrench")
-        this.wrench.setVisible(false);
-        this.wrench.scale=0.3
+        this.hammer = this.add.sprite(this.gameScene.boat.x, this.gameScene.boat.y, "repairAnim")
+        this.anims.create({
+            key: 'hammerAnimation',
+            frames: this.anims.generateFrameNumbers('repairAnim', { start: 0, end: 3 }),
+            frameRate: 10, 
+            repeat: -1 
+        });
+        this.hammer.play('hammerAnimation');
+        this.hammer.setVisible(false);
+        this.hammer.scale=1
 
     }
     // Obracanie strzałką kompasu
@@ -120,11 +129,9 @@ export default class UI extends Phaser.Scene {
 
         // Update tekstu stanu łodzi
         if(this.HP === 0){
-            // Klucz naprawy (anim)
-            this.wrench.setVisible(true);
-            this.wrench.angle += delta/3;
+            this.hammer.setVisible(true);
         }else{
-            this.wrench.setVisible(false);
+            this.hammer.setVisible(false);
         }
 
         // Update tekstu pod HP

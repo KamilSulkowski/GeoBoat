@@ -22,5 +22,8 @@ export default new Phaser.Game({
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    render: {
+        antialias: true,
     }
 });

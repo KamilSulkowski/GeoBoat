@@ -40,6 +40,16 @@ export default class Game extends Phaser.Scene {
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
         this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
 
+        // Animacja łódki gracza
+        this.anims.create({
+            key: 'boatAnimation',
+            frames: this.anims.generateFrameNumbers('boatAnim', { start: 0, end: 3 }),
+            frameRate: 10, 
+            repeat: -1 
+        });
+        this.boat.play('boatAnimation');
+        this.boat.anims.pause();
+
         //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
         //obiektem aktualnie może być łódka
         this.physics.add.overlap(this.boat, this.boat2, () => {
@@ -95,6 +105,11 @@ export default class Game extends Phaser.Scene {
         // Zmiana strzałki kompasu w zależności od pozycji łodzi
         if(this.uiScene){
             this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
+        }
+        if(this.boatSpeed != 0){
+            this.boat.anims.resume();
+        }else{
+            this.boat.anims.pause();
         }
         // Poruszanie łodzią
         this.moveBoat(this.timer);
