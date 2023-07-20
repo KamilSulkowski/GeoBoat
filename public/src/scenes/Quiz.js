@@ -6,21 +6,43 @@ function prepareQuiz(kategoria) {
 
     // Pobranie dostępnych pytań z bazy
     let j = 0;
-    let dostepnePytania = [];
+    let dostepneP = [];
     for(j in this.pytania) {
         if (this.pytania[j].idKategorii === wybranaKategoria) {
-            dostepnePytania.push(this.pytania[j].id);
+            dostepneP.push(this.pytania[j].id);
         }
+    }
+
+    // Losowanie kolejności pytań
+    let len = dostepneP.length;
+    let dostepnePytania = [];
+    for(let i = 0; i < len; i++) {
+        let random = Math.floor(Math.random() * (len - i));
+        console.log('random', random);
+        let n = dostepneP[random];
+        dostepneP.splice(random, 1);
+        dostepnePytania.push(n);
     }
 
     // Pobranie dostępnych odpowiedzi
     let i = 0;
-    let dostepneOdpowiedzi = [];
+    let dostepneO = [];
     for(i in this.odpowiedzi) {
         if (dostepnePytania.includes(this.odpowiedzi[i].idPytania)) {
-            dostepneOdpowiedzi.push(this.odpowiedzi[i].id);
+            dostepneO.push(this.odpowiedzi[i].id);
         }
-    }   // można zaimplementować losowaną kolejność
+    }
+
+    // Losowanie kolejności odpowiedzi
+    len = dostepneO.length;
+    let dostepneOdpowiedzi = [];
+    for(let i = 0; i < len; i++) {
+        let random = Math.floor(Math.random() * (len - i));
+        console.log('random', random);
+        let n = dostepneO[random];
+        dostepneO.splice(random, 1);
+        dostepneOdpowiedzi.push(n);
+    }
 
     console.log(dostepnePytania);
     console.log(dostepneOdpowiedzi);
@@ -28,6 +50,7 @@ function prepareQuiz(kategoria) {
 }
 
 export function showQuiz(){
+
     const modalWidth = 800;
     const modalHeight = 600;
     const modalX = (this.bw - modalWidth) / 2;
@@ -65,8 +88,8 @@ export function showQuiz(){
     // fetch('/dane/odpowiedzi')
     //     .then((response) => response.json())
     //     .then((data) => {
-    //         this.x = data;
-    //         console.log(x);
+    //         var aaa = data;
+    //         console.log(aaa);
     //     })
     //     .catch((error) => console.error('Error', error));
 
@@ -248,7 +271,7 @@ function drawQuestionAndAnswers(){
 
         }else if(this.aktualnePytanie === this.liczbaPytan){
 
-            setWynik(this.punktyZdobyte, 0, 0, 0);
+            setWynik(this.punktyZdobyte, this.liczbaPytan, 0, 0);
             fetch('/dane/wynik')
                 .then(response => response.text())
                 .catch(error => {
