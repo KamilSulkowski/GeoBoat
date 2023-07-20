@@ -66,15 +66,15 @@ export class WorldMap extends Phaser.Scene {
     }
 
     handleGroundCollision(boat, ground) {
-        console.log("Collision with ground");
+        //console.log("Collision with ground");
     }
 
     handleDeepWaterCollision(boat, deepwater) {
-        console.log("Collision with deep water");
+        //console.log("Collision with deep water");
     }
 
     handleExtraCollision(boat, extra) {
-        console.log("Collision with extra");
+        //console.log("Collision with extra");
     }
 }
 

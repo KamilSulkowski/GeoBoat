@@ -1,26 +1,24 @@
+import {setWynik, setOdp, zablokujPytanie, odblokujPytanie} from '../data_access/data_access.js';
 //-------QUIZ MODAL-------
 
 function prepareQuiz(kategoria) {
     let wybranaKategoria = kategoria //polityka
 
-    const pytania = this.cache.json.get('pytania');
-    const odpowiedzi = this.cache.json.get('odpowiedzi');
-
     // Pobranie dostępnych pytań z bazy
     let j = 0;
     let dostepnePytania = [];
-    for(j in pytania) {
-        if (pytania[j].idKategorii === wybranaKategoria) {
-            dostepnePytania.push(pytania[j].id);
+    for(j in this.pytania) {
+        if (this.pytania[j].idKategorii === wybranaKategoria) {
+            dostepnePytania.push(this.pytania[j].id);
         }
     }
 
     // Pobranie dostępnych odpowiedzi
     let i = 0;
     let dostepneOdpowiedzi = [];
-    for(i in odpowiedzi) {
-        if (dostepnePytania.includes(odpowiedzi[i].idPytania)) {
-            dostepneOdpowiedzi.push(odpowiedzi[i].id);
+    for(i in this.odpowiedzi) {
+        if (dostepnePytania.includes(this.odpowiedzi[i].idPytania)) {
+            dostepneOdpowiedzi.push(this.odpowiedzi[i].id);
         }
     }   // można zaimplementować losowaną kolejność
 
@@ -30,8 +28,6 @@ function prepareQuiz(kategoria) {
 }
 
 export function showQuiz(){
-    this.load.json('pytania', '../json_files/pytania.json');
-    this.load.json('odpowiedzi', '../json_files/odpowiedzi.json');
     const modalWidth = 800;
     const modalHeight = 600;
     const modalX = (this.bw - modalWidth) / 2;
@@ -41,6 +37,12 @@ export function showQuiz(){
     this.modal = this.add.graphics();
     this.modal.fillStyle(0xffffff, 0.95);
     this.modal.fillRoundedRect(modalX, modalY, modalWidth, modalHeight, 25);
+    setWynik(0, 0, 0, 0);
+    fetch('/dane/wynik')
+        .then(response => response.text())
+        .catch(error => {
+            console.error('Error:', error);
+        });
 
     //Tytuł
     this.menuText = this.add.text(modalX + modalWidth / 2, modalY + 20, 'Quiz', { fontFamily: 'Arial', fontSize: '24px', fill: '#000000' });
@@ -56,51 +58,62 @@ export function showQuiz(){
     this.quizCharacterImage.setScale(0.75); // Adjust the scale of the image as needed
 
     //---------------------------------------
-    const pytania = this.cache.json.get('pytania');
-    const odpowiedzi = this.cache.json.get('odpowiedzi');
+    this.pytania = this.cache.json.get('pytania');
+    this.odpowiedzi = this.cache.json.get('odpowiedzi');
+    this.wynik = this.cache.json.get('wynik');
 
     // fetch('/dane/odpowiedzi')
     //     .then((response) => response.json())
     //     .then((data) => {
-    //         qwerty = data;
-    //         console.log(qwerty);
+    //         this.x = data;
+    //         console.log(x);
     //     })
     //     .catch((error) => console.error('Error', error));
 
+    this.aktualnePytanie = 1;
+    this.punktyZdobyte = 0;
+    this.liczbaPytan = 10;
+
     const dostepne = prepareQuiz.call(this, 3);
-    const dostepnePytania = dostepne.dostepnePytania;
-    const dostepneOdpowiedzi = dostepne.dostepneOdpowiedzi;
-    const p = pytania.find((row) => row.id === 1);
-    console.log(p);
-    const odp = [];
-    for (let h = 1; h < dostepneOdpowiedzi.length + 1; h++) {
-        odp.push(odpowiedzi.find((row) => row.id === h));
+    this.dostepnePytania = dostepne.dostepnePytania;
+    this.dostepneOdpowiedzi = dostepne.dostepneOdpowiedzi;
+    this.p = this.pytania.find((row) => row.id === this.dostepnePytania[0]);
+    console.log(this.p);
+    this.o = [];
+    this.odp = [];
+    for (let i = 0; i < this.dostepneOdpowiedzi.length; i++) {
+        let f = this.odpowiedzi.find((row) => row.id === this.dostepneOdpowiedzi[i])
+        this.o.push(f);
+    }
+    for (let i = 0; i < this.dostepneOdpowiedzi.length; i++) {
+        if (this.o[i].idPytania === this.p.id)
+            this.odp.push(this.o[i]);
     }
 
-    this.aktualnePytanie = 1;
-    this.liczbaPytan = 10;
+    if (this.dostepnePytania.length < 10)
+        this.liczbaPytan = this.dostepnePytania.length;
     this.QnA = [
         {
-            question: p.tresc,
+            question: this.p.tresc,
             answers: [
-                odp[0].tresc,
-                odp[1].tresc,
-                odp[2].tresc,
-                odp[3].tresc,
+                this.odp[0].tresc,
+                this.odp[1].tresc,
+                this.odp[2].tresc,
+                this.odp[3].tresc,
             ],
         },
         // Tutaj z bazy przypisujemy pytanie do question, odpowiedzi do answers
     ];
     let h = 0;
-    let correctIndex = 0;
-    for (h in odp) {
-        if (odp[h].czyPoprawna === 1)
-            correctIndex = h;
+    this.correctIndex = 0;
+    for (h in this.odp) {
+        if (this.odp[h].czyPoprawna === 1)
+            this.correctIndex = h;
     }
-    console.log(correctIndex);
-    drawQuestionAndAnswers.call(this, correctIndex);
+    console.log('Correct index:', this.correctIndex);
+    drawQuestionAndAnswers.call(this);
 }
-function drawQuestionAndAnswers(correctIndex){
+function drawQuestionAndAnswers(){
     const modalWidth = 800;
     const modalHeight = 600;
     const modalX = (this.bw - modalWidth) / 2;
@@ -189,7 +202,10 @@ function drawQuestionAndAnswers(correctIndex){
     this.submitButton.visible = false;
 
     this.submitButton.on('pointerdown', () => {
-        if(this.aktualnePytanie != this.liczbaPytan){
+        if (parseInt(this.selectedAnswerIndex) === parseInt(this.correctIndex))
+            this.punktyZdobyte += 1;
+        //updateDatabase.call(this);
+        if(this.aktualnePytanie !== this.liczbaPytan){
             this.quizQuestionText.destroy();
             for (this.quizAnswerText of this.quizAnswerTexts) {
                 this.quizAnswerText.destroy();
@@ -198,10 +214,47 @@ function drawQuestionAndAnswers(correctIndex){
                 this.submitButton.destroy();
             }
             this.QuestionNumberDisplayed.destroy();
+
+            // Nowe pytanie i nowe odpowiedzi
+            this.p = this.pytania.find((row) => row.id === this.dostepnePytania[this.aktualnePytanie]);
+            console.log(this.p);
             this.aktualnePytanie += 1;
+            this.odp = [];
+            for (let i = 0; i < this.dostepneOdpowiedzi.length; i++) {
+                if (this.o[i].idPytania === this.p.id)
+                    this.odp.push(this.o[i]);
+            }
+
+            this.QnA = [
+                {
+                    question: this.p.tresc,
+                    answers: [
+                        this.odp[0].tresc,
+                        this.odp[1].tresc,
+                        this.odp[2].tresc,
+                        this.odp[3].tresc,
+                    ],
+                },
+            ];
+
+            let h = 0;
+            this.correctIndex = 0;
+            for (h in this.odp) {
+                if (this.odp[h].czyPoprawna === 1)
+                    this.correctIndex = h;
+            }
+            console.log('Correct index:', this.correctIndex);
             drawQuestionAndAnswers.call(this);
 
         }else if(this.aktualnePytanie === this.liczbaPytan){
+
+            setWynik(this.punktyZdobyte, 0, 0, 0);
+            fetch('/dane/wynik')
+                .then(response => response.text())
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
             this.modal.clear();
             if (this.menuText) {
                 this.menuText.destroy();
@@ -218,7 +271,36 @@ function drawQuestionAndAnswers(correctIndex){
             }
         }
         console.log('Selected answer index:', this.selectedAnswerIndex);
+        console.log('Punkty zdobyte!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ', this.punktyZdobyte);
     });
+}
+
+function updateDatabase() {
+    console.log('Prawidlowa:', this.selectedAnswerIndex);
+    console.log('Wybrano:', this.correctIndex);
+    if (parseInt(this.selectedAnswerIndex) === parseInt(this.correctIndex)) {
+        console.log('thdgfbsgrsbbgs:', this.wynik[0].punktyZdobyte);
+        setWynik(parseInt(this.wynik[0].punktyZdobyte) + 1, 0, 0, 0);
+        fetch('/dane/wynik')
+            .then((response) => response.json())
+            .then((data) => {
+                let x = data;
+                console.log(x);
+            })
+            .catch((error) => console.error('Error', error));
+        console.log("Poprawna odpowiedz");
+        zablokujPytanie(this.p.id);
+        fetch('/dane/wynik')
+            .then(response => response.text())
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        fetch('/dane/pytania')
+            .then(response => response.text())
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 }
 
 export function closeQuiz(){

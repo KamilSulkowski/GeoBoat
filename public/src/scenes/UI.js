@@ -12,6 +12,7 @@ export default class UI extends Phaser.Scene {
     preload() {
         this.load.json('pytania', '../json_files/pytania.json');
         this.load.json('odpowiedzi', '../json_files/odpowiedzi.json');
+        this.load.json('wynik', '../json_files/wynik.json');
     }
     create() {
         this.gameScene = this.scene.get('game');
