@@ -79,16 +79,15 @@ export default class Game extends Phaser.Scene {
         // Poprawka: Ustawienie środka kamery na pozycję łodzi
         this.cameras.main.centerOn(this.boat.x, this.boat.y);
 
-        //this.scene.add('worldMap');
         this.scene.launch('worldMap');
         this.scene.sendToBack('worldMap');
         this.currentMap = 'worldMap';
 
     }
     update(time, delta) {
-
         super.update(time, delta);
         this.timer += delta;
+
         this.shipCooldown += delta;
         // Cooldown debuffa (Naprawa łodzi w czasie)
         this.shipDebuff()

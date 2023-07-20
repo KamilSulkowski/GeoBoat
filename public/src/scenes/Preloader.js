@@ -1,3 +1,4 @@
+import {WorldMap} from "../worldMap.js";
 
 
 export default class Preloader extends Phaser.Scene {
@@ -42,7 +43,6 @@ export default class Preloader extends Phaser.Scene {
 
         this.scene.start('game');
         this.scene.run('ui');
-
 
     }
 }
