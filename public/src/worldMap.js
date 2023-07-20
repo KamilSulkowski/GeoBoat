@@ -21,7 +21,7 @@ export class WorldMap extends Phaser.Scene {
         this.shipRepairTime = 10000 //Zmienna czasu naprawy 10000 = 10s
         this.shipDamaged = false;//Flaga stanu statku (naprawa/sprawny)
         this.boatRespawnX = 3150;
-        this.boatRespawny = 1750;
+        this.boatRespawnY = 1750;
     }
 
     preload() {
@@ -73,7 +73,7 @@ export class WorldMap extends Phaser.Scene {
         this.currentMap = 'worldMap';
 
         // ładowanie łódki
-        this.boat = this.physics.add.sprite(this.boatRespawnX, this.boatRespawny, "boat");
+        this.boat = this.physics.add.sprite(this.boatRespawnX, this.boatRespawnY, "boat");
         this.boat2 = this.physics.add.sprite(3150, 1680 , "PPH");
         // Zmiana obszaru kolizji dla gracza
         this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
@@ -116,14 +116,17 @@ export class WorldMap extends Phaser.Scene {
         this.boat.anims.pause();
 
         // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
-        //this.boat.setCollideWorldBounds(true);
+        this.boat.setCollideWorldBounds(true);
         this.physics.add.collider(this.boat, this.boat_collider, this.handleCollision, null, this);
+        this.physics.add.collider(this.boat, this.ground, this.handleCollision, null, this);
+        this.physics.add.collider(this.boat, this.deepwater, this.handleCollision, null, this);
+        this.physics.add.collider(this.boat, this.extra, this.handleCollision, null, this);
 
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
 
 
-
+        this.physics.world.enable([this.boat]);
 
     }
 

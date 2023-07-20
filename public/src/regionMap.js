@@ -25,71 +25,85 @@ export class RegionMap extends Phaser.Scene {
 
     }
         create() {
-        //Pobranie wartości z pliku UI.js
-        this.uiScene = this.scene.get('ui');
+            //Pobranie wartości z pliku UI.js
+            this.uiScene = this.scene.get('ui');
 
-        this.boat = this.physics.add.sprite(3150, 1750, "boat");
-        this.boat2 = this.physics.add.sprite(3150, 1680 , "PPH");
-        // Zmiana obszaru kolizji dla gracza
-        this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
-        this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
-        this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
+            this.regionMap = this.make.tilemap({key: 'regionMap'});
 
-        // Animacja łódki gracza
-        this.anims.create({
-            key: 'boatAnimation',
-            frames: this.anims.generateFrameNumbers('boatAnim', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        });
-        this.boat.play('boatAnimation');
-        this.boat.anims.pause();
-
-        //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
-        //obiektem aktualnie może być łódka
-        this.physics.add.overlap(this.boat, this.boat2, () => {
-            this.inZone = true;
-            if (this.inZone === true && !this.text) {
-                this.text = this.add.text(this.boat2.x + 0 ,this.boat2.y - 50, 'Czy chcesz wejść na region ?')
-                    .setScale(1.5)
-                    .setBackgroundColor('#808080')
-                    .setColor('#000000')
-                    .setStyle({fontFamily: "Arial"});
-                this.inZoneKey = this.input.keyboard.addKey('E')
-                this.inZoneKey.on('down', () => {this.changeMap()});
-            }
-        });
-
-        // Animacja łódki gracza
-        this.anims.create({
-            key: 'boatAnimation',
-            frames: this.anims.generateFrameNumbers('boatAnim', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        });
-        this.boat.play('boatAnimation');
-        this.boat.anims.pause();
-
-        // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
-        //this.boat.setCollideWorldBounds(true);
-        this.physics.add.collider(this.boat, this.boat_collider, this.handleCollision, null, this);
-
-        // Zmienna do ustawienia sterowania
-        this.keys = this.input.keyboard.createCursorKeys();
+            this.tileSetWorld = this.regionMap.addTilesetImage('tile', 'tile',16,16);
+            this.regionMap.createStaticLayer('water', this.tileSetWorld);
+            const island = this.regionMap.createStaticLayer('island', this.tileSetWorld);
 
 
-        this.regionMap = this.make.tilemap({key: 'regionMap'});
+            // Dodaj fizykę do warstw
 
-        this.tileSetWorld = this.worldMap.addTilesetImage('tile', 'tile',16,16);
-        this.regionMap.createStaticLayer('water', tileSetWorld);
-        const island = this.regionMap.createStaticLayer('island', tileSetWorld);
+            this.cameras.main.setBounds(0, 0, 2000, 2000);
 
+            this.currentMap = 'regionMap';
 
-        // Dodaj fizykę do warstw
+            this.boat = this.physics.add.sprite(500, 500, "boat");
+            this.boat2 = this.physics.add.sprite(600, 600 , "PPH");
+            this.quiz_test = this.physics.add.sprite(700, 700, "QPH");
+            // Zmiana obszaru kolizji dla gracza
+            this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
+            this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
+            this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
 
-        this.cameras.main.setBounds(0, 0, 2000, 2000);
+            // Animacja łódki gracza
+            this.anims.create({
+                key: 'boatAnimation',
+                frames: this.anims.generateFrameNumbers('boatAnim', { start: 0, end: 3 }),
+                frameRate: 10,
+                repeat: -1
+            });
+            this.boat.play('boatAnimation');
+            this.boat.anims.pause();
 
-        this.currentMap = 'regionMap';
+            //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
+            //obiektem aktualnie może być łódka
+            this.physics.add.overlap(this.boat, this.boat2, () => {
+                this.inZone = true;
+                if (this.inZone === true && !this.text) {
+                    this.text = this.add.text(this.boat2.x + 0 ,this.boat2.y - 50, 'Czy chcesz wejść na region ?')
+                        .setScale(1.5)
+                        .setBackgroundColor('#808080')
+                        .setColor('#000000')
+                        .setStyle({fontFamily: "Arial"});
+                    this.inZoneKey = this.input.keyboard.addKey('E')
+                    this.inZoneKey.on('down', () => {this.changeMap()});
+                }
+            });
+                //Wpływanie na quizy, alert
+                this.physics.add.overlap(this.boat, this.quiz_test, () => {
+                    this.inZone = true;
+                    if (this.inZone === true && !this.quizText) {
+                        this.quizText = this.add.text(this.quiz_test.x + 0 ,this.quiz_test.y - 50, 'Wciśnij Q, żeby przejść do quizu.')
+                            .setScale(1.5)
+                            .setBackgroundColor('#808080')
+                            .setColor('#000000')
+                            .setStyle({fontFamily: "Arial"});
+                        this.inZoneKey = this.input.keyboard.addKey('Q');
+                        this.inZoneKey.on('down', () => { this.uiScene.toggleQuiz()});
+                    }
+                });
+
+                // Animacja łódki gracza
+            this.anims.create({
+                key: 'boatAnimation',
+                frames: this.anims.generateFrameNumbers('boatAnim', { start: 0, end: 3 }),
+                frameRate: 10,
+                repeat: -1
+            });
+            this.boat.play('boatAnimation');
+            this.boat.anims.pause();
+
+            // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
+            this.boat.setCollideWorldBounds(true);
+            this.physics.add.collider(this.boat, this.boat_collider, this.handleCollision, null, this);
+
+            // Zmienna do ustawienia sterowania
+            this.keys = this.input.keyboard.createCursorKeys();
+
 
         }
 
@@ -121,6 +135,13 @@ export class RegionMap extends Phaser.Scene {
                 this.inZoneKey.destroy();
             }
         }
+            if (!this.inZone && !this.physics.overlap(this.boat, this.quiz_test)) {
+                if (this.quizText) {
+                    this.quizText.destroy();
+                    this.quizText = null;
+                    this.inZoneKey.destroy();
+                }
+            }
         }
         handleCollision(){
         console.log("KOLIZJA");
