@@ -67,16 +67,18 @@ export default class UI extends Phaser.Scene {
         this.compassA = this.add.image(this.bw-126, this.bh-(this.bh-38), "compassArrow")
         this.compassH.scale = 0.5;
 
-        // Zębatka (menu - modal)
+        // ster (menu - modal)
         this.menu = this.add.image(this.bw-54, this.bh-(this.bh-38), "menuCog")
         this.menu.setInteractive();
-        this.menu.on('pointerdown', this.toggleModal, this);
-        this.input.keyboard.on('keydown-ESC', this.toggleModal, this);
+        this.menu.on('pointerdown', this.toggleMenu, this);
+        this.input.keyboard.on('keydown-ESC', this.toggleMenu, this);
 
         // Ranking
         this.rankBorder = this.add.image(this.bw*0.5+100, this.bh-(this.bh-40), "profileBorder")
         this.rankMenu = this.add.image(this.bw*0.5+100, this.bh-(this.bh-40), "rankBadge")
-
+        this.rankMenu.setInteractive();
+        this.rankMenu.on('pointerdown', this.toggleRanking, this);
+        this.input.keyboard.on('keydown-R', this.toggleRanking, this);
 
         // Ikona użytkownika
         this.profileBorder = this.add.image(this.bw*0.5-100, this.bh-(this.bh-40), "profileBorder")
@@ -179,14 +181,14 @@ export default class UI extends Phaser.Scene {
             this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), this.fillSpeedValue, this.bh-(this.bh-20));
         }
         //-------MENU MODAL-------
-        toggleModal() {
+        toggleMenu() {
             if (this.menuOpen) {
-              this.closeModal();
+              this.closeMenu();
             } else {
-              this.showModal();
+              this.showMenu();
             }
         }
-        showModal() {
+        showMenu() {
             const modalWidth = 500;
             const modalHeight = 500;
             const modalX = (this.bw - modalWidth) / 2;
@@ -203,17 +205,121 @@ export default class UI extends Phaser.Scene {
                 fill: '#000000'
             });
             this.menuText.setOrigin(0.5);
+
+            this.menuButton1 = this.add.text(modalX + modalWidth/2, modalY + 80, 'Sterowanie', {
+                fontFamily: 'Arial',
+                fontSize: '18px',
+                fill: '#000000',
+            });
+            this.menuButton1.setOrigin(0.5);
+            this.menuButton1.setInteractive();
+            this.menuButton1.on('pointerdown', () => {
+                this.drawRanking();
+            });
         }
-            closeModal() {
+        drawMenu(){
+
+        }
+        closeMenu() {
             if (this.menuOpen) {
                 this.modal.clear();
                 if (this.menuText) {
                     this.menuText.destroy();
+                    this.menuButton1.destroy();
                 }
                 this.menuOpen = false;
             }
         }
+    //-------RANKING MODAL-------
+    toggleRanking() {
+        if (this.menuOpen) {
+            this.closeRanking();
+        } else {
+            this.showRanking();
+        }
+    }
+    showRanking() {
+        const modalWidth = 500;
+        const modalHeight = 500;
+        const modalX = (this.bw - modalWidth) / 2;
+        const modalY = (this.bh - modalHeight) / 2;
 
+        this.menuOpen = true;
+        this.modal = this.add.graphics();
+        this.modal.fillStyle(0xffffff, 0.95);
+        this.modal.fillRoundedRect(modalX, modalY, modalWidth, modalHeight, 25);
+
+        this.menuText = this.add.text(modalX + modalWidth / 2, modalY + 20, 'Ranking użytkowników', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#000000'
+        });
+        this.menuText.setOrigin(0.5);
+
+        //Przyciski zmiany rankingu
+    this.rank1 = this.add.text(modalX + 80, modalY +80, 'Ranking jakiś', {
+        fontFamily: 'Arial',
+        fontSize: '18px',
+        fill: '#000000',
+        padding: {
+            x: 20,
+            y: 10,
+        },
+    });
+    this.rank1.setStroke('#000000', 4);
+    this.rank1.setOrigin(0.5);
+    this.rank1.setInteractive();
+    this.rank1.on('pointerdown', () => {
+
+    });
+
+    this.rank2 = this.add.text(modalX + modalWidth/2, modalY + 80, 'Ranking punktów', {
+        fontFamily: 'Arial',
+        fontSize: '18px',
+        fill: '#ffffff',
+        backgroundColor: '#007bff',
+        padding: {
+            x: 20,
+            y: 10,
+        },
+    });
+    this.rank2.setOrigin(0.5);
+    this.rank2.setInteractive();
+    this.rank2.on('pointerdown', () => {
+        this.drawRanking();
+    });
+
+    // this.rank3 = this.add.text(modalX + modalWidth - 80, modalY + 80, 'Ranking jakiś', {
+    //     fontFamily: 'Arial',
+    //     fontSize: '18px',
+    //     fill: '#000000',
+    //     backgroundColor: '#007bff',
+    //     padding: {
+    //         x: 20,
+    //         y: 10,
+    //     },
+    // });
+    // this.rank3.setOrigin(0.5);
+    // this.rank3.setInteractive();
+    // this.rank3.on('pointerdown', () => {
+        
+    // });
+
+
+    }
+    drawRanking(){
+
+    }
+    closeRanking() {
+        if (this.menuOpen) {
+            this.modal.clear();
+            if (this.menuText) {
+                this.menuText.destroy();
+                this.rank2.destroy();
+            }
+            this.menuOpen = false;
+        }
+    }
     //-------PROFIL MODAL-------
     toggleProfil() {
         if (this.profileOpen) {
