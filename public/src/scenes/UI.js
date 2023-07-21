@@ -1,4 +1,4 @@
-import {showQuiz, closeQuiz} from "./Quiz.js";
+import {categorySelection, closeQuiz} from "./Quiz.js";
 export default class UI extends Phaser.Scene {
     constructor() {
         super('ui');
@@ -13,6 +13,7 @@ export default class UI extends Phaser.Scene {
         this.load.json('pytania', '../json_files/pytania.json');
         this.load.json('odpowiedzi', '../json_files/odpowiedzi.json');
         this.load.json('wynik', '../json_files/wynik.json');
+        this.load.json('kategorie', '../json_files/kategorie.json');
     }
     create() {
         this.gameScene = this.scene.get('game');
@@ -369,7 +370,7 @@ export default class UI extends Phaser.Scene {
             closeQuiz.call(this);
         } else {
             console.log("quiz open")
-            showQuiz.call(this);
+            categorySelection.call(this);
         }
     }
 }

@@ -1,5 +1,85 @@
 import {setWynik, setOdp, zablokujPytanie, odblokujPytanie} from '../data_access/data_access.js';
-//-------QUIZ MODAL-------
+
+export function categorySelection() {
+    this.modalWidth = 800;
+    this.modalHeight = 600;
+    this.modalX = (this.bw - this.modalWidth) / 2;
+    this.modalY = (this.bh - this.modalHeight) / 2;
+
+    this.quizOpen = true;
+    this.modal = this.add.graphics();
+    this.modal.fillStyle(0xffffff, 0.95);
+    this.modal.fillRoundedRect(this.modalX, this.modalY, this.modalWidth, this.modalHeight, 25);
+
+    let idRegionu = 1;  //Jamajka
+    this.categoriesJSON = this.cache.json.get('kategorie');
+    this.categories = [];
+    this.selectedCategories = [];
+    let i = 0;
+    for(i in this.categoriesJSON) {
+        if (this.categoriesJSON[i].idKategorie === idRegionu) {
+            this.categories.push(this.categoriesJSON[i].nazwa);
+            let k = this.categoriesJSON[i].id;
+            this.selectedCategories.push(k);
+        }
+    }
+    console.log([this.selectedCategories]);
+
+    const yOffset = 300;
+    const yOffsetIncrement = 60;
+    const wordWrapWidth = 760;
+    this.quizAnswerTexts = [];
+    for (let i = 0; i < this.categories.length; i++) {
+        this.quizAnswerText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + yOffset + yOffsetIncrement * i, this.categories[i], {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#000000',
+            wordWrap: { width: wordWrapWidth, useAdvancedWrap: true }
+
+        });
+        this.quizAnswerText.setOrigin(0.5);
+        this.quizAnswerText.setBackgroundColor('#f0f0f0');
+        this.quizAnswerText.setInteractive({ useHandCursor: true });
+        this.quizAnswerText.on('pointerdown', () => {
+            handleAnswerClick(i);
+        });
+        this.quizAnswerTexts.push(this.quizAnswerText);
+    }
+
+    const handleAnswerClick = (index) => {
+        for (let i = 0; i < this.quizAnswerTexts.length; i++) {
+            this.quizAnswerTexts[i].setBackgroundColor('#f0f0f0');
+        }
+        this.quizAnswerTexts[index].setBackgroundColor('#aaffaa');
+        this.selectedAnswerIndex = index;
+        this.submitButton1.visible = true;
+    };
+
+    //Przycisk zatwierdzania wyboru
+    this.submitButton1 = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Zatwierdź', {
+        fontFamily: 'Arial',
+        fontSize: '24px',
+        fill: '#ffffff',
+        backgroundColor: '#007bff',
+        padding: {
+            x: 20,
+            y: 10,
+        },
+    });
+    this.submitButton1.setOrigin(0.5);
+    this.submitButton1.setInteractive({ useHandCursor: true });
+    this.submitButton1.visible = false;
+
+    this.submitButton1.on('pointerdown', () => {
+        for (this.quizAnswerText of this.quizAnswerTexts) {
+            this.quizAnswerText.destroy();
+        }
+        this.submitButton1.destroy();
+
+        console.log([this.selectedAnswerIndex]);
+        showQuiz.call(this, this.selectedCategories[this.selectedAnswerIndex]);
+    });
+}
 
 function prepareQuiz(kategoria) {
     let wybranaKategoria = kategoria //polityka
@@ -49,17 +129,7 @@ function prepareQuiz(kategoria) {
     return {dostepnePytania, dostepneOdpowiedzi};
 }
 
-export function showQuiz(){
-
-    this.modalWidth = 800;
-    this.modalHeight = 600;
-    this.modalX = (this.bw - this.modalWidth) / 2;
-    this.modalY = (this.bh - this.modalHeight) / 2;
-
-    this.quizOpen = true;
-    this.modal = this.add.graphics();
-    this.modal.fillStyle(0xffffff, 0.95);
-    this.modal.fillRoundedRect(this.modalX, this.modalY, this.modalWidth, this.modalHeight, 25);
+function showQuiz(categoryNumber){
     setWynik(0, 0, 0, 0);
     fetch('/dane/wynik')
         .then(response => response.text())
@@ -107,7 +177,7 @@ export function showQuiz(){
     this.punktyZdobyte = 0;
     this.liczbaPytan = 10;
 
-    const dostepne = prepareQuiz.call(this, 3);
+    const dostepne = prepareQuiz.call(this, categoryNumber);
     this.dostepnePytania = dostepne.dostepnePytania;
     this.dostepneOdpowiedzi = dostepne.dostepneOdpowiedzi;
     this.p = this.pytania.find((row) => row.id === this.dostepnePytania[0]);
@@ -210,6 +280,7 @@ function drawQuestionAndAnswers(){
             y: 10,
         },
     });
+
     this.submitButton.setOrigin(0.5);
     this.submitButton.setInteractive({ useHandCursor: true });
     this.submitButton.visible = false;
@@ -310,7 +381,7 @@ function showEndScreen() {
 
     // Wynik
     let points = "Wynik: \n " + (this.punktyZdobyte) + " / " + (this.liczbaPytan)
-    this.quizAnswerText = this.add.text(this.modalX + this.modalWidth / 2 - 100, this.modalHeight - 65, points, {
+    this.points = this.add.text(this.modalX + this.modalWidth / 2 - 100, this.modalHeight - 65, points, {
         fontFamily: 'Arial',
         fontSize: '50px',
         fill: '#000000',
@@ -319,7 +390,6 @@ function showEndScreen() {
             y: 10,
         },
     });
-    this.quizAnswerTexts.push(this.quizAnswerText);
 
     //Zakończ
     this.submitButton = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 45, 'Zakończ', {
@@ -357,6 +427,7 @@ function showEndScreen() {
         if (this.menuText) {
             this.menuText.destroy();
             this.quizQuestionText.destroy();
+            this.points.destroy();
             if(this.submitButton){
                 this.submitButton.destroy();
             }
@@ -410,6 +481,7 @@ export function closeQuiz(){
             if(this.submitButton){
                 this.submitButton.destroy();
             }
+            this.points.destroy();
             this.QuestionNumberDisplayed.destroy();
             this.quizCharacterImage.destroy();
             this.quizQuestionText.destroy();
