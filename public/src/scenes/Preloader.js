@@ -41,6 +41,8 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("CPH", "assets/collisionPH.png")
         this.load.image("QPH", "assets/quizPH.png")
         this.load.image('QTPH', "assets/quizTalkPH.png");
+
+        this.load.image("roseHall", "assets/roseHall.png")
     }
     create() {
 

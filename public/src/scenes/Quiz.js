@@ -93,6 +93,16 @@ export function showQuiz(){
     //     })
     //     .catch((error) => console.error('Error', error));
 
+    // (async () => {
+    //     try {
+    //         const data = await fetch('/dane/odpowiedzi');
+    //         console.log('Dane otrzymane:', data);
+    //         // Tutaj możesz kontynuować pracę z danymi
+    //     } catch (error) {
+    //         console.error('Wystąpił błąd:', error);
+    //     }
+    // })();
+
     this.aktualnePytanie = 1;
     this.punktyZdobyte = 0;
     this.liczbaPytan = 10;
@@ -127,6 +137,13 @@ export function showQuiz(){
         },
         // Tutaj z bazy przypisujemy pytanie do question, odpowiedzi do answers
     ];
+
+    // Ustawianie zdjęcia
+    if (this.p.obraz !== null) {
+        this.questionImage = this.add.image((this.bw - 800) / 2 + 800 / 2, (this.bh - 600) / 2 + 140, this.p.obraz)
+        this.questionImage.setScale(0.25)
+    }
+
     let h = 0;
     this.correctIndex = 0;
     for (h in this.odp) {
@@ -157,7 +174,7 @@ function drawQuestionAndAnswers(){
     this.modal.strokeLineShape(LineSep2);
 
     // Odpowiedzi
-    const answerTexts = tempQuestion.answers    // <--
+    const answerTexts = tempQuestion.answers
 
     const fontSize = '22px';
     const textColor = '#000000';
@@ -227,7 +244,6 @@ function drawQuestionAndAnswers(){
     this.submitButton.on('pointerdown', () => {
         if (parseInt(this.selectedAnswerIndex) === parseInt(this.correctIndex))
             this.punktyZdobyte += 1;
-        //updateDatabase.call(this);
         if(this.aktualnePytanie !== this.liczbaPytan){
             this.quizQuestionText.destroy();
             for (this.quizAnswerText of this.quizAnswerTexts) {
@@ -260,6 +276,11 @@ function drawQuestionAndAnswers(){
                 },
             ];
 
+            if (this.p.obraz !== null) {
+                this.questionImage = this.add.image((this.bw - 800) / 2 + 800 / 2, (this.bh - 600) / 2 + 140, this.p.obraz)
+                this.questionImage.setScale(0.25)
+            }
+
             let h = 0;
             this.correctIndex = 0;
             for (h in this.odp) {
@@ -269,7 +290,8 @@ function drawQuestionAndAnswers(){
             console.log('Correct index:', this.correctIndex);
             drawQuestionAndAnswers.call(this);
 
-        }else if(this.aktualnePytanie === this.liczbaPytan){
+        }
+        else if(this.aktualnePytanie === this.liczbaPytan){
 
             setWynik(this.punktyZdobyte, this.liczbaPytan, 0, 0);
             fetch('/dane/wynik')
@@ -278,11 +300,11 @@ function drawQuestionAndAnswers(){
                     console.error('Error:', error);
                 });
 
-            this.modal.clear();
             if (this.menuText) {
                 this.menuText.destroy();
                 this.quizCharacterImage.destroy();
                 this.quizQuestionText.destroy();
+                this.questionImage.destroy();
                 for (this.quizAnswerText of this.quizAnswerTexts) {
                     this.quizAnswerText.destroy();
                 }
@@ -290,14 +312,88 @@ function drawQuestionAndAnswers(){
                     this.submitButton.destroy();
                 }
                 this.QuestionNumberDisplayed.destroy();
-                this.quizOpen = false;
             }
+            showEndScreen.call(this);
         }
         console.log('Selected answer index:', this.selectedAnswerIndex);
         console.log('Punkty zdobyte!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ', this.punktyZdobyte);
     });
 }
 
+function showEndScreen() {
+    const modalWidth = 800;
+    const modalHeight = 600;
+    const modalX = (this.bw - modalWidth) / 2;
+    const modalY = (this.bh - modalHeight) / 2;
+
+    // Gratulacje
+    let header = 'Gratulacje, quiz ukończony'
+
+    this.header = this.add.text(modalWidth / 2, modalY + 110, header,
+        { fontFamily: 'Arial', fontSize: '50px', fill: '#000000', wordWrap: { width: 780, useAdvancedWrap: true }});
+
+    this.submitButton.visible = true;
+
+    // Wynik
+    let points = "Wynik: \n " + (this.punktyZdobyte) + " / " + (this.liczbaPytan)
+    this.points = this.add.text(modalX + modalWidth / 2 - 100, modalHeight - 65, points, {
+        fontFamily: 'Arial',
+        fontSize: '50px',
+        fill: '#000000',
+        padding: {
+            x: 20,
+            y: 10,
+        },
+    });
+
+    //Zakończ
+    this.submitButton = this.add.text(modalX + modalWidth / 2, modalY + modalHeight - 45, 'Zakończ', {
+        fontFamily: 'Arial',
+        fontSize: '40px',
+        fill: '#ffffff',
+        backgroundColor: '#007bff',
+        padding: {
+            x: 20,
+            y: 10,
+        },
+    });
+    this.submitButton.setOrigin(0.5);
+    this.submitButton.setInteractive({ useHandCursor: true });
+
+    this.submitButton.on('pointerdown', () => {
+        //updateDatabase.call(this);
+        this.quizQuestionText.destroy();
+        for (this.quizAnswerText of this.quizAnswerTexts) {
+            this.quizAnswerText.destroy();
+        }
+        if(this.submitButton){
+            this.submitButton.destroy();
+        }
+        this.QuestionNumberDisplayed.destroy();
+
+
+        setWynik(this.punktyZdobyte, this.liczbaPytan, 0, 0);
+        fetch('/dane/wynik')
+            .then(response => response.text())
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        this.modal.clear();
+        if (this.menuText) {
+            this.menuText.destroy();
+            this.header.destroy();
+            if(this.submitButton){
+                this.submitButton.destroy();
+            }
+            this.points.destroy();
+            this.quizOpen = false;
+        }
+
+        console.log('Selected answer index:', this.selectedAnswerIndex);
+        console.log('Punkty zdobyte!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ', this.punktyZdobyte);
+    });
+}
 function updateDatabase() {
     console.log('Prawidlowa:', this.selectedAnswerIndex);
     console.log('Wybrano:', this.correctIndex);
@@ -331,7 +427,6 @@ export function closeQuiz(){
         this.modal.clear();
         if (this.menuText) {
             this.menuText.destroy();
-            this.quizCharacterImage.destroy();
             this.quizQuestionText.destroy();
             for (this.quizAnswerText of this.quizAnswerTexts) {
                 this.quizAnswerText.destroy();
