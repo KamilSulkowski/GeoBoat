@@ -1,3 +1,4 @@
+
 export class RegionMap extends Phaser.Scene {
     constructor() {
         super('regionMap');
@@ -30,9 +31,20 @@ export class RegionMap extends Phaser.Scene {
 
             this.regionMap = this.make.tilemap({key: 'regionMap'});
 
-            this.tileSetWorld = this.regionMap.addTilesetImage('tile', 'tile',16,16);
-            this.regionMap.createStaticLayer('water', this.tileSetWorld);
-            const island = this.regionMap.createStaticLayer('island', this.tileSetWorld);
+            this.tileSetWorld = this.regionMap.addTilesetImage('tile', 'tiled',16,16);
+            this.water = this.regionMap.createStaticLayer('woda', this.tileSetWorld);
+            this.ground = this.regionMap.createStaticLayer('ground', this.tileSetWorld);
+
+            this.ground.setCollisionByProperty({collides: true});
+
+
+
+            const debugGraphics = this.add.graphics().setAlpha(0.75);
+            this.ground.renderDebug(debugGraphics, {
+                tileColor: null, // Color of non-colliding tiles,
+                collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+                faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+            });
 
 
             // Dodaj fizykę do warstw
@@ -103,7 +115,8 @@ export class RegionMap extends Phaser.Scene {
 
             // Zmienna do ustawienia sterowania
             this.keys = this.input.keyboard.createCursorKeys();
-
+            this.physics.add.collider(this.boat, this.ground);
+            this.ground.setCollisionBetween(5,6);
 
         }
 
@@ -135,6 +148,7 @@ export class RegionMap extends Phaser.Scene {
                 this.inZoneKey.destroy();
             }
         }
+
             if (!this.inZone && !this.physics.overlap(this.boat, this.quiz_test)) {
                 if (this.quizText) {
                     this.quizText.destroy();
@@ -142,6 +156,7 @@ export class RegionMap extends Phaser.Scene {
                     this.inZoneKey.destroy();
                 }
             }
+            console.log('Ground Collides:', this.physics.overlap(this.boat, this.ground));
         }
         handleCollision(){
         console.log("KOLIZJA");
@@ -175,12 +190,6 @@ export class RegionMap extends Phaser.Scene {
         changeMap() {
         console.log("zmiana mapy1: " + this.currentMap + " inzone: " + this.inZone);
         switch (this.currentMap) {
-            case 'worldMap':
-                this.currentMap = 'regionMap';
-                this.scene.stop('worldMap');
-                this.scene.launch('regionMap');
-                this.scene.sendToBack('regionMap');
-                break;
             case 'regionMap':
                 this.currentMap = 'worldMap';
                 this.scene.stop('regionMap');

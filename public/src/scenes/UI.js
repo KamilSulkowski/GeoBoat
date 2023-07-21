@@ -1,4 +1,5 @@
 import {showQuiz, closeQuiz} from "./Quiz.js";
+
 export default class UI extends Phaser.Scene {
     constructor() {
         super('ui');

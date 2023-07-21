@@ -518,6 +518,12 @@
          "id":8,
          "name":"deepwater",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"collision",
+                 "type":"string",
+                 "value":"true"
+                }],
          "type":"tilelayer",
          "visible":true,
          "width":500,
@@ -779,6 +785,12 @@
          "id":4,
          "name":"ground",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"collision",
+                 "type":"string",
+                 "value":"true"
+                }],
          "type":"tilelayer",
          "visible":true,
          "width":500,
@@ -1040,6 +1052,12 @@
          "id":6,
          "name":"extra",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"collision",
+                 "type":"string",
+                 "value":"true"
+                }],
          "type":"tilelayer",
          "visible":true,
          "width":500,

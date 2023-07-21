@@ -4,9 +4,9 @@
   "description": "",
   "main": "public/index.html",
   "scripts": {
-    "start": "",
+    "start": "node server.js",
     "prestart": "npm install cors express md5 phaser sqlite3 body-parser fs phaser3-rex-plugins",
-    "poststart": "node server.js"
+    "poststart": ""
   },
   "keywords": [],
   "author": "",

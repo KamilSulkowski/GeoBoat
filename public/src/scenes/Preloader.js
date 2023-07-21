@@ -1,5 +1,3 @@
-import {WorldMap} from "../worldMap.js";
-
 
 export default class Preloader extends Phaser.Scene {
 
@@ -31,12 +29,12 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("profilePic", "assets/profilePic.png")
         this.load.image("profileBorder", "assets/profileBorder.png")
 
+        this.load.image('worldtiles', "assets/worldtiles.png");
         this.load.image('tiled', "assets/worldtiles.png");
-        this.load.image('tile', "assets/worldtiles.png");
 
         this.load.tilemapTiledJSON('worldMap','Maps/worldMap.json');
         this.load.tilemapTiledJSON('regionMap', 'Maps/regionMap.json');
-
+        this.load.tilemapTiledJSON('jamajka', 'Maps/jamajkaRegion.json');
         this.load.image("PPH", "assets/portPH.png")
         this.load.image("CPH", "assets/collisionPH.png")
         this.load.image("QPH", "assets/quizPH.png")

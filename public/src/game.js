@@ -88,9 +88,8 @@ export default class Game extends Phaser.Scene {
 
         // Poprawka: Ustawienie środka kamery na pozycję łodzi
         this.cameras.main.centerOn(this.boat.x, this.boat.y);
-
         // Utworzenie instancji klasy WorldMap i przekazanie referencji łodzi
-        this.scene.start('worldMap'); // Przekazujemy łódź jako drugi argument
+        this.scene.launch('worldMap', this.boat); // Przekazujemy łódź jako drugi argument
         this.scene.sendToBack('worldMap');
         this.currentMap = 'worldMap';
 

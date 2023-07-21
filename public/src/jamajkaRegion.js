@@ -1,12 +1,10 @@
-
-export class WorldMap extends Phaser.Scene {
+export class jamajkaRegion extends Phaser.Scene {
     constructor() {
-        super('worldMap');
+        super('jamajka');
         this.tileSetWorld = null;
         this.water = null;
         this.ground = null;
-        this.deepwater = null;
-        this.extra = null;
+        this.stones = null;
         this.boat = null; // Przypisujemy łódź do właściwości klasy
         this.engine = 0;    //Zmienna do sprawdzania stanu rozpędu/hamowania łodzi
         this.inZone = false;//Flaga kolizji
@@ -18,66 +16,51 @@ export class WorldMap extends Phaser.Scene {
         this.boatMaxSpeed = 4 // Maksymalna prędkość łodzi
         this.boatMaxReverseSpeed = -0.5 // Maksymalna prędkość cofania łodzi
         this.currentMap = null; //Zmienna do zapamiętywania na jakiej mapie jest gracz
-        this.region = null; //Zmienna do zapamiętywania na jakim regionie jest gracz
         this.shipCooldown = 0;//Zmienna do sprawdzania czasu naprawy
         this.shipRepairTime = 10000 //Zmienna czasu naprawy 10000 = 10s
         this.shipDamaged = false;//Flaga stanu statku (naprawa/sprawny)
-        this.boatRespawnX = 3150;
-        this.boatRespawnY = 1250;
     }
+    preload(){
 
-    preload() {
-        // Ładowanie zasobów specyficznych dla mapy świata...
     }
-
     create() {
         //Pobranie wartości z pliku UI.js
         this.uiScene = this.scene.get('ui');
 
-        // Ładowanie mapy
-        const worldMap = this.make.tilemap({key: 'worldMap'});
+        const jamajka = this.make.tilemap({key: 'jamajka'});
 
-        this.tileSetWorld = worldMap.addTilesetImage('tile', 'tiled',16,16);
-        this.extra = worldMap.createDynamicLayer('extra', this.tileSetWorld);
-        this.water = worldMap.createDynamicLayer('water', this.tileSetWorld);
-        this.ground = worldMap.createDynamicLayer('ground', this.tileSetWorld);
-        this.deepwater = worldMap.createDynamicLayer('deepwater', this.tileSetWorld);
+        this.tileSetWorld = jamajka.addTilesetImage('worldtiles', 'worldtiles',16,16);
+        this.water = jamajka.createStaticLayer('water', this.tileSetWorld);
+        this.ground = jamajka.createStaticLayer('ground', this.tileSetWorld);
+        this.stones = jamajka.createStaticLayer('stones', this.tileSetWorld);
 
-        this.water.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
-        this.deepwater.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
-        this.ground.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
-        this.extra.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
+        this.ground.setCollisionByProperty({collides: true});
+        this.stones.setCollisionByProperty({collides: true});
 
 
-        this.physics.world.setBounds(0, 0, 8000, 4000); // Ustaw granice świata
-        //
-        // const debugGraphics = this.add.graphics().setAlpha(0.75);
-        // this.ground.renderDebug(debugGraphics, {
-        //     tileColor: null, // Color of non-colliding tiles,
-        //     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        // });
-        // this.deepwater.renderDebug(debugGraphics, {
-        //     tileColor: null, // Color of non-colliding tiles,
-        //     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        // });
-        // this.extra.renderDebug(debugGraphics, {
-        //     tileColor: null, // Color of non-colliding tiles,
-        //     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        // });
-        this.currentMap = 'worldMap';
 
 
-        // ładowanie łódki
-        this.boat = this.physics.add.sprite(this.boatRespawnX, this.boatRespawnY, "boat");
-        this.boat2 = this.physics.add.sprite(3150, 1680 , "PPH");
-        this.boat3 = this.physics.add.sprite(2600, 900 , "PPH");
+        const debugGraphics = this.add.graphics().setAlpha(0.75);
+        this.ground.renderDebug(debugGraphics, {
+            tileColor: null, // Color of non-colliding tiles,
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        });
+
+
+        // Dodaj fizykę do warstw
+
+        this.cameras.main.setBounds(0, 0, 2000, 2000);
+
+        this.currentMap = 'jamajka';
+
+        this.boat = this.physics.add.sprite(500, 500, "boat");
+        this.boat2 = this.physics.add.sprite(600, 600 , "PPH");
+        this.quiz_test = this.physics.add.sprite(700, 700, "QPH");
         // Zmiana obszaru kolizji dla gracza
+        this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
         this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
-        this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
 
         // Animacja łódki gracza
         this.anims.create({
@@ -101,20 +84,19 @@ export class WorldMap extends Phaser.Scene {
                     .setStyle({fontFamily: "Arial"});
                 this.inZoneKey = this.input.keyboard.addKey('E')
                 this.inZoneKey.on('down', () => {this.changeMap()});
-                this.region = 'Kuba';
             }
         });
-        this.physics.add.overlap(this.boat, this.boat3, () => {
+        //Wpływanie na quizy, alert
+        this.physics.add.overlap(this.boat, this.quiz_test, () => {
             this.inZone = true;
-            if (this.inZone === true && !this.text2) {
-                this.text2 = this.add.text(this.boat3.x + 0 ,this.boat3.y - 50, 'Czy chcesz wejść na region ?')
+            if (this.inZone === true && !this.quizText) {
+                this.quizText = this.add.text(this.quiz_test.x + 0 ,this.quiz_test.y - 50, 'Wciśnij Q, żeby przejść do quizu.')
                     .setScale(1.5)
                     .setBackgroundColor('#808080')
                     .setColor('#000000')
                     .setStyle({fontFamily: "Arial"});
-                this.inZoneKey = this.input.keyboard.addKey('E')
-                this.inZoneKey.on('down', () => {this.changeMap()});
-                this.region = 'jamajka';
+                this.inZoneKey = this.input.keyboard.addKey('Q');
+                this.inZoneKey.on('down', () => { this.uiScene.toggleQuiz()});
             }
         });
 
@@ -130,9 +112,11 @@ export class WorldMap extends Phaser.Scene {
 
         // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
         this.boat.setCollideWorldBounds(true);
+        this.physics.add.collider(this.boat, this.boat_collider, this.handleCollision, null, this);
 
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
+
 
     }
 
@@ -164,29 +148,24 @@ export class WorldMap extends Phaser.Scene {
                 this.inZoneKey.destroy();
             }
         }
-        this.inZone = false;
-        if (this.inZone === false && this.physics.overlap(this.boat, this.boat3) === false) {
-            if (this.text2) {
-                this.text2.destroy();
-                this.text2 = null;
+        if (!this.inZone && !this.physics.overlap(this.boat, this.quiz_test)) {
+            if (this.quizText) {
+                this.quizText.destroy();
+                this.quizText = null;
                 this.inZoneKey.destroy();
             }
         }
-        // Ustaw kolizje dla obiektu this.boat z innymi obiektami
-        this.physics.add.collider(this.boat, this.deepwater);
         this.physics.add.collider(this.boat, this.ground);
-        this.physics.add.collider(this.boat, this.extra);
     }
     handleCollision(){
         console.log("KOLIZJA");
-        this.boat.setTint(0xff0000);
-        // this.boatSpeed = -1;
-        // this.adrift = 1;
-        //
-        // // Zmiana życia łodzi, jak ma 0 HP to i tak już jest
-        // if(this.uiScene.HP > 0){
-        //     this.uiScene.setHeartState()
-        // }
+        this.boatSpeed = -1;
+        this.adrift = 1;
+
+        // Zmiana życia łodzi, jak ma 0 HP to i tak już jest
+        if(this.uiScene.HP > 0){
+            this.uiScene.setHeartState()
+        }
     }
     // Funkcje debuffa łodzi
     shipWrecked(){
@@ -209,18 +188,12 @@ export class WorldMap extends Phaser.Scene {
     }
     changeMap() {
         console.log("zmiana mapy1: " + this.currentMap + " inzone: " + this.inZone);
-        switch (this.region) {
-            case 'Kuba':
-                this.currentMap = 'regionMap';
-                this.scene.stop('worldMap');
-                this.scene.launch('regionMap');
-                this.scene.sendToBack('regionMap');
-                break;
+        switch (this.currentMap) {
             case 'jamajka':
-                this.currentMap = 'jamajka';
-                this.scene.stop('worldMap');
-                this.scene.launch('jamajka');
-                this.scene.sendToBack('jamajka');
+                this.currentMap = 'worldMap';
+                this.scene.stop('jamajka');
+                this.scene.launch('worldMap');
+                this.scene.sendToBack('worldMap');
                 break;
         }
         console.log("zmiana mapy2: " + this.currentMap + " inzone: " + this.inZone);
@@ -301,4 +274,3 @@ export class WorldMap extends Phaser.Scene {
         }
     }
 }
-
