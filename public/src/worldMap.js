@@ -38,35 +38,38 @@ export class WorldMap extends Phaser.Scene {
         const worldMap = this.make.tilemap({key: 'worldMap'});
 
         this.tileSetWorld = worldMap.addTilesetImage('tile', 'tiled',16,16);
-        this.extra = worldMap.createDynamicLayer('extra', this.tileSetWorld);
-        this.water = worldMap.createDynamicLayer('water', this.tileSetWorld);
-        this.ground = worldMap.createDynamicLayer('ground', this.tileSetWorld);
-        this.deepwater = worldMap.createDynamicLayer('deepwater', this.tileSetWorld);
+        this.extra = worldMap.createStaticLayer('extra', this.tileSetWorld);
+        this.water = worldMap.createStaticLayer('water', this.tileSetWorld);
+        this.ground = worldMap.createStaticLayer('ground', this.tileSetWorld);
+        this.deepwater = worldMap.createStaticLayer('deepwater', this.tileSetWorld);
 
         this.water.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
         this.deepwater.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
         this.ground.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
         this.extra.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
 
+        this.deepwater.setCollisionByProperty({collides: true});
+        this.ground.setCollisionByProperty({collides: true});
+        this.extra.setCollisionByProperty({collides: true});
 
         this.physics.world.setBounds(0, 0, 8000, 4000); // Ustaw granice świata
-        //
-        // const debugGraphics = this.add.graphics().setAlpha(0.75);
-        // this.ground.renderDebug(debugGraphics, {
-        //     tileColor: null, // Color of non-colliding tiles,
-        //     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        // });
-        // this.deepwater.renderDebug(debugGraphics, {
-        //     tileColor: null, // Color of non-colliding tiles,
-        //     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        // });
-        // this.extra.renderDebug(debugGraphics, {
-        //     tileColor: null, // Color of non-colliding tiles,
-        //     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        // });
+
+        const debugGraphics = this.add.graphics().setAlpha(0.75);
+        this.ground.renderDebug(debugGraphics, {
+            tileColor: null, // Color of non-colliding tiles,
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        });
+        this.deepwater.renderDebug(debugGraphics, {
+            tileColor: null, // Color of non-colliding tiles,
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        });
+        this.extra.renderDebug(debugGraphics, {
+            tileColor: null, // Color of non-colliding tiles,
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        });
         this.currentMap = 'worldMap';
 
 
@@ -172,10 +175,7 @@ export class WorldMap extends Phaser.Scene {
                 this.inZoneKey.destroy();
             }
         }
-        // Ustaw kolizje dla obiektu this.boat z innymi obiektami
-        this.physics.add.collider(this.boat, this.deepwater);
-        this.physics.add.collider(this.boat, this.ground);
-        this.physics.add.collider(this.boat, this.extra);
+
     }
     handleCollision(){
         console.log("KOLIZJA");
@@ -257,13 +257,13 @@ export class WorldMap extends Phaser.Scene {
             } // Poruszanie łodzi (Rozpędzanie w czasie)
             if(this.boatSpeed <= this.boatMaxSpeed){
                 if(this.timer >= 100){
-                    console.log(this.timer)
+                    //console.log(this.timer)
                     this.boatSpeed += 0.1;
                     this.boat.y -= this.boatSpeed *dy;
                     this.boat.x -= this.boatSpeed *dx;
                     this.timer = 0;
 
-                    console.log(this.boatSpeed)
+                    //console.log(this.boatSpeed)
                 }
             }
         }else if(this.keys.up?.isUp){
