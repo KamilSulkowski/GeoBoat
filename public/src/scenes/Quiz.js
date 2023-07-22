@@ -1,6 +1,14 @@
-import {setWynik, setOdp, zablokujPytanie, odblokujPytanie} from '../data_access/data_access.js';
+import {setWynik, setOdp, zablokujPytanie, odblokujPytanie, fetchData} from '../data_access/data_access.js';
 
-export function categorySelection() {
+export function startQuiz() {
+    categorySelection.call(this);
+}
+async function categorySelection() {
+    // this.ddd;
+    // await fetchData('dane/odpowiedzi').then((data) =>
+    //     this.ddd = data[2].tresc
+    // );
+    // console.log('wooooow mega', this.ddd);
     this.modalWidth = 800;
     this.modalHeight = 600;
     this.modalX = (this.bw - this.modalWidth) / 2;
@@ -11,8 +19,15 @@ export function categorySelection() {
     this.modal.fillStyle(0xffffff, 0.95);
     this.modal.fillRoundedRect(this.modalX, this.modalY, this.modalWidth, this.modalHeight, 25);
 
+    //Pobranie danych z bazy
+    this.pytania = await fetchData('dane/pytania').then((data) => this.pytania = data);
+    this.odpowiedzi = await fetchData('dane/odpowiedzi').then((data) => this.odpowiedzi = data);
+    this.wynik = await fetchData('dane/wynik').then((data) => this.wynik = data);
+    this.categoriesJSON = await fetchData('dane/kategorie').then((data) => this.categoriesJSON = data);
+
     let idRegionu = 1;  //Jamajka
-    this.categoriesJSON = this.cache.json.get('kategorie');
+
+    //Pobranie kategorii dla wybranego regionu
     this.categories = [];
     this.selectedCategories = [];
     let i = 0;
@@ -25,6 +40,7 @@ export function categorySelection() {
     }
     console.log([this.selectedCategories]);
 
+    //Wypisanie nazw kategorii
     const yOffset = 300;
     const yOffsetIncrement = 60;
     const wordWrapWidth = 760;
@@ -46,6 +62,7 @@ export function categorySelection() {
         this.quizAnswerTexts.push(this.quizAnswerText);
     }
 
+    //Wybieranie kategorii
     const handleAnswerClick = (index) => {
         for (let i = 0; i < this.quizAnswerTexts.length; i++) {
             this.quizAnswerTexts[i].setBackgroundColor('#f0f0f0');
@@ -69,7 +86,6 @@ export function categorySelection() {
     this.submitButton1.setOrigin(0.5);
     this.submitButton1.setInteractive({ useHandCursor: true });
     this.submitButton1.visible = false;
-
     this.submitButton1.on('pointerdown', () => {
         for (this.quizAnswerText of this.quizAnswerTexts) {
             this.quizAnswerText.destroy();
@@ -131,11 +147,6 @@ function prepareQuiz(kategoria) {
 
 function showQuiz(categoryNumber){
     setWynik(0, 0, 0, 0);
-    fetch('/dane/wynik')
-        .then(response => response.text())
-        .catch(error => {
-            console.error('Error:', error);
-        });
 
     //Tytuł
     this.menuText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + 20, 'Quiz', { fontFamily: 'Arial', fontSize: '24px', fill: '#000000' });
@@ -150,10 +161,6 @@ function showQuiz(categoryNumber){
     this.quizCharacterImage = this.add.image(this.modalX + 110, this.modalY + 150, 'QTPH');
     this.quizCharacterImage.setScale(0.75); // Adjust the scale of the image as needed
 
-    //---------------------------------------
-    this.pytania = this.cache.json.get('pytania');
-    this.odpowiedzi = this.cache.json.get('odpowiedzi');
-    this.wynik = this.cache.json.get('wynik');
 
     // fetch('/dane/odpowiedzi')
     //     .then((response) => response.json())
@@ -195,7 +202,6 @@ function showQuiz(categoryNumber){
 
     if (this.dostepnePytania.length < 10)
         this.liczbaPytan = this.dostepnePytania.length;
-
     drawQuestionAndAnswers.call(this);
 }
 function drawQuestionAndAnswers(){
@@ -288,46 +294,12 @@ function drawQuestionAndAnswers(){
     this.submitButton.on('pointerdown', () => {
         if (parseInt(this.selectedAnswerIndex) === parseInt(this.correctIndex))
             this.punktyZdobyte += 1;
-        if(this.aktualnePytanie !== this.liczbaPytan){
-            this.quizQuestionText.destroy();
-            for (this.quizAnswerText of this.quizAnswerTexts) {
-                this.quizAnswerText.destroy();
-            }
-            if(this.questionImage)
-                this.questionImage.destroy();
-            if(this.submitButton)
-                this.submitButton.destroy();
-            this.QuestionNumberDisplayed.destroy();
+        if(this.submitButton)
+            this.submitButton.destroy();
 
-            drawQuestionAndAnswers.call(this);
-        }
-        else if(this.aktualnePytanie === this.liczbaPytan){
-
-            setWynik(this.punktyZdobyte, this.liczbaPytan, 0, 0);
-            fetch('/dane/wynik')
-                .then(response => response.text())
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-
-            if (this.menuText) {
-                this.menuText.destroy();
-                this.quizCharacterImage.destroy();
-                this.quizQuestionText.destroy();
-                if(this.questionImage)
-                    this.questionImage.destroy();
-                for (this.quizAnswerText of this.quizAnswerTexts) {
-                    this.quizAnswerText.destroy();
-                }
-                if(this.submitButton){
-                    this.submitButton.destroy();
-                }
-                this.QuestionNumberDisplayed.destroy();
-            }
-            showEndScreen.call(this);
-        }
         console.log('Selected answer index:', this.selectedAnswerIndex);
         console.log('Punkty zdobyte: ', this.punktyZdobyte);
+        showResult.call(this);
     });
 }
 
@@ -370,18 +342,80 @@ function newQuestion() {
     }
     console.log('Correct index:', this.correctIndex);
 }
+
+function showResult() {
+    let information;
+    if (parseInt(this.selectedAnswerIndex) === parseInt(this.correctIndex))
+        information = 'Poprawna odpowiedź';
+    else {
+        information = 'Błędna odpowiedź';
+    }
+
+    this.correctionText = this.add.text(this.modalWidth / 2, this.modalHeight, information,
+        { fontFamily: 'Arial', fontSize: '24px', fill: '#000000', wordWrap: { width: 780, useAdvancedWrap: true }});
+
+    //Przejście dalej
+    this.nextQuestionButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Dalej', {
+        fontFamily: 'Arial',
+        fontSize: '24px',
+        fill: '#ffffff',
+        backgroundColor: '#007bff',
+        padding: {
+            x: 20,
+            y: 10,
+        },
+    });
+    this.nextQuestionButton.setOrigin(0.5);
+    this.nextQuestionButton.setInteractive({ useHandCursor: true });
+    this.nextQuestionButton.visible = true;
+
+    this.nextQuestionButton.on('pointerdown', () => {
+    if(this.aktualnePytanie === this.liczbaPytan) {
+        if (this.menuText) {
+            this.menuText.destroy();
+            this.quizCharacterImage.destroy();
+            this.quizQuestionText.destroy();
+            if(this.questionImage)
+                this.questionImage.destroy();
+            for (this.quizAnswerText of this.quizAnswerTexts) {
+                this.quizAnswerText.destroy();
+            }
+            this.QuestionNumberDisplayed.destroy();
+            if(this.nextQuestionButton)
+                this.nextQuestionButton.destroy();
+        }
+        this.correctionText.destroy();
+
+        showEndScreen.call(this);
+    }
+    else {
+        this.quizQuestionText.destroy();
+        this.correctionText.destroy();
+        for (this.quizAnswerText of this.quizAnswerTexts) {
+            this.quizAnswerText.destroy();
+        }
+        if (this.questionImage)
+            this.questionImage.destroy();
+        if (this.nextQuestionButton)
+            this.nextQuestionButton.destroy();
+        this.QuestionNumberDisplayed.destroy();
+
+        drawQuestionAndAnswers.call(this);
+    }
+    });
+}
 function showEndScreen() {
     // Gratulacje
     let header = 'Gratulacje, quiz ukończony'
 
-    this.quizQuestionText = this.add.text(this.modalWidth / 2, this.modalY + 110, header,
+    this.endText = this.add.text(this.modalWidth / 2 - 100, this.modalY + 110, header,
         { fontFamily: 'Arial', fontSize: '50px', fill: '#000000', wordWrap: { width: 780, useAdvancedWrap: true }});
 
     this.submitButton.visible = true;
 
     // Wynik
     let points = "Wynik: \n " + (this.punktyZdobyte) + " / " + (this.liczbaPytan)
-    this.points = this.add.text(this.modalX + this.modalWidth / 2 - 100, this.modalHeight - 65, points, {
+    this.points = this.add.text(this.modalWidth / 2 + 50, this.modalHeight / 2 + 50, points, {
         fontFamily: 'Arial',
         fontSize: '50px',
         fill: '#000000',
@@ -415,19 +449,14 @@ function showEndScreen() {
         }
         this.QuestionNumberDisplayed.destroy();
 
-
         setWynik(this.punktyZdobyte, this.liczbaPytan, 0, 0);
-        fetch('/dane/wynik')
-            .then(response => response.text())
-            .catch(error => {
-                console.error('Error:', error);
-            });
 
         this.modal.clear();
         if (this.menuText) {
             this.menuText.destroy();
             this.quizQuestionText.destroy();
             this.points.destroy();
+            this.endText.destroy();
             if(this.submitButton){
                 this.submitButton.destroy();
             }

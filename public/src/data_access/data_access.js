@@ -53,6 +53,17 @@ export function odblokujPytanie(idPyt) {
     fetchThen('/dane/odblokowaniePytania', pytanie)
 }
 
+export async function fetchData(path) {
+    try {
+        const response = await fetch(path);
+        const data = await response.json();
+        return data;
+    }
+    catch (e) {
+        console.error(e.message);
+    }
+}
+
 // export function getOdpowiedzi(idPyt) {
 //     const pytanie = {
 //         idPytania: idPyt

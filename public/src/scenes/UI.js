@@ -1,4 +1,4 @@
-import {categorySelection, closeQuiz} from "./Quiz.js";
+import {startQuiz, closeQuiz} from "./Quiz.js";
 export default class UI extends Phaser.Scene {
     constructor() {
         super('ui');
@@ -10,10 +10,6 @@ export default class UI extends Phaser.Scene {
         this.speedDecreaseRate = 0.1;
     }
     preload() {
-        this.load.json('pytania', '../json_files/pytania.json');
-        this.load.json('odpowiedzi', '../json_files/odpowiedzi.json');
-        this.load.json('wynik', '../json_files/wynik.json');
-        this.load.json('kategorie', '../json_files/kategorie.json');
     }
     create() {
         this.gameScene = this.scene.get('game');
@@ -125,7 +121,7 @@ export default class UI extends Phaser.Scene {
     }
     // Obracanie strzałką kompasu
     setCompassArrowAngle(angle){
-        //this.compassA.angle = angle;
+        this.compassA.angle = angle;
     }
 
     update(time, delta) {
@@ -370,7 +366,7 @@ export default class UI extends Phaser.Scene {
             closeQuiz.call(this);
         } else {
             console.log("quiz open")
-            categorySelection.call(this);
+            startQuiz.call(this);
         }
     }
 }
