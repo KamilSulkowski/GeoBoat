@@ -15,15 +15,15 @@ export class WorldMap extends Phaser.Scene {
         this.adrift = 0;    //Zmienna do kolizji odbicia
         this.timer = 0;     //Zmienna do przeliczania czasu (używana przy łodzi atm)
         this.boatSpeed = 0; //Zmienna do ustawiania prędkości łódki
-        this.boatMaxSpeed = 4 // Maksymalna prędkość łodzi
-        this.boatMaxReverseSpeed = -0.5 // Maksymalna prędkość cofania łodzi
+        this.boatMaxSpeed = 100 // Maksymalna prędkość łodzi
+        this.boatMaxReverseSpeed = -25 // Maksymalna prędkość cofania łodzi
         this.currentMap = null; //Zmienna do zapamiętywania na jakiej mapie jest gracz
         this.region = null; //Zmienna do zapamiętywania na jakim regionie jest gracz
         this.shipCooldown = 0;//Zmienna do sprawdzania czasu naprawy
         this.shipRepairTime = 10000 //Zmienna czasu naprawy 10000 = 10s
         this.shipDamaged = false;//Flaga stanu statku (naprawa/sprawny)
-        this.boatRespawnX = 3150;
-        this.boatRespawnY = 1250;
+        this.boatRespawnX = 3150; //Współrzędne respawnu łodzi
+        this.boatRespawnY = 1350; //Współrzędne respawnu łodzi
     }
 
     preload() {
@@ -54,22 +54,22 @@ export class WorldMap extends Phaser.Scene {
 
         this.physics.world.setBounds(0, 0, 8000, 4000); // Ustaw granice świata
 
-        const debugGraphics = this.add.graphics().setAlpha(0.25);
-        this.ground.renderDebug(debugGraphics, {
-            tileColor: null, // Color of non-colliding tiles,
-            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        });
-        this.deepwater.renderDebug(debugGraphics, {
-            tileColor: null, // Color of non-colliding tiles,
-            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        });
-        this.extra.renderDebug(debugGraphics, {
-            tileColor: null, // Color of non-colliding tiles,
-            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        });
+        // const debugGraphics = this.add.graphics().setAlpha(0.25);
+        // this.ground.renderDebug(debugGraphics, {
+        //     tileColor: null, // Color of non-colliding tiles,
+        //     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        // });
+        // this.deepwater.renderDebug(debugGraphics, {
+        //     tileColor: null, // Color of non-colliding tiles,
+        //     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        // });
+        // this.extra.renderDebug(debugGraphics, {
+        //     tileColor: null, // Color of non-colliding tiles,
+        //     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        // });
         this.currentMap = 'worldMap';
 
 
@@ -137,64 +137,64 @@ export class WorldMap extends Phaser.Scene {
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
 
-        // BEGGIN - HUGO
+
         this.physics.add.collider(this.boat, this.ground);
-        // END - HUGO
+        this.physics.add.collider(this.boat, this.deepwater);
+        this.physics.add.collider(this.boat, this.extra);
     }
 
     update(time, delta) {
         // BEGGIN - HUGO
-        const speed = 200;
-        this.cameras.main.startFollow(this.boat);
-        if(this.keys.left?.isDown){
-            this.boat.setVelocity(-speed, 0)
-        }else if(this.keys.right?.isDown){
-            this.boat.setVelocity(speed, 0)
-        }
-        if(this.keys.up?.isDown){
-            this.boat.setVelocity(0, -speed)
-        }else if(this.keys.up?.isUp){
-        }
-        if(this.keys.down?.isDown){
-            this.boat.setVelocity(0, speed)
-        }
+        // this.cameras.main.startFollow(this.boat);
+        // if(this.keys.left?.isDown){
+        //     this.boat.setVelocity(-speed, 0)
+        // }else if(this.keys.right?.isDown){
+        //     this.boat.setVelocity(speed, 0)
+        // }
+        // if(this.keys.up?.isDown){
+        //     this.boat.setVelocity(0, -speed)
+        // }else if(this.keys.up?.isUp){
+        // }
+        // if(this.keys.down?.isDown){
+        //     this.boat.setVelocity(0, speed)
+        // }
         // END - HUGO
 
-        // super.update(time, delta);
-        // this.timer += delta;
-        // this.shipCooldown += delta;
-        // // Cooldown debuffa (Naprawa łodzi w czasie)
-        // this.shipDebuff()
-        // // Zmiana strzałki kompasu w zależności od pozycji łodzi
-        // if(this.uiScene){
-        //     this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
-        // }
-        // if(this.boatSpeed != 0){
-        //     this.boat.anims.resume();
-        // }else{
-        //     this.boat.anims.pause();
-        // }
-        // // Poruszanie łodzią
-        // this.moveBoat(this.timer);
-        // this.boatEngine(this.engine, this.timer);
-        // this.cameras.main.startFollow(this.boat);
-        // // Sprawdzenie, czy łódka opuściła obszar kolizji
-        // this.inZone = false;
-        // if (this.inZone === false && this.physics.overlap(this.boat, this.boat2) === false) {
-        //     if (this.text) {
-        //         this.text.destroy();
-        //         this.text = null;
-        //         this.inZoneKey.destroy();
-        //     }
-        // }
-        // this.inZone = false;
-        // if (this.inZone === false && this.physics.overlap(this.boat, this.boat3) === false) {
-        //     if (this.text2) {
-        //         this.text2.destroy();
-        //         this.text2 = null;
-        //         this.inZoneKey.destroy();
-        //     }
-        // }
+        super.update(time, delta);
+        this.timer += delta;
+        this.shipCooldown += delta;
+        // Cooldown debuffa (Naprawa łodzi w czasie)
+        this.shipDebuff()
+        // Zmiana strzałki kompasu w zależności od pozycji łodzi
+        if(this.uiScene){
+            this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
+        }
+        if(this.boatSpeed != 0){
+            this.boat.anims.resume();
+        }else{
+            this.boat.anims.pause();
+        }
+        // Poruszanie łodzią
+        this.moveBoat(this.timer);
+        this.boatEngine(this.engine, this.timer);
+        this.cameras.main.startFollow(this.boat);
+        // Sprawdzenie, czy łódka opuściła obszar kolizji
+        this.inZone = false;
+        if (this.inZone === false && this.physics.overlap(this.boat, this.boat2) === false) {
+            if (this.text) {
+                this.text.destroy();
+                this.text = null;
+                this.inZoneKey.destroy();
+            }
+        }
+        this.inZone = false;
+        if (this.inZone === false && this.physics.overlap(this.boat, this.boat3) === false) {
+            if (this.text2) {
+                this.text2.destroy();
+                this.text2 = null;
+                this.inZoneKey.destroy();
+            }
+        }
 
     }
     handleCollision(){
@@ -221,7 +221,7 @@ export class WorldMap extends Phaser.Scene {
 
             }else{
                 console.log("Naprawiono")
-                this.boatMaxSpeed = 4;
+                this.boatMaxSpeed = 100;
                 this.uiScene.recoverHeart();
             }
             this.shipCooldown = 0;
@@ -265,22 +265,21 @@ export class WorldMap extends Phaser.Scene {
         }
         // Obracanie
         if(this.keys.left?.isDown){
-            this.boat.angle -= this.boatSpeed / 2;
+            this.boat.angle -= 2;
         }else if(this.keys.right?.isDown){
-            this.boat.angle += this.boatSpeed / 2;
+            this.boat.angle += 2;
         }
         if(this.keys.up?.isDown){
             // Jeżeli łódź się cofa, zatrzymaj ją
-            if(this.boatSpeed === -0.25 && this.timer >= 500){
+            if(this.boatSpeed === -20 && this.timer >= 500){
                 this.boatSpeed = 0;
                 this.timer = 0;
             } // Poruszanie łodzi (Rozpędzanie w czasie)
             if(this.boatSpeed <= this.boatMaxSpeed){
                 if(this.timer >= 100){
                     //console.log(this.timer)
-                    this.boatSpeed += 0.1;
-                    this.boat.y -= this.boatSpeed *dy;
-                    this.boat.x -= this.boatSpeed *dx;
+                    this.boatSpeed += 10;
+                    this.boat.setAcceleration(Math.cos(direction) * this.boatSpeed, Math.sin(direction) * this.boatSpeed);
                     this.timer = 0;
 
                     //console.log(this.boatSpeed)
@@ -299,12 +298,12 @@ export class WorldMap extends Phaser.Scene {
     boatStop(){
         if(this.boatSpeed > 0){
             if(this.timer >= 100){
-                this.boatSpeed -= 0.25;
+                this.boatSpeed -= 10;
                 this.timer = 0;
             }// cofanie
         }else if(this.boatSpeed < 0){
             this.boatSpeed = this.boatMaxReverseSpeed;
-            this.adrift = 1;
+            this.adrift = 10;
             console.log(this.boatSpeed)
         }
     }
@@ -316,8 +315,9 @@ export class WorldMap extends Phaser.Scene {
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
         if (engine = 1){
-            this.boat.y -= this.boatSpeed *dy;
-            this.boat.x -= this.boatSpeed *dx;
+            this.boat.setVelocity(-this.boatSpeed *dx, -this.boatSpeed *dy);
+            // this.boat.y -= this.boatSpeed *dy;
+            // this.boat.x -= this.boatSpeed *dx;
         }
     }
 }

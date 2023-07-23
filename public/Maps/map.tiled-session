@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "jamajkaRegion.json",
+    "activeFile": "worldMap.json",
     "automapping.whileDrawing": false,
     "expandedProjectPaths": [
         "tiled",
@@ -56,8 +56,8 @@
             "scale": 0.351025,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 994.2311801153763,
-                "y": 992.8067801438644
+                "x": 992.8067801438644,
+                "y": 988.5335802293284
             }
         },
         "jamajkaRegion.json#worldtiles": {
@@ -235,8 +235,8 @@
             "scale": 0.125,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 3960,
-                "y": 1972
+                "x": 4092,
+                "y": 2440
             }
         },
         "worldMap.json#tile": {
@@ -261,13 +261,13 @@
     "map.tileWidth": 16,
     "map.width": 125,
     "openFiles": [
-        "jamajkaRegion.json"
+        "worldMap.json"
     ],
     "project": "map.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "jamajkaRegion.json",
         "worldMap.json",
+        "jamajkaRegion.json",
         "regionMap.json",
         "jamajkaRegion.xml",
         "tiled/jamajkaRegion.xml",
