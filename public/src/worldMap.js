@@ -54,7 +54,7 @@ export class WorldMap extends Phaser.Scene {
 
         this.physics.world.setBounds(0, 0, 8000, 4000); // Ustaw granice świata
 
-        const debugGraphics = this.add.graphics().setAlpha(0.75);
+        const debugGraphics = this.add.graphics().setAlpha(0.25);
         this.ground.renderDebug(debugGraphics, {
             tileColor: null, // Color of non-colliding tiles,
             collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
@@ -98,10 +98,10 @@ export class WorldMap extends Phaser.Scene {
             this.inZone = true;
             if (this.inZone === true && !this.text) {
                 this.text = this.add.text(this.boat2.x + 0 ,this.boat2.y - 50, 'Czy chcesz wejść na region ?')
-                    .setScale(1.5)
-                    .setBackgroundColor('#808080')
-                    .setColor('#000000')
-                    .setStyle({fontFamily: "Arial"});
+                  .setScale(1.5)
+                  .setBackgroundColor('#808080')
+                  .setColor('#000000')
+                  .setStyle({fontFamily: "Arial"});
                 this.inZoneKey = this.input.keyboard.addKey('E')
                 this.inZoneKey.on('down', () => {this.changeMap()});
                 this.region = 'Kuba';
@@ -111,10 +111,10 @@ export class WorldMap extends Phaser.Scene {
             this.inZone = true;
             if (this.inZone === true && !this.text2) {
                 this.text2 = this.add.text(this.boat3.x + 0 ,this.boat3.y - 50, 'Czy chcesz wejść na region ?')
-                    .setScale(1.5)
-                    .setBackgroundColor('#808080')
-                    .setColor('#000000')
-                    .setStyle({fontFamily: "Arial"});
+                  .setScale(1.5)
+                  .setBackgroundColor('#808080')
+                  .setColor('#000000')
+                  .setStyle({fontFamily: "Arial"});
                 this.inZoneKey = this.input.keyboard.addKey('E')
                 this.inZoneKey.on('down', () => {this.changeMap()});
                 this.region = 'jamajka';
@@ -137,44 +137,64 @@ export class WorldMap extends Phaser.Scene {
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
 
+        // BEGGIN - HUGO
+        this.physics.add.collider(this.boat, this.ground);
+        // END - HUGO
     }
 
     update(time, delta) {
-        super.update(time, delta);
-        this.timer += delta;
-        this.shipCooldown += delta;
-        // Cooldown debuffa (Naprawa łodzi w czasie)
-        this.shipDebuff()
-        // Zmiana strzałki kompasu w zależności od pozycji łodzi
-        if(this.uiScene){
-            this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
-        }
-        if(this.boatSpeed != 0){
-            this.boat.anims.resume();
-        }else{
-            this.boat.anims.pause();
-        }
-        // Poruszanie łodzią
-        this.moveBoat(this.timer);
-        this.boatEngine(this.engine, this.timer);
+        // BEGGIN - HUGO
+        const speed = 200;
         this.cameras.main.startFollow(this.boat);
-        // Sprawdzenie, czy łódka opuściła obszar kolizji
-        this.inZone = false;
-        if (this.inZone === false && this.physics.overlap(this.boat, this.boat2) === false) {
-            if (this.text) {
-                this.text.destroy();
-                this.text = null;
-                this.inZoneKey.destroy();
-            }
+        if(this.keys.left?.isDown){
+            this.boat.setVelocity(-speed, 0)
+        }else if(this.keys.right?.isDown){
+            this.boat.setVelocity(speed, 0)
         }
-        this.inZone = false;
-        if (this.inZone === false && this.physics.overlap(this.boat, this.boat3) === false) {
-            if (this.text2) {
-                this.text2.destroy();
-                this.text2 = null;
-                this.inZoneKey.destroy();
-            }
+        if(this.keys.up?.isDown){
+            this.boat.setVelocity(0, -speed)
+        }else if(this.keys.up?.isUp){
         }
+        if(this.keys.down?.isDown){
+            this.boat.setVelocity(0, speed)
+        }
+        // END - HUGO
+
+        // super.update(time, delta);
+        // this.timer += delta;
+        // this.shipCooldown += delta;
+        // // Cooldown debuffa (Naprawa łodzi w czasie)
+        // this.shipDebuff()
+        // // Zmiana strzałki kompasu w zależności od pozycji łodzi
+        // if(this.uiScene){
+        //     this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
+        // }
+        // if(this.boatSpeed != 0){
+        //     this.boat.anims.resume();
+        // }else{
+        //     this.boat.anims.pause();
+        // }
+        // // Poruszanie łodzią
+        // this.moveBoat(this.timer);
+        // this.boatEngine(this.engine, this.timer);
+        // this.cameras.main.startFollow(this.boat);
+        // // Sprawdzenie, czy łódka opuściła obszar kolizji
+        // this.inZone = false;
+        // if (this.inZone === false && this.physics.overlap(this.boat, this.boat2) === false) {
+        //     if (this.text) {
+        //         this.text.destroy();
+        //         this.text = null;
+        //         this.inZoneKey.destroy();
+        //     }
+        // }
+        // this.inZone = false;
+        // if (this.inZone === false && this.physics.overlap(this.boat, this.boat3) === false) {
+        //     if (this.text2) {
+        //         this.text2.destroy();
+        //         this.text2 = null;
+        //         this.inZoneKey.destroy();
+        //     }
+        // }
 
     }
     handleCollision(){
