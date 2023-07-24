@@ -109,14 +109,12 @@ export class RegionMap extends Phaser.Scene {
             this.boat.play('boatAnimation');
             this.boat.anims.pause();
 
-            // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
-            this.boat.setCollideWorldBounds(true);
+
             this.physics.add.collider(this.boat, this.boat_collider, this.handleCollision, null, this);
 
             // Zmienna do ustawienia sterowania
             this.keys = this.input.keyboard.createCursorKeys();
             this.physics.add.collider(this.boat, this.ground);
-            this.ground.setCollisionBetween(5,6);
 
         }
 

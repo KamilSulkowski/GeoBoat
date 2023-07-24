@@ -35,10 +35,13 @@ export default class Preloader extends Phaser.Scene {
         this.load.tilemapTiledJSON('worldMap','Maps/worldMap.json');
         this.load.tilemapTiledJSON('regionMap', 'Maps/regionMap.json');
         this.load.tilemapTiledJSON('jamajka', 'Maps/jamajkaRegion.json');
+        
         this.load.image("PPH", "assets/portPH.png")
         this.load.image("CPH", "assets/collisionPH.png")
         this.load.image("QPH", "assets/quizPH.png")
         this.load.image('QTPH', "assets/quizTalkPH.png");
+
+        this.load.image("roseHall", "assets/roseHall.png")
     }
     create() {
 
