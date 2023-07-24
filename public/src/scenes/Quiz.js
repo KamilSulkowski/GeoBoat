@@ -9,7 +9,6 @@ async function categorySelection() {
     this.modalX = (this.bw - this.modalWidth) / 2;
     this.modalY = (this.bh - this.modalHeight) / 2;
 
-    updateUser(13, 14, 15, 16, 1)
     this.quizOpen = true;
     this.modal = this.add.graphics();
     this.modal.fillStyle(0xffffff, 0.95);
