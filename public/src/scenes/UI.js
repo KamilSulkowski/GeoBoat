@@ -1,13 +1,13 @@
-import {showQuiz, closeQuiz} from "./Quiz.js";
+import {startQuiz, closeQuiz} from "./Quiz.js";
 export default class UI extends Phaser.Scene {
     constructor() {
         super('ui');
         this.HP = 3; //Zmienna do sprawdzania stanu życia łodzi
         this.menuOpen = false;
         this.profileOpen = false;
+        this.quizOpen = false;
         this.rankingOpen = false;
         this.mapOpen = false;
-        this.quizOpen = false;
         this.fillSpeedValue = 0;
         this.speedDecreaseRate = 0.1;
         this.rankingFlag = false;
@@ -16,11 +16,10 @@ export default class UI extends Phaser.Scene {
         this.rightScrollScrolled = false;
     }
     preload() {
-        this.load.json('pytania', '../json_files/pytania.json');
-        this.load.json('odpowiedzi', '../json_files/odpowiedzi.json');
     }
+
     create() {
-        this.gameScene = this.scene.get('game');
+        this.gameScene = this.scene.get('worldMap');
         // Pobranie wysokości/długości sceny
         this.bw = this.cameras.main.width; // width main kamery
         this.bh = this.cameras.main.height;// height main kamery
@@ -37,8 +36,7 @@ export default class UI extends Phaser.Scene {
 
         //this.middleScroll = this.add.sprite(this.bw*0.5, this.bh-(this.bh-100), "scrollMenuMiddle")
         //this.middleScroll.scale = 1.75;
-
-
+        
         // HUD
         this.hpBar = this.add.sprite(this.bw-(this.bw-90), this.bh-(this.bh-60), "menuBar")
         this.hpBar.scale = 1.7;
@@ -46,6 +44,8 @@ export default class UI extends Phaser.Scene {
         this.userBar.scale = 1.7;
         this.rightBar = this.add.sprite(this.bw-90, this.bh-(this.bh-60), "menuBar")
         this.rightBar.scale = 1.7;
+
+
 
         // Kontener na UI życia gracza (3 serca)
         this.hearts = this.add.group({
@@ -89,7 +89,7 @@ export default class UI extends Phaser.Scene {
         this.compassH.scale = 0.5;
         this.input.keyboard.on('keydown-M', this.toggleMap, this);
 
-        // ster
+        // Ster
         this.menu = this.add.image(this.bw-54, this.bh-(this.bh-38), "menuCog")
 
         // Ranking
@@ -98,6 +98,7 @@ export default class UI extends Phaser.Scene {
         this.rankMenu.setInteractive();
         this.rankMenu.on('pointerdown', this.toggleRanking, this);
         this.input.keyboard.on('keydown-R', this.toggleRanking, this);
+
 
         // Ikona użytkownika
         this.profileBorder = this.add.image(this.bw*0.5-100, this.bh-(this.bh-40), "profileBorder")
@@ -145,13 +146,10 @@ export default class UI extends Phaser.Scene {
 
     }
     // Obracanie strzałką kompasu
-
-    //  this.leftScrollScrolled = false;
-    //  this.rightScrollScrolled = false;
-    
     setCompassArrowAngle(angle){
-        //this.compassA.angle = angle;
+        this.compassA.angle = angle;
     }
+
     onLeftScrollClick() {
         if(this.leftScrollScrolled){
             this.tweens.add({
@@ -195,6 +193,7 @@ export default class UI extends Phaser.Scene {
             this.rightScrollScrolled = true;
         }
     }
+
     update(time, delta) {
         this.menu.angle += 2*this.gameScene.boatSpeed;
         // Update paska szybkości
@@ -239,15 +238,17 @@ export default class UI extends Phaser.Scene {
         updateSpeedBar(){
             this.fillSpeedBar.clear();
             if(this.gameScene.boatSpeed > 0){
-                this.fillSpeedValue = 32 * this.gameScene.boatSpeed
+                this.fillSpeedValue = this.gameScene.boatSpeed/1.2
                 this.fillSpeedBar.fillStyle(0x7dff45, 1)
-                this.speedText.setText(8*(Math.round(this.gameScene.boatSpeed * 10)/10) + " / Mph");
+                this.speedText.setText((Math.round(this.gameScene.boatSpeed * 10)/10)/5 + " / Mph");
+                this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), this.fillSpeedValue, this.bh-(this.bh-20));
             }else if(this.gameScene.boatSpeed < 0){
-                this.fillSpeedValue = 5 * this.gameScene.boatSpeed
+                this.fillSpeedValue = this.gameScene.boatSpeed/1.2
                 this.fillSpeedBar.fillStyle(0xff4564, 1)
-                this.speedText.setText(8*(Math.round(-this.gameScene.boatSpeed * 10)/10) + " / Mph");
+                this.speedText.setText((Math.round(-this.gameScene.boatSpeed * 10)/10)/5 + " / Mph");
+                this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), -this.fillSpeedValue, this.bh-(this.bh-20));
             }
-            this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), this.fillSpeedValue, this.bh-(this.bh-20));
+
         }
     //-------RANKING MODAL-------
     toggleRanking() {
@@ -327,7 +328,7 @@ export default class UI extends Phaser.Scene {
     // Ranking właściwy (wyświetlanie pól o użytkownikach)
     this.drawRanking();
     }
-    
+
     drawRanking(){
         const modalWidth = 500;
         const modalHeight = 500;
@@ -403,7 +404,7 @@ export default class UI extends Phaser.Scene {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
-    
+
             });
             this.playerPosition.setOrigin(0);
 
@@ -411,7 +412,7 @@ export default class UI extends Phaser.Scene {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
-    
+
             });
             this.PlayerName.setOrigin(0);
             this.modal.fillStyle(0x000000, 0.2);
@@ -421,7 +422,7 @@ export default class UI extends Phaser.Scene {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
-    
+
             });
             this.playerXP.setOrigin(0);
 
@@ -429,7 +430,7 @@ export default class UI extends Phaser.Scene {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
-    
+
             });
             this.PlayerLevel.setOrigin(0);
 
@@ -613,51 +614,52 @@ export default class UI extends Phaser.Scene {
             closeQuiz.call(this);
         } else {
             console.log("quiz open")
-            showQuiz.call(this);
+            startQuiz.call(this);
         }
     }
-        //-------RANKING MODAL-------
-        toggleMap() {
-            if (this.mapOpen) {
-                this.closeMap();
-            } else {
-                this.showMap();
-            }
-        }
-        showMap() {
-    
-            this.mapOpen = true;
-            this.anims.create({
-                key: 'mapOpen',
-                frames: this.anims.generateFrameNumbers('mapAnim', { start: 0, end: 4 }),
-                frameRate: 30, 
-                repeat: 0 
-            });
-            this.anims.create({
-                key: 'mapClose',
-                frames: this.anims.generateFrameNumbers('mapAnim', { start: 4, end: 0 }),
-                frameRate: 60, 
-                repeat: 0 
-            });
-            this.drawMap();
 
+    //-------MAP MODAL-------
+    toggleMap() {
+        if (this.mapOpen) {
+            this.closeMap();
+        } else {
+            this.showMap();
         }
-        drawMap(){
-            this.scrollMap = this.add.sprite(this.bw*0.5, this.bh*0.6, "scrollMap")
-            this.scrollMap.scale = 2.5;
+    }
+    showMap() {
 
-            this.scrollMap.play('mapOpen');
-            this.scrollMap.scale=2.5;
-            
+        this.mapOpen = true;
+        this.anims.create({
+            key: 'mapOpen',
+            frames: this.anims.generateFrameNumbers('mapAnim', { start: 0, end: 4 }),
+            frameRate: 30, 
+            repeat: 0 
+        });
+        this.anims.create({
+            key: 'mapClose',
+            frames: this.anims.generateFrameNumbers('mapAnim', { start: 4, end: 0 }),
+            frameRate: 60, 
+            repeat: 0 
+        });
+        this.drawMap();
+
+    }
+    drawMap(){
+        this.scrollMap = this.add.sprite(this.bw*0.5, this.bh*0.6, "scrollMap")
+        this.scrollMap.scale = 2.5;
+
+        this.scrollMap.play('mapOpen');
+        this.scrollMap.scale=2.5;
+        
+    }
+    closeMap() {
+        this.scrollMap.play('mapClose');
+        this.scrollMap.scale=2.5;
+        if (this.mapOpen) {
+            this.scrollMap.on('animationcomplete', () => {
+                this.mapOpen = false;
+                this.scrollMap.destroy();
+            });
         }
-        closeMap() {
-            this.scrollMap.play('mapClose');
-            this.scrollMap.scale=2.5;
-            if (this.mapOpen) {
-                this.scrollMap.on('animationcomplete', () => {
-                    this.mapOpen = false;
-                    this.scrollMap.destroy();
-                });
-            }
-        }
+    }
 }

@@ -6,13 +6,16 @@
     "activeFile": "worldMap.json",
     "automapping.whileDrawing": false,
     "expandedProjectPaths": [
-        "tiled",
-        "."
+        ".",
+        "tiled"
     ],
     "file.lastUsedOpenFilter": "Wszystkie pliki (*)",
     "fileStates": {
         "": {
             "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "#tile": {
             "scaleInEditor": 1
         },
         "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/tile.tsx": {
@@ -49,6 +52,29 @@
         "C:/Users/Rockl/Downloads/tile.tsx": {
             "scaleInDock": 1
         },
+        "jamajkaRegion.json": {
+            "scale": 0.351025,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 992.8067801438644,
+                "y": 988.5335802293284
+            }
+        },
+        "jamajkaRegion.json#worldtiles": {
+            "scaleInDock": 1
+        },
+        "jamajkaRegion.xml": {
+            "scale": 0.2128,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 996.2406015037595,
+                "y": 1684.6804511278197
+            }
+        },
+        "jamajkaRegion.xml#worldtiles": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "mapa.json": {
             "scale": 0.125,
             "selectedLayer": 3,
@@ -62,12 +88,23 @@
             "scaleInDock": 2,
             "scaleInEditor": 1
         },
+        "mapa.xml": {
+            "scale": 0.09619140625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3997.2385786802024,
+                "y": 1996.020304568528
+            }
+        },
+        "mapa.xml#tile": {
+            "scaleInDock": 1
+        },
         "regionMap.json": {
             "scale": 0.25,
-            "selectedLayer": -1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 136,
-                "y": 946
+                "x": 132,
+                "y": 942
             }
         },
         "regionMap.json#tile": {
@@ -83,6 +120,17 @@
             "dynamicWrapping": false,
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "tiled/jamajkaRegion.xml": {
+            "scale": 0.351025,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1002.7775799444483,
+                "y": 1001.3531799729362
+            }
+        },
+        "tiled/jamajkaRegion.xml#worldtiles": {
+            "scaleInDock": 1
         },
         "tiled/mapa.json": {
             "scale": 0.031005859375,
@@ -109,18 +157,23 @@
             "scaleInEditor": 1
         },
         "tiled/regionmap.xml": {
-            "scale": 0.75,
-            "selectedLayer": 1,
+            "scale": 0.25,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 6389.333333333333,
-                "y": 3907.333333333333
+                "x": 1132,
+                "y": 966
             }
         },
         "tiled/regionmap.xml#tile": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "tiled/regionmap.xml#tiled": {
             "scaleInDock": 1
+        },
+        "tiled/regionmap.xml#worldtiles": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "tiled/rule1.tmx": {
             "scale": 2,
@@ -177,16 +230,28 @@
         "tiled/worldmap.xml#tiled": {
             "scaleInDock": 1
         },
-        "worldMap.json": {
-            "scale": 0.33,
+        "tiled/yamajkaRegion.xml": {
+            "scale": 0.125,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 6815.151515151515,
-                "y": 2204.5454545454545
+                "x": 2672,
+                "y": 364
+            }
+        },
+        "tiled/yamajkaRegion.xml#worldtiles": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "worldMap.json": {
+            "scale": 0.125,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 1220,
+                "y": 916
             }
         },
         "worldMap.json#tile": {
-            "scaleInDock": 2,
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "worldMap.json#tile2": {
@@ -199,13 +264,13 @@
     "last.exportedFilePath": "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/Maps",
     "last.externalTilesetPath": "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/Maps",
     "last.imagePath": "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/assets",
-    "map.height": 8,
-    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.height": 125,
+    "map.lastUsedExportFilter": "Tiled map files (*.tmx *.xml)",
     "map.lastUsedFormat": "tmx",
     "map.renderOrder": null,
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 8,
+    "map.width": 125,
     "openFiles": [
         "worldMap.json"
     ],
@@ -213,17 +278,17 @@
     "property.type": "bool",
     "recentFiles": [
         "worldMap.json",
+        "mapa.xml",
+        "jamajkaRegion.json",
+        "regionMap.json",
+        "jamajkaRegion.xml",
+        "tiled/jamajkaRegion.xml",
+        "tiled/yamajkaRegion.xml",
+        "tiled/regionmap.xml",
         "tiled/mapa.xml",
         "mapa.json",
         "tile.tsx",
-        "regionMap.json",
-        "tiled/test.xml",
-        "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/tile.tsx",
-        "tiled/mapa.json",
-        "C:/Users/Rockl/Downloads/Maps/tiled/mapa.json",
-        "C:/Users/Rockl/Downloads/Maps/worldMap.json",
-        "tiled/rule1tmx.tmx",
-        "tiled/worldmap.xml"
+        "tiled/test.xml"
     ],
     "tileset.embedInMap": true,
     "tileset.lastUsedFilter": "Wszystkie pliki (*)",

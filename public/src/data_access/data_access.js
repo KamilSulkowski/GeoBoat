@@ -8,7 +8,7 @@ function fetchThen(sciezka, dane) {
     })
         .then(response => {
             if (response.ok) {
-                console.log('Dane zapisano pomyślnie');
+                console.log('Dane zapisano pomyÅ›lnie');
             } else {
                 console.error('Error:', response.statusText);
             }
@@ -53,26 +53,24 @@ export function odblokujPytanie(idPyt) {
     fetchThen('/dane/odblokowaniePytania', pytanie)
 }
 
-// export function getOdpowiedzi(idPyt) {
-//     const pytanie = {
-//         idPytania: idPyt
-//     };
-//     fetch('/dane/konkretneodpowiedzi', {
-//         method: 'GET',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(pytanie)
-//     })
-//         .then(response => {
-//             if (response.ok) {
-//                 console.log('Dane zapisano pomyślnie');
-//             } else {
-//                 console.error('Error:', response.statusText);
-//             }
-//         })
-//         .catch(error => {
-//             console.error('Error:', error);
-//         });
-// }
-//DO ZROBIENIA UPGRADE UŻYTKOWNIKA!!!!!!!!
+export function updateUser(punktyXP, poziom, wytrzymaloscLodzi, maxPredkoscLodzi, id) {
+    const data = {
+        punktyXP: punktyXP,
+        poziom: poziom,
+        wytrzymaloscLodzi: wytrzymaloscLodzi,
+        maxPredkoscLodzi: maxPredkoscLodzi,
+        id: id
+    };
+    fetchThen('/dane/aktualizacjaUzytkownika', data)
+}
+
+export async function fetchData(path) {
+    try {
+        const response = await fetch(path);
+        const data = await response.json();
+        return data;
+    }
+    catch (e) {
+        console.error(e.message);
+    }
+}

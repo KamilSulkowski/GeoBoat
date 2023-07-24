@@ -1,8 +1,10 @@
+
 import Preloader from "./scenes/Preloader.js";
 import Game from './game.js';
 import UI from "./scenes/UI.js";
 import {WorldMap} from "./worldMap.js";
 import {RegionMap} from "./regionMap.js";
+import {jamajkaRegion} from "./jamajkaRegion.js";
 //import Wrap from '../../node_modules/phaser3-rex-plugins/plugins/text/wrap.js';
 //import { Wrap } from "phaser3-rex-plugins";
 export default new Phaser.Game({
@@ -18,7 +20,7 @@ export default new Phaser.Game({
             debug: true
         },
     },
-    scene: [Preloader, Game, UI, WorldMap, RegionMap],
+    scene: [Preloader, UI, WorldMap, RegionMap, jamajkaRegion],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
