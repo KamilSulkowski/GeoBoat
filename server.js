@@ -273,6 +273,29 @@ app.post('/dane/odblokowaniePytania', (req, res) => {
     });
 });
 
+// Zapis parametrów gracza
+app.post('/dane/aktualizacjaUzytkownika', (req, res) => {
+
+    const data = {
+        punktyXP: req.body.punktyXP,
+        poziom: req.body.poziom,
+        wytrzymaloscLodzi: req.body.wytrzymaloscLodzi,
+        maxPredkoscLodzi: req.body.maxPredkoscLodzi,
+        id: req.body.id
+    };
+
+    let sql = "UPDATE uzytkownik SET punktyXP = ?, poziom = ?, wytrzymaloscLodzi = ?, maxPredkoscLodzi = ? WHERE id = ?";
+
+    db.run(sql, [data.punktyXP, data.poziom, data.wytrzymaloscLodzi, data.maxPredkoscLodzi, data.id], function (err) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error');
+        } else {
+            res.status(200).send('Dane zapisano poprawnie');
+        }
+    });
+});
+
 app.use(function(req, res){
     res.status(404);
 });

@@ -1,19 +1,15 @@
-import {setWynik, setOdp, zablokujPytanie, odblokujPytanie, fetchData} from '../data_access/data_access.js';
+import {setWynik, setOdp, zablokujPytanie, odblokujPytanie, fetchData, updateUser} from '../data_access/data_access.js';
 
 export function startQuiz() {
     categorySelection.call(this);
 }
 async function categorySelection() {
-    // this.ddd;
-    // await fetchData('dane/odpowiedzi').then((data) =>
-    //     this.ddd = data[2].tresc
-    // );
-    // console.log('wooooow mega', this.ddd);
     this.modalWidth = 800;
     this.modalHeight = 600;
     this.modalX = (this.bw - this.modalWidth) / 2;
     this.modalY = (this.bh - this.modalHeight) / 2;
 
+    updateUser(13, 14, 15, 16, 1)
     this.quizOpen = true;
     this.modal = this.add.graphics();
     this.modal.fillStyle(0xffffff, 0.95);
@@ -44,36 +40,36 @@ async function categorySelection() {
     const yOffset = 300;
     const yOffsetIncrement = 60;
     const wordWrapWidth = 760;
-    this.quizAnswerTexts = [];
+    this.categoriesTexts = [];
     for (let i = 0; i < this.categories.length; i++) {
-        this.quizAnswerText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + yOffset + yOffsetIncrement * i, this.categories[i], {
+        this.categoriesText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + yOffset + yOffsetIncrement * i, this.categories[i], {
             fontFamily: 'Arial',
             fontSize: '24px',
             fill: '#000000',
             wordWrap: { width: wordWrapWidth, useAdvancedWrap: true }
 
         });
-        this.quizAnswerText.setOrigin(0.5);
-        this.quizAnswerText.setBackgroundColor('#f0f0f0');
-        this.quizAnswerText.setInteractive({ useHandCursor: true });
-        this.quizAnswerText.on('pointerdown', () => {
+        this.categoriesText.setOrigin(0.5);
+        this.categoriesText.setBackgroundColor('#f0f0f0');
+        this.categoriesText.setInteractive({ useHandCursor: true });
+        this.categoriesText.on('pointerdown', () => {
             handleAnswerClick(i);
         });
-        this.quizAnswerTexts.push(this.quizAnswerText);
+        this.categoriesTexts.push(this.categoriesText);
     }
 
     //Wybieranie kategorii
     const handleAnswerClick = (index) => {
-        for (let i = 0; i < this.quizAnswerTexts.length; i++) {
-            this.quizAnswerTexts[i].setBackgroundColor('#f0f0f0');
+        for (let i = 0; i < this.categoriesTexts.length; i++) {
+            this.categoriesTexts[i].setBackgroundColor('#f0f0f0');
         }
-        this.quizAnswerTexts[index].setBackgroundColor('#aaffaa');
+        this.categoriesTexts[index].setBackgroundColor('#aaffaa');
         this.selectedAnswerIndex = index;
-        this.submitButton1.visible = true;
+        this.categoryButton.visible = true;
     };
 
     //Przycisk zatwierdzania wyboru
-    this.submitButton1 = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Zatwierdź', {
+    this.categoryButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Zatwierdź', {
         fontFamily: 'Arial',
         fontSize: '24px',
         fill: '#ffffff',
@@ -83,28 +79,28 @@ async function categorySelection() {
             y: 10,
         },
     });
-    this.submitButton1.setOrigin(0.5);
-    this.submitButton1.setInteractive({ useHandCursor: true });
-    this.submitButton1.visible = false;
-    this.submitButton1.on('pointerdown', () => {
-        for (this.quizAnswerText of this.quizAnswerTexts) {
-            this.quizAnswerText.destroy();
+    this.categoryButton.setOrigin(0.5);
+    this.categoryButton.setInteractive({ useHandCursor: true });
+    this.categoryButton.visible = false;
+    this.categoryButton.on('pointerdown', () => {
+        for (this.categoriesText of this.categoriesTexts) {
+            this.categoriesText.destroy();
         }
-        this.submitButton1.destroy();
+        this.categoryButton.destroy();
 
         console.log([this.selectedAnswerIndex]);
         showQuiz.call(this, this.selectedCategories[this.selectedAnswerIndex]);
     });
 }
 
-function prepareQuiz(kategoria) {
-    let wybranaKategoria = kategoria //polityka
+function prepareQuiz(cat) {
+    let selectedCategory = cat
 
     // Pobranie dostępnych pytań z bazy
     let j = 0;
     let dostepneP = [];
     for(j in this.pytania) {
-        if (this.pytania[j].idKategorii === wybranaKategoria) {
+        if (this.pytania[j].idKategorii === selectedCategory) {
             dostepneP.push(this.pytania[j].id);
         }
     }
@@ -159,26 +155,7 @@ function showQuiz(categoryNumber){
 
     // Postać co będzie se ruszać ustami jak pytanie będzie lecieć
     this.quizCharacterImage = this.add.image(this.modalX + 110, this.modalY + 150, 'QTPH');
-    this.quizCharacterImage.setScale(0.75); // Adjust the scale of the image as needed
-
-
-    // fetch('/dane/odpowiedzi')
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //         var aaa = data;
-    //         console.log(aaa);
-    //     })
-    //     .catch((error) => console.error('Error', error));
-
-    // (async () => {
-    //     try {
-    //         const data = await fetch('/dane/odpowiedzi');
-    //         console.log('Dane otrzymane:', data);
-    //         // Tutaj możesz kontynuować pracę z danymi
-    //     } catch (error) {
-    //         console.error('Wystąpił błąd:', error);
-    //     }
-    // })();
+    this.quizCharacterImage.setScale(0.75);
 
     this.aktualnePytanie = 0;
     this.punktyZdobyte = 0;
@@ -351,8 +328,9 @@ function showResult() {
         information = 'Błędna odpowiedź';
     }
 
-    this.correctionText = this.add.text(this.modalWidth / 2, this.modalHeight, information,
-        { fontFamily: 'Arial', fontSize: '24px', fill: '#000000', wordWrap: { width: 780, useAdvancedWrap: true }});
+    this.correctionText = this.add.text(this.modalX + this.modalWidth / 2 + 180, this.modalY + 555, information,
+        { fontFamily: 'Arial', fontSize: '24px', fill: '#000000', wordWrap: { width: 580, useAdvancedWrap: true }});
+    this.correctionText.setOrigin(1);
 
     //Przejście dalej
     this.nextQuestionButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Dalej', {
@@ -408,8 +386,9 @@ function showEndScreen() {
     // Gratulacje
     let header = 'Gratulacje, quiz ukończony'
 
-    this.endText = this.add.text(this.modalWidth / 2 - 100, this.modalY + 110, header,
-        { fontFamily: 'Arial', fontSize: '50px', fill: '#000000', wordWrap: { width: 780, useAdvancedWrap: true }});
+    this.endText = this.add.text(this.modalX + this.modalWidth / 2 + 380, this.modalY + 235, header,
+        { fontFamily: 'Arial', fontSize: '24px', fill: '#000000', wordWrap: { width: 580, useAdvancedWrap: true }});
+    this.endText.setOrigin(1);
 
     this.submitButton.visible = true;
 
@@ -514,8 +493,13 @@ export function closeQuiz(){
             this.QuestionNumberDisplayed.destroy();
             this.quizCharacterImage.destroy();
             this.quizQuestionText.destroy();
+
+
         }
+        for (this.categoriesText of this.categoriesTexts) {
+            this.categoriesText.destroy();
+        }
+        this.categoryButton.destroy();
         this.quizOpen = false;
-        // this.quizAnswerButtons = [];
     }
 }
