@@ -23,7 +23,12 @@ export default class Preloader extends Phaser.Scene {
             frameWidth: 256,
             frameHeight: 256
         });
+        this.load.spritesheet("mapAnim", "assets/animation/scrollMapSheet.png", {
+            frameWidth: 376,
+            frameHeight: 188
+        });
         
+        this.load.image("scrollMap", "assets/scrollMap.png")
         this.load.image("pirate", "assets/pirat.png")
         this.load.image("fullHeart", "assets/fullHeart.png")
         this.load.image("emptyHeart", "assets/emptyHeart.png")
@@ -35,6 +40,9 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("rankBadge", "assets/rankBadge.png")
         this.load.image("profilePic", "assets/profilePic.png")
         this.load.image("profileBorder", "assets/profileBorder.png")
+        this.load.image("scrollMenuMovement", "assets/scrollMenuMovement.png")
+        this.load.image("scrollMenuInputs", "assets/scrollMenuInputs.png")
+        this.load.image("scrollMenuMiddle", "assets/scrollMenuMiddle.png")
 
         this.load.image('tiled', "assets/worldtiles.png");
         this.load.image('tile', "assets/worldtiles.png");
@@ -46,6 +54,7 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("CPH", "assets/collisionPH.png")
         this.load.image("QPH", "assets/quizPH.png")
         this.load.image('QTPH', "assets/quizTalkPH.png");
+        this.load.image('FPH', "assets/finPH.png");
     }
     create() {
 

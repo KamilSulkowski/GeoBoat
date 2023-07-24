@@ -5,10 +5,15 @@ export default class UI extends Phaser.Scene {
         this.HP = 3; //Zmienna do sprawdzania stanu życia łodzi
         this.menuOpen = false;
         this.profileOpen = false;
+        this.rankingOpen = false;
+        this.mapOpen = false;
         this.quizOpen = false;
         this.fillSpeedValue = 0;
         this.speedDecreaseRate = 0.1;
         this.rankingFlag = false;
+        this.scrollHeight = 130;
+        this.leftScrollScrolled = false;
+        this.rightScrollScrolled = false;
     }
     preload() {
         this.load.json('pytania', '../json_files/pytania.json');
@@ -20,6 +25,20 @@ export default class UI extends Phaser.Scene {
         this.bw = this.cameras.main.width; // width main kamery
         this.bh = this.cameras.main.height;// height main kamery
 
+        // Rozwijane scrolle z menu
+        this.leftScroll = this.add.sprite(this.bw-(this.bw-90), this.bh-(this.bh-70), "scrollMenuInputs")
+        this.rightScroll = this.add.sprite(this.bw-90, this.bh-(this.bh-70), "scrollMenuMovement")
+        this.leftScroll.scale = 0.8;
+        this.rightScroll.scale = 0.8;
+        this.leftScroll.setInteractive();
+        this.leftScroll.on('pointerdown', this.onLeftScrollClick, this);
+        this.rightScroll.setInteractive();
+        this.rightScroll.on('pointerdown', this.onRightScrollClick, this);
+
+        //this.middleScroll = this.add.sprite(this.bw*0.5, this.bh-(this.bh-100), "scrollMenuMiddle")
+        //this.middleScroll.scale = 1.75;
+
+
         // HUD
         this.hpBar = this.add.sprite(this.bw-(this.bw-90), this.bh-(this.bh-60), "menuBar")
         this.hpBar.scale = 1.7;
@@ -27,8 +46,6 @@ export default class UI extends Phaser.Scene {
         this.userBar.scale = 1.7;
         this.rightBar = this.add.sprite(this.bw-90, this.bh-(this.bh-60), "menuBar")
         this.rightBar.scale = 1.7;
-
-
 
         // Kontener na UI życia gracza (3 serca)
         this.hearts = this.add.group({
@@ -46,33 +63,34 @@ export default class UI extends Phaser.Scene {
         this.heartsArray = this.hearts.getChildren();
         
         // Stan (tekst pod hp)
-        this.stateText = this.add.text(this.bw-(this.bw-30), this.bh-(this.bh-50), 'W pełni sprawna')
+        this.stateText = this.add.text(this.bw-(this.bw-90), this.bh-(this.bh-58), 'Fully repaired')
+        .setOrigin(0.5)
         .setScale(1)
         .setColor('#ffffff')
-        .setStyle({fontFamily: "Arial"});
+        .setStyle({fontFamily: "CustomFont"});
 
         // Tekst o użytkowniku i regionie
-        this.userText = this.add.text(this.bw*0.5-49, this.bh-(this.bh-12), 'Giga Ryba')
+        this.userText = this.add.text(this.bw*0.5, this.bh-(this.bh-26), 'Giga Ryba')
+        .setOrigin(0.5)
         .setScale(1)
-        .setFontSize(20)
+        .setFontSize(18)
         .setColor('#ffffff')
-        .setStyle({fontFamily: "Arial"});
-        this.regionText = this.add.text(this.bw*0.5-48, this.bh-(this.bh-52), 'Region: Jamajka')
+        .setStyle({fontFamily: "CustomFont"});
+        this.regionText = this.add.text(this.bw*0.5, this.bh-(this.bh-58), 'Region: ' + this.gameScene.currentMap)
+        .setOrigin(0.5)
         .setScale(1)
-        .setFontSize(12)
+        .setFontSize(13)
         .setColor('#ffffff')
-        .setStyle({fontFamily: "Arial"});
+        .setStyle({fontFamily: "CustomFont"});
 
         // Kompas
         this.compassH = this.add.image(this.bw-126, this.bh-(this.bh-38), "compassHead")
         this.compassA = this.add.image(this.bw-126, this.bh-(this.bh-38), "compassArrow")
         this.compassH.scale = 0.5;
+        this.input.keyboard.on('keydown-M', this.toggleMap, this);
 
-        // ster (menu - modal)
+        // ster
         this.menu = this.add.image(this.bw-54, this.bh-(this.bh-38), "menuCog")
-        this.menu.setInteractive();
-        this.menu.on('pointerdown', this.toggleMenu, this);
-        this.input.keyboard.on('keydown-ESC', this.toggleMenu, this);
 
         // Ranking
         this.rankBorder = this.add.image(this.bw*0.5+100, this.bh-(this.bh-40), "profileBorder")
@@ -93,11 +111,12 @@ export default class UI extends Phaser.Scene {
         this.ExpBar = this.add.graphics();
         this.ExpBar.fillStyle(0x222222, 0.3);
         this.ExpBar.fillRect(this.bw-(this.bw-20), this.bh-(this.bh-84), this.bw-(this.bw-140), this.bh-(this.bh-28));
-        this.expText = this.add.text(this.bw-(this.bw-65), this.bh-(this.bh-92), 'Poziom 1')
+        this.expText = this.add.text(this.bw-(this.bw-90), this.bh-(this.bh-98), 'Level 1')
+        .setOrigin(0.5)
         .setScale(1)
         .setFontSize(14)
         .setColor('#ffffff')
-        .setStyle({fontFamily: "Georgia"});
+        .setStyle({fontFamily: "CustomFont"});
 
         // Speedbar
         this.fillSpeedBar = this.add.graphics();
@@ -105,14 +124,15 @@ export default class UI extends Phaser.Scene {
         this.SpeedBar = this.add.graphics();
         this.SpeedBar.fillStyle(0x222222, 0.3);
         this.SpeedBar.fillRect(this.bw-160, this.bh-(this.bh-84), this.bw-(this.bw-140), this.bh-(this.bh-28));
-        this.speedText = this.add.text(this.bw-115, this.bh-(this.bh-92), '0 / Mph')
+        this.speedText = this.add.text(this.bw-90, this.bh-(this.bh-98), '0 / Mph')
+        .setOrigin(0.5)
         .setScale(1)
         .setFontSize(14)
         .setColor('#ffffff')
-        .setStyle({fontFamily: "Georgia"});
+        .setStyle({fontFamily: "CustomFont"});
 
         // Identyfikator zniszczonej łodzi
-        this.hammer = this.add.sprite(this.gameScene.boat.x, this.gameScene.boat.y, "repairAnim")
+        this.hammer = this.add.sprite(this.gameScene.boat.x+50, this.gameScene.boat.y, "repairAnim")
         this.anims.create({
             key: 'hammerAnimation',
             frames: this.anims.generateFrameNumbers('repairAnim', { start: 0, end: 3 }),
@@ -125,10 +145,56 @@ export default class UI extends Phaser.Scene {
 
     }
     // Obracanie strzałką kompasu
+
+    //  this.leftScrollScrolled = false;
+    //  this.rightScrollScrolled = false;
+    
     setCompassArrowAngle(angle){
         //this.compassA.angle = angle;
     }
-
+    onLeftScrollClick() {
+        if(this.leftScrollScrolled){
+            this.tweens.add({
+                targets: this.leftScroll,
+                y: this.leftScroll.y - this.scrollHeight,
+                duration: 400,
+                ease: 'Power1',
+                onComplete: () => {}
+            });
+            this.leftScrollScrolled = false;
+        }else{
+            this.tweens.add({
+                targets: this.leftScroll,
+                y: this.leftScroll.y + this.scrollHeight,
+                duration: 400,
+                ease: 'Power1',
+                onComplete: () => {}
+            });
+            this.leftScrollScrolled = true;
+        }
+    }
+    
+    onRightScrollClick() {
+        if(this.rightScrollScrolled){
+            this.tweens.add({
+                targets: this.rightScroll,
+                y: this.rightScroll.y - this.scrollHeight,
+                duration: 400,
+                ease: 'Power1',
+                onComplete: () => {}
+            });
+            this.rightScrollScrolled = false;
+        }else{
+            this.tweens.add({
+                targets: this.rightScroll,
+                y: this.rightScroll.y + this.scrollHeight,
+                duration: 400,
+                ease: 'Power1',
+                onComplete: () => {}
+            });
+            this.rightScrollScrolled = true;
+        }
+    }
     update(time, delta) {
         this.menu.angle += 2*this.gameScene.boatSpeed;
         // Update paska szybkości
@@ -141,11 +207,13 @@ export default class UI extends Phaser.Scene {
             this.hammer.setVisible(false);
         }
 
+        this.regionText.setText('Region: ' + this.gameScene.currentMap)
+
         // Update tekstu pod HP
         if(this.HP != 3){
-            this.stateText.setText("Naprawa za: " + Math.floor(((this.gameScene.shipRepairTime - this.gameScene.shipCooldown)/1000)));
+            this.stateText.setText("Repaired in: " + Math.floor(((this.gameScene.shipRepairTime - this.gameScene.shipCooldown)/1000))+ "s");
         }else{
-            this.stateText.setText("W pełni sprawna.");
+            this.stateText.setText("Fully repaired");
         }
     }
 
@@ -181,59 +249,9 @@ export default class UI extends Phaser.Scene {
             }
             this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), this.fillSpeedValue, this.bh-(this.bh-20));
         }
-        //-------MENU MODAL-------
-        toggleMenu() {
-            if (this.menuOpen) {
-              this.closeMenu();
-            } else {
-              this.showMenu();
-            }
-        }
-        showMenu() {
-            const modalWidth = 500;
-            const modalHeight = 500;
-            const modalX = (this.bw - modalWidth) / 2;
-            const modalY = (this.bh - modalHeight) / 2;
-
-            this.menuOpen = true;
-            this.modal = this.add.graphics();
-            this.modal.fillStyle(0xffffff, 0.95);
-            this.modal.fillRoundedRect(modalX, modalY, modalWidth, modalHeight, 25);
-
-            this.menuText = this.add.text(modalX + modalWidth / 2, modalY + 20, 'Opcje', {
-                fontFamily: 'Arial',
-                fontSize: '24px',
-                fill: '#000000'
-            });
-            this.menuText.setOrigin(0.5);
-
-            this.menuButton1 = this.add.text(modalX + modalWidth/2, modalY + 80, 'Sterowanie', {
-                fontFamily: 'Arial',
-                fontSize: '18px',
-                fill: '#000000',
-            });
-            this.menuButton1.setOrigin(0.5);
-            this.menuButton1.setInteractive();
-            this.menuButton1.on('pointerdown', () => {
-                this.drawRanking();
-            });
-        }
-        drawMenu(){
-
-        }
-        closeMenu() {
-            if (this.menuOpen) {
-                this.modal.clear();
-                if (this.menuText) {
-                    this.menuText.destroy();
-                    this.menuButton1.destroy();
-                }
-                this.menuOpen = false;
-            }
-        }
     //-------RANKING MODAL-------
     toggleRanking() {
-        if (this.menuOpen) {
+        if (this.rankingOpen) {
             this.closeRanking();
         } else {
             this.showRanking();
@@ -245,7 +263,7 @@ export default class UI extends Phaser.Scene {
         const modalX = (this.bw - modalWidth) / 2;
         const modalY = (this.bh - modalHeight) / 2;
 
-        this.menuOpen = true;
+        this.rankingOpen = true;
         this.modal = this.add.graphics();
         this.modal.fillStyle(0xffffff, 0.95);
         this.modal.fillRoundedRect(modalX, modalY, modalWidth, modalHeight, 25);
@@ -256,25 +274,26 @@ export default class UI extends Phaser.Scene {
             fill: '#000000'
         });
         this.menuText.setOrigin(0.5);
+        this.modal.fillStyle(0x000000, 0.95);
+        this.modal.fillRect(modalX, modalY + 50, modalWidth,3);
 
         //Przyciski zmiany rankingu
-    this.rank1 = this.add.text(modalX + 80, modalY +80, 'Ranking jakiś', {
-        fontFamily: 'Arial',
-        fontSize: '18px',
-        fill: '#000000',
-        padding: {
-            x: 20,
-            y: 10,
-        },
-    });
-    this.rank1.setStroke('#000000', 4);
-    this.rank1.setOrigin(0.5);
-    this.rank1.setInteractive();
-    this.rank1.on('pointerdown', () => {
+    // this.rank1 = this.add.text(modalX + 80, modalY +80, 'Ranking jakiś', {
+    //     fontFamily: 'Arial',
+    //     fontSize: '18px',
+    //     fill: '#000000',
+    //     padding: {
+    //         x: 20,
+    //         y: 10,
+    //     },
+    // });
+    // this.rank1.setStroke('#000000', 4);
+    // this.rank1.setOrigin(0.5);
+    // this.rank1.setInteractive();
+    // this.rank1.on('pointerdown', () => {
 
-    });
-
-    this.rank2 = this.add.text(modalX + modalWidth/2, modalY + 80, 'Ranking punktów', {
+    // });
+    this.rank2 = this.add.text(modalX + modalWidth/2, modalY + 80, 'Ranking ogólny', {
         fontFamily: 'Arial',
         fontSize: '18px',
         fill: '#ffffff',
@@ -289,7 +308,6 @@ export default class UI extends Phaser.Scene {
     this.rank2.on('pointerdown', () => {
         if(this.rankingFlag){this.drawRanking();}
     });
-
     // this.rank3 = this.add.text(modalX + modalWidth - 80, modalY + 80, 'Ranking jakiś', {
     //     fontFamily: 'Arial',
     //     fontSize: '18px',
@@ -306,9 +324,15 @@ export default class UI extends Phaser.Scene {
         
     // });
 
-
+    // Ranking właściwy (wyświetlanie pól o użytkownikach)
+    this.drawRanking();
     }
+    
     drawRanking(){
+        const modalWidth = 500;
+        const modalHeight = 500;
+        const modalX = (this.bw - modalWidth) / 2;
+        const modalY = (this.bh - modalHeight) / 2;
         // Pobieramy sobie gdzieś tu info o graczach
 
         //
@@ -316,33 +340,105 @@ export default class UI extends Phaser.Scene {
         this.Players = [
             {
                 name: "Małpa D. Luźny",
-                XP: 31,
-                Level: 1,
-            },
-            {
-                name: "Edward NowaBrama",
-                XP: 51,
+                XP: 13,
                 Level: 2,
             },
             {
-                name: "Jacek Wróblewski",
-                XP: 18,
+                name: "Edward NowaBrama",
+                XP: 2,
                 Level: 1,
             },
+            {
+                name: "Jacek Wróblewski",
+                XP: 41,
+                Level: 4,
+            },
         ]
-        //
+        this.Players.sort((a, b) => b.XP - a.XP);
+        // Rysowanie
+        const fontSize = '18px';
+        const textColor = '#000000';
+        const yOffset = 150;
+        const yOffsetIncrement = 30;
+
+        this.PlayerInfoDump = []
+
+        this.displayName = this.add.text(modalX + 10, modalY + 120, "Player name: ", {
+            fontFamily: 'Arial',
+            fontSize: fontSize,
+            fill: textColor,
+
+        });
+        this.displayName.setOrigin(0);
+
+        this.displayXP = this.add.text(modalX + 260, modalY + 120, "XP gained: ", {
+            fontFamily: 'Arial',
+            fontSize: fontSize,
+            fill: textColor,
+
+        });
+        this.displayXP.setOrigin(0);
+
+        this.displayLevel = this.add.text(modalX + 410, modalY + 120, "Level: ", {
+            fontFamily: 'Arial',
+            fontSize: fontSize,
+            fill: textColor,
+
+        });
+        this.displayLevel.setOrigin(0);
+
+        for (let i = 0; i < this.Players.length; i++) {
+
+            this.PlayerInfo = this.Players[i];
+
+            this.PlayerName = this.add.text(modalX + 10, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.name, {
+                fontFamily: 'Arial',
+                fontSize: fontSize,
+                fill: textColor,
+    
+            });
+            this.PlayerName.setOrigin(0);
+            this.modal.fillStyle(0x000000, 0.2);
+            this.modal.fillRect(modalX+10, modalY + yOffset + yOffsetIncrement * i + 20, modalWidth-20,1);
+            
+            this.playerXP = this.add.text(modalX + 260, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.XP, {
+                fontFamily: 'Arial',
+                fontSize: fontSize,
+                fill: textColor,
+    
+            });
+            this.playerXP.setOrigin(0);
+
+            this.PlayerLevel = this.add.text(modalX + 410, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.Level, {
+                fontFamily: 'Arial',
+                fontSize: fontSize,
+                fill: textColor,
+    
+            });
+            this.PlayerLevel.setOrigin(0);
+
+            this.PlayerInfoDump.push(this.PlayerName);
+            this.PlayerInfoDump.push(this.playerXP);
+            this.PlayerInfoDump.push(this.PlayerLevel);
+        }
 
 
 
     }
     closeRanking() {
-        if (this.menuOpen) {
+        if (this.rankingOpen) {
             this.modal.clear();
             if (this.menuText) {
                 this.menuText.destroy();
                 this.rank2.destroy();
+                for (this.Player of this.PlayerInfoDump) {
+                    this.Player.destroy();
+                }
+                this.displayName.destroy();
+                this.displayXP.destroy();
+                this.displayLevel.destroy();
             }
-            this.menuOpen = false;
+            this.rankingOpen = false;
         }
     }
     //-------PROFIL MODAL-------
@@ -502,4 +598,48 @@ export default class UI extends Phaser.Scene {
             showQuiz.call(this);
         }
     }
+        //-------RANKING MODAL-------
+        toggleMap() {
+            if (this.mapOpen) {
+                this.closeMap();
+            } else {
+                this.showMap();
+            }
+        }
+        showMap() {
+    
+            this.mapOpen = true;
+            this.anims.create({
+                key: 'mapOpen',
+                frames: this.anims.generateFrameNumbers('mapAnim', { start: 0, end: 4 }),
+                frameRate: 30, 
+                repeat: 0 
+            });
+            this.anims.create({
+                key: 'mapClose',
+                frames: this.anims.generateFrameNumbers('mapAnim', { start: 4, end: 0 }),
+                frameRate: 60, 
+                repeat: 0 
+            });
+            this.drawMap();
+
+        }
+        drawMap(){
+            this.scrollMap = this.add.sprite(this.bw*0.5, this.bh*0.6, "scrollMap")
+            this.scrollMap.scale = 2.5;
+
+            this.scrollMap.play('mapOpen');
+            this.scrollMap.scale=2.5;
+            
+        }
+        closeMap() {
+            this.scrollMap.play('mapClose');
+            this.scrollMap.scale=2.5;
+            if (this.mapOpen) {
+                this.scrollMap.on('animationcomplete', () => {
+                    this.mapOpen = false;
+                    this.scrollMap.destroy();
+                });
+            }
+        }
 }

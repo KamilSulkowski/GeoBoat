@@ -85,6 +85,10 @@ export default class Game extends Phaser.Scene {
 
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
+        this.key_A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.key_S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.key_D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        this.key_W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
 
         // Poprawka: Ustawienie środka kamery na pozycję łodzi
         this.cameras.main.centerOn(this.boat.x, this.boat.y);
@@ -203,12 +207,12 @@ export default class Game extends Phaser.Scene {
             }
         }
         // Obracanie
-        if(this.keys.left?.isDown){
+        if(this.key_A?.isDown){
             this.boat.angle -= this.boatSpeed / 2;
-        }else if(this.keys.right?.isDown){
+        }else if(this.key_D?.isDown){
             this.boat.angle += this.boatSpeed / 2;
         }
-        if(this.keys.up?.isDown){
+        if(this.key_W?.isDown){
             // Jeżeli łódź się cofa, zatrzymaj ją
             if(this.boatSpeed === -0.25 && this.timer >= 500){
                 this.boatSpeed = 0;
@@ -225,11 +229,11 @@ export default class Game extends Phaser.Scene {
                     console.log(this.boatSpeed)
                 }
             }
-        }else if(this.keys.up?.isUp){
+        }else if(this.key_W?.isUp){
             //Utrzymanie prędkości
             this.engine = true;
         }
-        if(this.keys.down?.isDown){
+        if(this.key_S?.isDown){
             //Zatrzymywanie/cofanie
             this.boatStop()
         }

@@ -6,6 +6,7 @@ export class WorldMap extends Phaser.Scene {
         this.ground = null;
         this.deepwater = null;
         this.extra = null;
+        this.sharkChasingSpeed = 100;
     }
 
     preload() {
@@ -16,6 +17,7 @@ export class WorldMap extends Phaser.Scene {
         //Pobranie wartości z pliku game.js
         this.worldMapScene = this.scene.get('game');
         this.worldMap = this.make.tilemap({key: 'worldMap', tileWidth: 16, tileHeight: 16});
+        this.uiScene = this.scene.get('ui');
 
         this.tileSetWorld = this.worldMap.addTilesetImage('tile', 'tile',16,16);
         this.extra = this.worldMap.createStaticLayer('extra', this.tileSetWorld,0,0);
@@ -49,20 +51,51 @@ export class WorldMap extends Phaser.Scene {
         this.physics.add.collider(this.worldMapScene.boat, this.deepwater, null, null, this);
         this.physics.add.collider(this.worldMapScene.boat, this.extra, null, null, this);
 
-        this.worldMapScene.boat.setPosition(3150, 1750);
+        this.worldMapScene.boat.setPosition(2950, 1750);
         this.worldMapScene.boat2.setPosition(3150, 1680);
-        this.worldMapScene.quiz_test.setPosition(3150, 1750);
+        this.worldMapScene.boat_collider.setPosition(2850, 1850);
+        this.worldMapScene.quiz_test.setPosition(2850, 1750);
 
         this.cameras.main.startFollow(this.worldMapScene.boat);
 
-    }
+        // Testowy rekin bardzo groźny i bardzo niebezpieczny
+        // this.shark = this.physics.add.sprite(3250, 1750, "FPH");
+        // this.shark.scale = 0.75;
+        // this.physics.add.collider(this.worldMapScene.boat, this.shark, this.handleCollision, null, this);
+        // this.physics.add.collider(this.shark, this.deepwater, null, null, this);
 
+
+
+    }
+    // Funkcja kolizji, odbicie od lądu
+    handleCollision(){
+        console.log("KOLIZJA");
+        this.worldMapScene.boatSpeed = 0;
+        this.adrift = 1;
+
+        // Zmiana życia łodzi, jak ma 0 HP to i tak już jest
+        if(this.uiScene.HP > 0){
+            this.uiScene.setHeartState()
+        }
+    }
     update(time, delta) {
         super.update(time, delta);
         this.timer += delta;
         this.physics.world.collide(this.worldMapScene.boat, this.ground, this.handleGroundCollision, null, this);
         this.physics.world.collide(this.worldMapScene.boat, this.deepwater, this.handleDeepWaterCollision, null, this);
         this.physics.world.collide(this.worldMapScene.boat, this.extra, this.handleExtraCollision, null, this);
+
+
+        // const direction = new Phaser.Math.Vector2(
+        //     this.worldMapScene.boat.x - this.shark.x,
+        //     this.worldMapScene.boat.y - this.shark.y
+        //   );
+        // direction.normalize();
+        // this.shark.body.setVelocity(
+        //     direction.x * this.sharkChasingSpeed,
+        //     direction.y * this.sharkChasingSpeed
+        //   );
+        // this.shark.rotation = Math.atan2(direction.y, direction.x);
     }
 
     handleGroundCollision(boat, ground) {
