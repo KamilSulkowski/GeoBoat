@@ -1,5 +1,4 @@
-import {showQuiz, closeQuiz} from "./Quiz.js";
-
+import {startQuiz, closeQuiz} from "./Quiz.js";
 export default class UI extends Phaser.Scene {
     constructor() {
         super('ui');
@@ -11,9 +10,8 @@ export default class UI extends Phaser.Scene {
         this.speedDecreaseRate = 0.1;
     }
     preload() {
-        this.load.json('pytania', '../json_files/pytania.json');
-        this.load.json('odpowiedzi', '../json_files/odpowiedzi.json');
     }
+
     create() {
         this.gameScene = this.scene.get('worldMap');
         // Pobranie wysokości/długości sceny
@@ -124,7 +122,7 @@ export default class UI extends Phaser.Scene {
     }
     // Obracanie strzałką kompasu
     setCompassArrowAngle(angle){
-        //this.compassA.angle = angle;
+        this.compassA.angle = angle;
     }
 
     update(time, delta) {
@@ -369,7 +367,7 @@ export default class UI extends Phaser.Scene {
             closeQuiz.call(this);
         } else {
             console.log("quiz open")
-            showQuiz.call(this);
+            startQuiz.call(this);
         }
     }
 }
