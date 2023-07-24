@@ -235,8 +235,8 @@
             "scale": 0.125,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 4092,
-                "y": 2440
+                "x": 4088,
+                "y": 1828
             }
         },
         "worldMap.json#tile": {

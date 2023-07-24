@@ -15,8 +15,8 @@ export class WorldMap extends Phaser.Scene {
         this.adrift = 0;    //Zmienna do kolizji odbicia
         this.timer = 0;     //Zmienna do przeliczania czasu (używana przy łodzi atm)
         this.boatSpeed = 0; //Zmienna do ustawiania prędkości łódki
-        this.boatMaxSpeed = 100 // Maksymalna prędkość łodzi
-        this.boatMaxReverseSpeed = -25 // Maksymalna prędkość cofania łodzi
+        this.boatMaxSpeed = 150 // Maksymalna prędkość łodzi
+        this.boatMaxReverseSpeed = -50 // Maksymalna prędkość cofania łodzi
         this.currentMap = null; //Zmienna do zapamiętywania na jakiej mapie jest gracz
         this.region = null; //Zmienna do zapamiętywania na jakim regionie jest gracz
         this.shipCooldown = 0;//Zmienna do sprawdzania czasu naprawy
@@ -200,13 +200,13 @@ export class WorldMap extends Phaser.Scene {
     handleCollision(){
         console.log("KOLIZJA");
         this.boat.setTint(0xff0000);
-        // this.boatSpeed = -1;
-        // this.adrift = 1;
-        //
-        // // Zmiana życia łodzi, jak ma 0 HP to i tak już jest
-        // if(this.uiScene.HP > 0){
-        //     this.uiScene.setHeartState()
-        // }
+        this.boatSpeed = -1;
+        this.adrift = 1;
+
+        // Zmiana życia łodzi, jak ma 0 HP to i tak już jest
+        if(this.uiScene.HP > 0){
+            this.uiScene.setHeartState()
+        }
     }
     // Funkcje debuffa łodzi
     shipWrecked(){
@@ -252,22 +252,23 @@ export class WorldMap extends Phaser.Scene {
         direction.setToPolar(this.boat.rotation, 1);
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
+        const changeAngle = 0.5;
         // Wyhamowanie przy dryfowaniu (odbiciu od lądu)
         if(this.adrift === 1 && this.boatSpeed <= 0){
             if(this.timer >= 100){
                 this.boatSpeed += 0.1;
                 this.timer = 0;
             }
-            if(this.boatSpeed >= 0.001){
+            if(this.boatSpeed >= 10){
                 this.boatSpeed = 0;
                 this.adrift = 0;
             }
         }
         // Obracanie
         if(this.keys.left?.isDown){
-            this.boat.angle -= 2;
+            this.boat.angle -= changeAngle;
         }else if(this.keys.right?.isDown){
-            this.boat.angle += 2;
+            this.boat.angle += changeAngle;
         }
         if(this.keys.up?.isDown){
             // Jeżeli łódź się cofa, zatrzymaj ją
@@ -281,8 +282,6 @@ export class WorldMap extends Phaser.Scene {
                     this.boatSpeed += 10;
                     this.boat.setAcceleration(Math.cos(direction) * this.boatSpeed, Math.sin(direction) * this.boatSpeed);
                     this.timer = 0;
-
-                    //console.log(this.boatSpeed)
                 }
             }
         }else if(this.keys.up?.isUp){
@@ -290,22 +289,33 @@ export class WorldMap extends Phaser.Scene {
             this.engine = true;
         }
         if(this.keys.down?.isDown){
-            //Zatrzymywanie/cofanie
+            //Zatrzymywanie/cofanie łodzi
             this.boatStop()
+        }
+        if(this.keys.down?.isUp){
+            if (this.boatSpeed <= this.boatMaxReverseSpeed && this.timer >= 100){
+                this.boatSpeed += 10;
+                this.timer = 0;
+            }
         }
     }
     // funkcja do zatrzymywania i cofania łodzi
     boatStop(){
-        if(this.boatSpeed > 0){
-            if(this.timer >= 100){
+        if(this.boatSpeed > 0 && this.timer >= 250){
                 this.boatSpeed -= 10;
                 this.timer = 0;
-            }// cofanie
-        }else if(this.boatSpeed < 0){
-            this.boatSpeed = this.boatMaxReverseSpeed;
-            this.adrift = 10;
-            console.log(this.boatSpeed)
+                // cofanie
         }
+        if(this.boatSpeed <= 0 && this.timer >= 250){
+            this.boatSpeed -= 10;
+            this.boat.setVelocity(this.boatSpeed, this.boatSpeed);
+            if (this.boatSpeed <= this.boatMaxReverseSpeed){
+                this.boatSpeed = this.boatMaxReverseSpeed;
+                this.boat.setVelocity(this.boatSpeed, this.boatSpeed);
+            }
+            this.timer = 0;
+        }
+
     }
     // funkcja do utrzymywania prędkości łodzi
     boatEngine(engine, timer){
@@ -315,6 +325,7 @@ export class WorldMap extends Phaser.Scene {
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
         if (engine = 1){
+            console.log(" " + this.boatSpeed)
             this.boat.setVelocity(-this.boatSpeed *dx, -this.boatSpeed *dy);
             // this.boat.y -= this.boatSpeed *dy;
             // this.boat.x -= this.boatSpeed *dx;
