@@ -23,7 +23,7 @@ export class WorldMap extends Phaser.Scene {
         this.shipRepairTime = 10000 //Zmienna czasu naprawy 10000 = 10s
         this.shipDamaged = false;//Flaga stanu statku (naprawa/sprawny)
         this.boatRespawnX = 3150; //Współrzędne respawnu łodzi
-        this.boatRespawnY = 1350; //Współrzędne respawnu łodzi
+        this.boatRespawnY = 1680; //Współrzędne respawnu łodzi
     }
 
     preload() {

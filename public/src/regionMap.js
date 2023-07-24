@@ -55,7 +55,7 @@ export class RegionMap extends Phaser.Scene {
 
             this.boat = this.physics.add.sprite(500, 500, "boat");
             this.boat2 = this.physics.add.sprite(600, 600 , "PPH");
-            this.quiz_test = this.physics.add.sprite(700, 700, "QPH");
+            this.quiz_test = this.physics.add.sprite(500, 500, "QPH");
             // Zmiana obszaru kolizji dla gracza
             this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
             this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
