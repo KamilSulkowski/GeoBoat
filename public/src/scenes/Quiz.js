@@ -153,7 +153,7 @@ function showQuiz(categoryNumber){
     this.modal.strokeLineShape(LineSep);
 
     // Postać co będzie se ruszać ustami jak pytanie będzie lecieć
-    this.quizCharacterImage = this.add.image(this.modalX + 110, this.modalY + 150, 'QTPH');
+    this.quizCharacterImage = this.add.image(this.modalX + 110, this.modalY + 150, 'pirate');
     this.quizCharacterImage.setScale(0.75);
 
     this.aktualnePytanie = 0;
