@@ -20,7 +20,7 @@ export default new Phaser.Game({
             debug: true
         },
     },
-    scene: [Preloader, WorldMap, RegionMap, jamajkaRegion, UI],
+    scene: [Preloader, UI, WorldMap, RegionMap, jamajkaRegion],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH

@@ -61,6 +61,7 @@ export default class Preloader extends Phaser.Scene {
 
         this.scene.start('worldMap');
         this.scene.run('ui');
+        this.scene.bringToTop('ui');
 
     }
 }

@@ -241,12 +241,14 @@ export default class UI extends Phaser.Scene {
                 this.fillSpeedValue = this.gameScene.boatSpeed/1.2
                 this.fillSpeedBar.fillStyle(0x7dff45, 1)
                 this.speedText.setText((Math.round(this.gameScene.boatSpeed * 10)/10)/5 + " / Mph");
+                this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), this.fillSpeedValue, this.bh-(this.bh-20));
             }else if(this.gameScene.boatSpeed < 0){
-                this.fillSpeedValue = 5 * this.gameScene.boatSpeed
+                this.fillSpeedValue = this.gameScene.boatSpeed/1.2
                 this.fillSpeedBar.fillStyle(0xff4564, 1)
                 this.speedText.setText((Math.round(-this.gameScene.boatSpeed * 10)/10)/5 + " / Mph");
+                this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), -this.fillSpeedValue, this.bh-(this.bh-20));
             }
-            this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), this.fillSpeedValue, this.bh-(this.bh-20));
+
         }
     //-------RANKING MODAL-------
     toggleRanking() {

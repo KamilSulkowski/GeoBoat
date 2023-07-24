@@ -6,8 +6,8 @@
     "activeFile": "worldMap.json",
     "automapping.whileDrawing": false,
     "expandedProjectPaths": [
-        "tiled",
-        "."
+        ".",
+        "tiled"
     ],
     "file.lastUsedOpenFilter": "Wszystkie pliki (*)",
     "fileStates": {
@@ -87,6 +87,17 @@
             "dynamicWrapping": false,
             "scaleInDock": 2,
             "scaleInEditor": 1
+        },
+        "mapa.xml": {
+            "scale": 0.09619140625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3997.2385786802024,
+                "y": 1996.020304568528
+            }
+        },
+        "mapa.xml#tile": {
+            "scaleInDock": 1
         },
         "regionMap.json": {
             "scale": 0.25,
@@ -235,8 +246,8 @@
             "scale": 0.125,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 4088,
-                "y": 1828
+                "x": 1220,
+                "y": 916
             }
         },
         "worldMap.json#tile": {
@@ -254,7 +265,7 @@
     "last.externalTilesetPath": "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/Maps",
     "last.imagePath": "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/assets",
     "map.height": 125,
-    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedExportFilter": "Tiled map files (*.tmx *.xml)",
     "map.lastUsedFormat": "tmx",
     "map.renderOrder": null,
     "map.tileHeight": 16,
@@ -267,6 +278,7 @@
     "property.type": "bool",
     "recentFiles": [
         "worldMap.json",
+        "mapa.xml",
         "jamajkaRegion.json",
         "regionMap.json",
         "jamajkaRegion.xml",
@@ -276,8 +288,7 @@
         "tiled/mapa.xml",
         "mapa.json",
         "tile.tsx",
-        "tiled/test.xml",
-        "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/tile.tsx"
+        "tiled/test.xml"
     ],
     "tileset.embedInMap": true,
     "tileset.lastUsedFilter": "Wszystkie pliki (*)",
