@@ -138,9 +138,9 @@ export class WorldMap extends Phaser.Scene {
         this.keys = this.input.keyboard.createCursorKeys();
 
 
-        this.physics.add.collider(this.boat, this.ground);
-        this.physics.add.collider(this.boat, this.deepwater);
-        this.physics.add.collider(this.boat, this.extra);
+        this.physics.add.collider(this.boat, this.ground, this.handleCollision , null, this);
+        this.physics.add.collider(this.boat, this.deepwater, this.handleCollision , null, this);
+        this.physics.add.collider(this.boat, this.extra, this.handleCollision , null, this);
     }
 
     update(time, delta) {
@@ -200,7 +200,7 @@ export class WorldMap extends Phaser.Scene {
     handleCollision(){
         console.log("KOLIZJA");
         this.boat.setTint(0xff0000);
-        this.boatSpeed = -1;
+        this.boatSpeed = this.boatMaxReverseSpeed;
         this.adrift = 1;
 
         // Zmiana życia łodzi, jak ma 0 HP to i tak już jest
@@ -221,7 +221,7 @@ export class WorldMap extends Phaser.Scene {
 
             }else{
                 console.log("Naprawiono")
-                this.boatMaxSpeed = 100;
+                this.boatMaxSpeed = 150;
                 this.uiScene.recoverHeart();
             }
             this.shipCooldown = 0;
@@ -254,12 +254,12 @@ export class WorldMap extends Phaser.Scene {
         const dy = direction.y; //Kierunek rotacji y
         const changeAngle = 0.5;
         // Wyhamowanie przy dryfowaniu (odbiciu od lądu)
-        if(this.adrift === 1 && this.boatSpeed <= 0){
+        if(this.adrift === 1){
             if(this.timer >= 100){
-                this.boatSpeed += 0.1;
+                this.boatSpeed += 5;
                 this.timer = 0;
             }
-            if(this.boatSpeed >= 10){
+            if(this.boatSpeed >= 0){
                 this.boatSpeed = 0;
                 this.adrift = 0;
             }
@@ -291,10 +291,11 @@ export class WorldMap extends Phaser.Scene {
         if(this.keys.down?.isDown){
             //Zatrzymywanie/cofanie łodzi
             this.boatStop()
-        }
-        if(this.keys.down?.isUp){
-            if (this.boatSpeed <= this.boatMaxReverseSpeed && this.timer >= 100){
+        }else if (this.keys.down?.isUp) {
+            // Zwolniono klawisz "down"
+            if (this.boatSpeed < 0 && this.timer >= 250) {
                 this.boatSpeed += 10;
+                this.boat.setVelocity(this.boatSpeed, this.boatSpeed);
                 this.timer = 0;
             }
         }
@@ -325,10 +326,7 @@ export class WorldMap extends Phaser.Scene {
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
         if (engine = 1){
-            console.log(" " + this.boatSpeed)
             this.boat.setVelocity(-this.boatSpeed *dx, -this.boatSpeed *dy);
-            // this.boat.y -= this.boatSpeed *dy;
-            // this.boat.x -= this.boatSpeed *dx;
         }
     }
 }

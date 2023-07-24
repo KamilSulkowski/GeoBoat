@@ -15,8 +15,8 @@ export class RegionMap extends Phaser.Scene {
         this.adrift = 0;    //Zmienna do kolizji odbicia
         this.timer = 0;     //Zmienna do przeliczania czasu (używana przy łodzi atm)
         this.boatSpeed = 0; //Zmienna do ustawiania prędkości łódki
-        this.boatMaxSpeed = 4 // Maksymalna prędkość łodzi
-        this.boatMaxReverseSpeed = -0.5 // Maksymalna prędkość cofania łodzi
+        this.boatMaxSpeed = 150 // Maksymalna prędkość łodzi
+        this.boatMaxReverseSpeed = -50 // Maksymalna prędkość cofania łodzi
         this.currentMap = null; //Zmienna do zapamiętywania na jakiej mapie jest gracz
         this.shipCooldown = 0;//Zmienna do sprawdzania czasu naprawy
         this.shipRepairTime = 10000 //Zmienna czasu naprawy 10000 = 10s
@@ -200,44 +200,42 @@ export class RegionMap extends Phaser.Scene {
         console.log("zmiana mapy2: " + this.currentMap + " inzone: " + this.inZone);
         }
 
-        moveBoat(){
+    moveBoat(){
         // Wektor do sprawdzania rotacji łodzi
         const direction = new Phaser.Math.Vector2(0, 0);
         direction.setToPolar(this.boat.rotation, 1);
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
+        const changeAngle = 0.5;
         // Wyhamowanie przy dryfowaniu (odbiciu od lądu)
         if(this.adrift === 1 && this.boatSpeed <= 0){
             if(this.timer >= 100){
                 this.boatSpeed += 0.1;
                 this.timer = 0;
             }
-            if(this.boatSpeed >= 0.001){
+            if(this.boatSpeed >= 10){
                 this.boatSpeed = 0;
                 this.adrift = 0;
             }
         }
         // Obracanie
         if(this.keys.left?.isDown){
-            this.boat.angle -= this.boatSpeed / 2;
+            this.boat.angle -= changeAngle;
         }else if(this.keys.right?.isDown){
-            this.boat.angle += this.boatSpeed / 2;
+            this.boat.angle += changeAngle;
         }
         if(this.keys.up?.isDown){
             // Jeżeli łódź się cofa, zatrzymaj ją
-            if(this.boatSpeed === -0.25 && this.timer >= 500){
+            if(this.boatSpeed === -20 && this.timer >= 500){
                 this.boatSpeed = 0;
                 this.timer = 0;
             } // Poruszanie łodzi (Rozpędzanie w czasie)
             if(this.boatSpeed <= this.boatMaxSpeed){
                 if(this.timer >= 100){
-                    console.log(this.timer)
-                    this.boatSpeed += 0.1;
-                    this.boat.y -= this.boatSpeed *dy;
-                    this.boat.x -= this.boatSpeed *dx;
+                    //console.log(this.timer)
+                    this.boatSpeed += 10;
+                    this.boat.setAcceleration(Math.cos(direction) * this.boatSpeed, Math.sin(direction) * this.boatSpeed);
                     this.timer = 0;
-
-                    console.log(this.boatSpeed)
                 }
             }
         }else if(this.keys.up?.isUp){
@@ -245,33 +243,44 @@ export class RegionMap extends Phaser.Scene {
             this.engine = true;
         }
         if(this.keys.down?.isDown){
-            //Zatrzymywanie/cofanie
+            //Zatrzymywanie/cofanie łodzi
             this.boatStop()
-        }
-        }
-        // funkcja do zatrzymywania i cofania łodzi
-        boatStop(){
-        if(this.boatSpeed > 0){
-            if(this.timer >= 100){
-                this.boatSpeed -= 0.25;
+        }else if (this.keys.down?.isUp) {
+            // Zwolniono klawisz "down"
+            if (this.boatSpeed < 0 && this.timer >= 250) {
+                this.boatSpeed += 10;
+                this.boat.setVelocity(this.boatSpeed, this.boatSpeed);
                 this.timer = 0;
-            }// cofanie
-        }else if(this.boatSpeed < 0){
-            this.boatSpeed = this.boatMaxReverseSpeed;
-            this.adrift = 1;
-            console.log(this.boatSpeed)
+            }
         }
+    }
+    // funkcja do zatrzymywania i cofania łodzi
+    boatStop(){
+        if(this.boatSpeed > 0 && this.timer >= 250){
+            this.boatSpeed -= 10;
+            this.timer = 0;
+            // cofanie
         }
-        // funkcja do utrzymywania prędkości łodzi
-        boatEngine(engine, timer){
+        if(this.boatSpeed <= 0 && this.timer >= 250){
+            this.boatSpeed -= 10;
+            this.boat.setVelocity(this.boatSpeed, this.boatSpeed);
+            if (this.boatSpeed <= this.boatMaxReverseSpeed){
+                this.boatSpeed = this.boatMaxReverseSpeed;
+                this.boat.setVelocity(this.boatSpeed, this.boatSpeed);
+            }
+            this.timer = 0;
+        }
+
+    }
+    // funkcja do utrzymywania prędkości łodzi
+    boatEngine(engine, timer){
         // Wektor do sprawdzania rotacji łódki
         const direction = new Phaser.Math.Vector2(0, 0);
         direction.setToPolar(this.boat.rotation, 1);
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
         if (engine = 1){
-            this.boat.y -= this.boatSpeed *dy;
-            this.boat.x -= this.boatSpeed *dx;
+            this.boat.setVelocity(-this.boatSpeed *dx, -this.boatSpeed *dy);
         }
-        }
-        }
+    }
+}
