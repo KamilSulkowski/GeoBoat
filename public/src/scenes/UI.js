@@ -247,6 +247,8 @@ export default class UI extends Phaser.Scene {
                 this.fillSpeedBar.fillStyle(0xff4564, 1)
                 this.speedText.setText((Math.round(-this.gameScene.boatSpeed * 10)/10)/5 + " / Mph");
                 this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), -this.fillSpeedValue, this.bh-(this.bh-20));
+            }else{
+                this.speedText.setText("0 / Mph");
             }
 
         }
