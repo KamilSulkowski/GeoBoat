@@ -24,6 +24,7 @@ export class WorldMap extends Phaser.Scene {
         this.shipDamaged = false;//Flaga stanu statku (naprawa/sprawny)
         this.boatRespawnX = 3150; //Współrzędne respawnu łodzi
         this.boatRespawnY = 1750; //Współrzędne respawnu łodzi
+        this.inDeepWater = false; //Flaga głębokiej wody
     }
 
     preload() {
@@ -139,26 +140,12 @@ export class WorldMap extends Phaser.Scene {
 
 
         this.physics.add.collider(this.boat, this.ground, this.handleCollision , null, this);
-        this.physics.add.collider(this.boat, this.deepwater, this.handleCollision , null, this);
+        this.physics.add.overlap(this.boat, this.deepwater, this.deepWaterHandleCollision , null, this);
+
         this.physics.add.collider(this.boat, this.extra, this.handleCollision , null, this);
     }
 
     update(time, delta) {
-        // BEGGIN - HUGO
-        // this.cameras.main.startFollow(this.boat);
-        // if(this.keys.left?.isDown){
-        //     this.boat.setVelocity(-speed, 0)
-        // }else if(this.keys.right?.isDown){
-        //     this.boat.setVelocity(speed, 0)
-        // }
-        // if(this.keys.up?.isDown){
-        //     this.boat.setVelocity(0, -speed)
-        // }else if(this.keys.up?.isUp){
-        // }
-        // if(this.keys.down?.isDown){
-        //     this.boat.setVelocity(0, speed)
-        // }
-        // END - HUGO
 
         super.update(time, delta);
         this.timer += delta;
@@ -328,6 +315,10 @@ export class WorldMap extends Phaser.Scene {
         if (engine = 1){
             this.boat.setVelocity(-this.boatSpeed *dx, -this.boatSpeed *dy);
         }
+    }
+    deepWaterHandleCollision() {
+        console.log("KOLIZJA");
+
     }
 }
 
