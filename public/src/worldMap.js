@@ -199,7 +199,6 @@ export class WorldMap extends Phaser.Scene {
     }
     handleCollision(){
         console.log("KOLIZJA");
-        this.boat.setTint(0xff0000);
         this.boatSpeed = this.boatMaxReverseSpeed;
         this.adrift = 1;
 

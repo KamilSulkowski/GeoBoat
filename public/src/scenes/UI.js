@@ -132,17 +132,7 @@ export default class UI extends Phaser.Scene {
         .setColor('#ffffff')
         .setStyle({fontFamily: "CustomFont"});
 
-        // Identyfikator zniszczonej łodzi
-        this.hammer = this.add.sprite(this.gameScene.boat.x+50, this.gameScene.boat.y, "repairAnim")
-        this.anims.create({
-            key: 'hammerAnimation',
-            frames: this.anims.generateFrameNumbers('repairAnim', { start: 0, end: 3 }),
-            frameRate: 10, 
-            repeat: -1 
-        });
-        this.hammer.play('hammerAnimation');
-        this.hammer.setVisible(false);
-        this.hammer.scale=1
+        this.boatRepairAnimation();
 
     }
     // Obracanie strzałką kompasu
@@ -194,16 +184,32 @@ export default class UI extends Phaser.Scene {
         }
     }
 
+    boatRepairAnimation(){
+        // Identyfikator zniszczonej łodzi
+        this.boatRepair = this.add.sprite(this.bw*0.5, this.bh*0.5, "repairAnim")
+        this.anims.create({
+            key: 'hammerAnimation',
+            frames: this.anims.generateFrameNumbers('repairAnim', { start: 0, end: 3 }),
+            frameRate: 10, 
+            repeat: -1 
+        });
+        this.boatRepair.play('hammerAnimation');
+        this.boatRepair.setVisible(true);
+        this.boatRepair.scale=1
+    }
+
     update(time, delta) {
         this.menu.angle += 2*this.gameScene.boatSpeed;
         // Update paska szybkości
         this.updateSpeedBar();
-
+        console.log(this.HP)
         // Update tekstu stanu łodzi
         if(this.HP === 0){
-            this.hammer.setVisible(true);
+            this.boatRepair.setVisible(true);
+            this.gameScene.boat.setTint(0xff0000);
         }else{
-            this.hammer.setVisible(false);
+            this.boatRepair.setVisible(false);
+            this.gameScene.boat.clearTint();
         }
 
         this.regionText.setText('Region: ' + this.gameScene.currentMap)
