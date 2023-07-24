@@ -150,27 +150,6 @@ app.get('/dane/wynik', (req, res) => {
     });
 });
 
-app.get('/dane/odp', (req, res) => {
-    let sql = "SELECT * FROM odpowiedzUzytkownika";
-
-    db.all(sql, (err, rows) => {
-        if (err) {
-            res.status(401).json({"error":err.message});
-        }
-        else {
-            const odpowiedz = JSON.stringify(rows);
-            fs.writeFile('./public/json_files/odpowiedz_uzytkownika.json', odpowiedz, (err) => {
-                if (err) {
-                    console.error(err);
-                    res.status(500).send('Internal Server Error');
-                } else {
-                    res.json(rows);
-                }
-            });
-        }
-    });
-});
-
 // app.get('/dane/konkretneodpowiedzi', (req, res) => {
 //     const customParam = 1;
 //     const sql = "SELECT * FROM odpowiedz WHERE idPytania = :abc";
@@ -192,26 +171,6 @@ app.get('/dane/odp', (req, res) => {
 //         }
 //     });
 // });
-
-app.post('/dane/odpowiedzgracza', (req, res) => {
-
-    const odp = {
-        idOdpowiedzi: req.body.idOdpowiedzi,
-        czasOdpowiedzi: req.body.czasOdpowiedzi,
-        nazwaUzytkownika: req.body.nazwaUzytkownika
-    };
-
-    let sql = "UPDATE odpowiedzUzytkownika SET idOdpowiedzi = ?, czasOdpowiedzi = ?, nazwaUzytkownika = ? WHERE id = 1";
-
-    db.run(sql, [odp.idOdpowiedzi, odp.czasOdpowiedzi, odp.nazwaUzytkownika], function (err) {
-        if (err) {
-            console.error(err);
-            res.status(500).send('Error');
-        } else {
-            res.status(200).send('Dane zapisano poprawnie');
-        }
-    });
-});
 
 //Zapisywanie wyniku quizu gracza (zmiana pojedynczego rekordu)
 app.post('/dane/zapiswyniku', (req, res) => {
