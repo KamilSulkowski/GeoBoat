@@ -336,7 +336,7 @@ export default class UI extends Phaser.Scene {
         // Pobieramy sobie gdzieś tu info o graczach
 
         //
-        // Przypisujemy info o graczach
+        // Przypisujemy info o graczach w arraya
         this.Players = [
             {
                 name: "Małpa D. Luźny",
@@ -363,7 +363,15 @@ export default class UI extends Phaser.Scene {
 
         this.PlayerInfoDump = []
 
-        this.displayName = this.add.text(modalX + 10, modalY + 120, "Player name: ", {
+        this.displayPosition = this.add.text(modalX + 10, modalY + 120, "Rank: ", {
+            fontFamily: 'Arial',
+            fontSize: fontSize,
+            fill: textColor,
+
+        });
+        this.displayPosition.setOrigin(0);
+
+        this.displayName = this.add.text(modalX + 90, modalY + 120, "Player name: ", {
             fontFamily: 'Arial',
             fontSize: fontSize,
             fill: textColor,
@@ -371,7 +379,7 @@ export default class UI extends Phaser.Scene {
         });
         this.displayName.setOrigin(0);
 
-        this.displayXP = this.add.text(modalX + 260, modalY + 120, "XP gained: ", {
+        this.displayXP = this.add.text(modalX + 330, modalY + 120, "XP gained: ", {
             fontFamily: 'Arial',
             fontSize: fontSize,
             fill: textColor,
@@ -379,7 +387,7 @@ export default class UI extends Phaser.Scene {
         });
         this.displayXP.setOrigin(0);
 
-        this.displayLevel = this.add.text(modalX + 410, modalY + 120, "Level: ", {
+        this.displayLevel = this.add.text(modalX + 440, modalY + 120, "Level: ", {
             fontFamily: 'Arial',
             fontSize: fontSize,
             fill: textColor,
@@ -391,7 +399,15 @@ export default class UI extends Phaser.Scene {
 
             this.PlayerInfo = this.Players[i];
 
-            this.PlayerName = this.add.text(modalX + 10, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.name, {
+            this.playerPosition = this.add.text(modalX + 10, modalY + yOffset + yOffsetIncrement * i, i+1, {
+                fontFamily: 'Arial',
+                fontSize: fontSize,
+                fill: textColor,
+    
+            });
+            this.playerPosition.setOrigin(0);
+
+            this.PlayerName = this.add.text(modalX + 90, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.name, {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
@@ -401,7 +417,7 @@ export default class UI extends Phaser.Scene {
             this.modal.fillStyle(0x000000, 0.2);
             this.modal.fillRect(modalX+10, modalY + yOffset + yOffsetIncrement * i + 20, modalWidth-20,1);
             
-            this.playerXP = this.add.text(modalX + 260, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.XP, {
+            this.playerXP = this.add.text(modalX + 330, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.XP, {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
@@ -409,7 +425,7 @@ export default class UI extends Phaser.Scene {
             });
             this.playerXP.setOrigin(0);
 
-            this.PlayerLevel = this.add.text(modalX + 410, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.Level, {
+            this.PlayerLevel = this.add.text(modalX + 440, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.Level, {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
@@ -417,6 +433,7 @@ export default class UI extends Phaser.Scene {
             });
             this.PlayerLevel.setOrigin(0);
 
+            this.PlayerInfoDump.push(this.playerPosition);
             this.PlayerInfoDump.push(this.PlayerName);
             this.PlayerInfoDump.push(this.playerXP);
             this.PlayerInfoDump.push(this.PlayerLevel);
@@ -437,6 +454,7 @@ export default class UI extends Phaser.Scene {
                 this.displayName.destroy();
                 this.displayXP.destroy();
                 this.displayLevel.destroy();
+                this.displayPosition.destroy();
             }
             this.rankingOpen = false;
         }
