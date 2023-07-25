@@ -4,7 +4,6 @@ export class Panama extends Phaser.Scene {
         this.tileSetWorld = null;
         this.water = null;
         this.ground = null;
-        this.stones = null;
         this.boat = null; // Przypisujemy łódź do właściwości klasy
         this.engine = 0;    //Zmienna do sprawdzania stanu rozpędu/hamowania łodzi
         this.inZone = false;//Flaga kolizji
