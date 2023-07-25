@@ -6,8 +6,8 @@
     "activeFile": "worldMap.json",
     "automapping.whileDrawing": false,
     "expandedProjectPaths": [
-        ".",
-        "tiled"
+        "tiled",
+        "."
     ],
     "file.lastUsedOpenFilter": "Wszystkie pliki (*)",
     "fileStates": {
@@ -246,8 +246,8 @@
             "scale": 0.125,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1220,
-                "y": 916
+                "x": 1196,
+                "y": 892
             }
         },
         "worldMap.json#tile": {
@@ -265,7 +265,7 @@
     "last.externalTilesetPath": "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/Maps",
     "last.imagePath": "C:/Users/Rockl/Desktop/oskarweg/GeoBoat/public/assets",
     "map.height": 125,
-    "map.lastUsedExportFilter": "Tiled map files (*.tmx *.xml)",
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
     "map.renderOrder": null,
     "map.tileHeight": 16,

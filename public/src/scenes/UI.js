@@ -9,7 +9,7 @@ async function getUserData() {
 export default class UI extends Phaser.Scene {
     constructor() {
         super('ui');
-        this.HP = 3; //Zmienna do sprawdzania stanu życia łodzi
+        //this.HP = 3; //Zmienna do sprawdzania stanu życia łodzi
         this.menuOpen = false;
         this.profileOpen = false;
         this.quizOpen = false;
@@ -32,6 +32,7 @@ export default class UI extends Phaser.Scene {
         getUserData.call(this);
         console.log(this.userData);
 
+        this.scene = this.scene.get('game');
         // Pobranie wysokości/długości sceny
         this.bw = this.cameras.main.width; // width main kamery
         this.bh = this.cameras.main.height;// height main kamery
@@ -88,7 +89,7 @@ export default class UI extends Phaser.Scene {
         .setFontSize(18)
         .setColor('#ffffff')
         .setStyle({fontFamily: "CustomFont"});
-        this.regionText = this.add.text(this.bw*0.5, this.bh-(this.bh-58), 'Region: ' + this.gameScene.currentMap)
+        this.regionText = this.add.text(this.bw*0.5, this.bh-(this.bh-58), 'Region: ' + this.scene.currentMap)
         .setOrigin(0.5)
         .setScale(1)
         .setFontSize(13)
@@ -231,7 +232,7 @@ export default class UI extends Phaser.Scene {
 
     boatRepairAnimation(){
         // Identyfikator zniszczonej łodzi
-        this.boatRepair = this.add.sprite(this.bw*0.5, this.bh*0.5, "repairAnim")
+        this.boatRepair = this.add.sprite(this.scene.boatCurrentX, this.scene.boatCurrentY, "repairAnim")
         this.anims.create({
             key: 'hammerAnimation',
             frames: this.anims.generateFrameNumbers('repairAnim', { start: 0, end: 3 }),
@@ -244,25 +245,23 @@ export default class UI extends Phaser.Scene {
     }
 
     update(time, delta) {
-        this.menu.angle = 4*this.gameScene.boat.angle;
+        this.menu.angle += this.scene.currentBoatSpeed/300;
         // Update paska szybkości
         this.updateSpeedBar();
         console.log(this.HP)
         // Update tekstu stanu łodzi
-        if(this.HP === 0){
+        if(this.scene.HP === 0){
             this.boatRepair.setVisible(true);
-            this.gameScene.boat.setTint(0xff0000);
         }else{
             this.boatRepair.setVisible(false);
-            this.gameScene.boat.clearTint();
         }
 
-        this.coords.setText('Lat - ' + this.gameScene.boat.x + ' Long - ' + this.gameScene.boat.y)
-        this.regionText.setText('Region: ' + this.gameScene.currentMap)
+        this.coords.setText('Lat - ' + this.scene.boat.x + ' Long - ' + this.scene.boat.y)
+        this.regionText.setText('Region: ' + this.scene.currentMap)
 
         // Update tekstu pod HP
-        if(this.HP != 3){
-            this.stateText.setText("Repaired in: " + Math.floor(((this.gameScene.shipRepairTime - this.gameScene.shipCooldown)/1000))+ "s");
+        if(this.scene.HP != 3){
+            this.stateText.setText("Repaired in: " + Math.floor(((this.scene.shipRepairTime - this.scene.shipCooldown)/1000))+ "s");
         }else{
             this.stateText.setText("Fully repaired");
         }
@@ -270,34 +269,34 @@ export default class UI extends Phaser.Scene {
 
         // Update serduszek życia
         setHeartState(collision){
-            this.gameScene.shipCooldown = 0;
-            this.gameScene.shipDamaged = true;
-            this.HP -= 1;
-            const temp = this.heartsArray[this.HP];
+            this.scene.shipCooldown = 0;
+            this.scene.shipDamaged = true;
+            this.scene.HP -= 1;
+            const temp = this.heartsArray[this.scene.HP];
             temp.setTexture('emptyHeart'); 
-            if(this.HP < 1){
+            if(this.scene.HP < 1){
                 this.gameScene.shipWrecked()
             }
             
         }
         // Odnowienie serduszek życia w czasie
         recoverHeart(){
-            const temp = this.heartsArray[this.HP];
+            const temp = this.heartsArray[this.scene.HP];
             temp.setTexture('fullHeart');
-            this.HP += 1;
+            this.scene.HP += 1;
         }
         // Update paska szybkości
         updateSpeedBar(){
             this.fillSpeedBar.clear();
-            if(this.gameScene.boatSpeed > 0){
-                this.fillSpeedValue = this.gameScene.boatSpeed/1.2
+            if(this.scene.currentBoatSpeed > 0){
+                this.fillSpeedValue = this.scene.currentBoatSpeed/1.2
                 this.fillSpeedBar.fillStyle(0x7dff45, 1)
-                this.speedText.setText((Math.round(this.gameScene.boatSpeed * 10)/10)/5 + " / Mph");
+                this.speedText.setText((Math.round(this.scene.currentBoatSpeed * 10)/10)/5 + " / Mph");
                 this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), this.fillSpeedValue, this.bh-(this.bh-20));
-            }else if(this.gameScene.boatSpeed < 0){
-                this.fillSpeedValue = this.gameScene.boatSpeed/1.2
+            }else if(this.scene.currentBoatSpeed < 0){
+                this.fillSpeedValue = this.scene.currentBoatSpeed/1.2
                 this.fillSpeedBar.fillStyle(0xff4564, 1)
-                this.speedText.setText((Math.round(-this.gameScene.boatSpeed * 10)/10)/5 + " / Mph");
+                this.speedText.setText((Math.round(-this.scene.currentBoatSpeed * 10)/10)/5 + " / Mph");
                 this.fillSpeedBar.fillRect(this.bw-155, this.bh-(this.bh-88), -this.fillSpeedValue, this.bh-(this.bh-20));
             }else{
                 this.speedText.setText("0 / Mph");
