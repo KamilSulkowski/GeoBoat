@@ -256,7 +256,7 @@ export default class UI extends Phaser.Scene {
             this.boatRepair.setVisible(false);
         }
 
-        this.coords.setText('Lat - ' + this.scene.boat.x + ' Long - ' + this.scene.boat.y)
+        this.coords.setText('Lat - ' + this.gameScene.boat.x + ' Long - ' + this.gameScene.boat.y)
         this.regionText.setText('Region: ' + this.scene.currentMap)
 
         // Update tekstu pod HP
