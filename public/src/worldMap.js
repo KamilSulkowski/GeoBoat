@@ -14,6 +14,8 @@ export class WorldMap extends Phaser.Scene {
         this.adrift = 0;    //Zmienna do kolizji odbicia
         this.boatSpeed = 0; //Zmienna do ustawiania prędkości łódki
         this.region = null; //Zmienna do zapamiętywania na jakim regionie jest gracz
+        this.birdGroup = null; //Zmienna do grupy ptaków
+        this.birdTimer = null; //Zmienna do timera ptaków
     }
 
     preload() {
@@ -58,6 +60,14 @@ export class WorldMap extends Phaser.Scene {
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
         this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
         this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
+
+        // Animacja ptaka
+        this.anims.create({
+            key: 'seagullAnimation',
+            frames: this.anims.generateFrameNumbers('seagull', { start: 0, end: 3 }),
+            frameRate: 6,
+            repeat: -1
+        });
 
         // Animacja łódki gracza
         this.anims.create({
@@ -112,15 +122,6 @@ export class WorldMap extends Phaser.Scene {
             }
         });
 
-        // Animacja łódki gracza
-        this.anims.create({
-            key: 'boatAnimation',
-            frames: this.anims.generateFrameNumbers('boatAnim', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        });
-        this.boat.play('boatAnimation');
-        this.boat.anims.pause();
 
         // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
         this.boat.setCollideWorldBounds(true);
@@ -138,6 +139,7 @@ export class WorldMap extends Phaser.Scene {
         super.update(time, delta);
         this.gameScene.timer += delta;
         this.gameScene.shipCooldown += delta;
+        this.manageBirds();
         // Cooldown debuffa (Naprawa łodzi w czasie)
         this.shipDebuff()
         // Zmiana strzałki kompasu w zależności od pozycji łodzi
@@ -342,6 +344,47 @@ export class WorldMap extends Phaser.Scene {
     deepWaterHandleCollision() {
         console.log("deepwater");
 
+    }
+    // Function to manage birds
+    manageBirds() {
+        const maxBirds = 90;
+
+        // Create bird group if not already created
+        if (!this.birdGroup) {
+            this.birdGroup = this.physics.add.group();
+        }
+
+        // Check if the number of birds is less than the maximum limit
+        if (this.birdGroup.getLength() < maxBirds) {
+            // Randomly spawn a bird at a random position on the map
+            const x = Phaser.Math.Between(0, this.physics.world.bounds.width);
+            const y = Phaser.Math.Between(0, this.physics.world.bounds.height);
+
+            // Create the bird sprite and add it to the bird group
+            const bird = this.birdGroup.create(x, y, 'seagull');
+            bird.anims.play('seagullAnimation', true);
+
+            // Set a timer to remove the bird after 10 seconds
+            this.time.addEvent({
+                delay: 10000,
+                callback: () => {
+                    bird.destroy();
+                },
+                callbackScope: this,
+            });
+
+            // Add random velocity to the bird
+            const birdSpeed = Phaser.Math.Between(50, 150);
+            bird.setVelocity(Phaser.Math.Between(-birdSpeed, birdSpeed), Phaser.Math.Between(-birdSpeed, birdSpeed));
+
+            // Update bird's rotation based on its velocity (direction of flight)
+            bird.rotation = Phaser.Math.Angle.Between(0, 0, bird.body.velocity.x, bird.body.velocity.y) + Math.PI / 2;
+        }
+
+        // Update rotation of existing birds
+        this.birdGroup.getChildren().forEach(bird => {
+            bird.rotation = Phaser.Math.Angle.Between(0, 0, bird.body.velocity.x, bird.body.velocity.y) + Math.PI / 2;
+        });
     }
 }
 
