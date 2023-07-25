@@ -9,7 +9,6 @@ async function getUserData() {
 export default class UI extends Phaser.Scene {
     constructor() {
         super('ui');
-        //this.HP = 3; //Zmienna do sprawdzania stanu życia łodzi
         this.menuOpen = false;
         this.profileOpen = false;
         this.quizOpen = false;
@@ -248,7 +247,7 @@ export default class UI extends Phaser.Scene {
         this.menu.angle += this.scene.currentBoatSpeed/300;
         // Update paska szybkości
         this.updateSpeedBar();
-        console.log(this.HP)
+        console.log(this.scene.HP)
         // Update tekstu stanu łodzi
         if(this.scene.HP === 0){
             this.boatRepair.setVisible(true);
