@@ -1,6 +1,6 @@
 # GeoBoat
 ## Opis
-GeoBoat to gra w stylu platformowym, osadzona w morskim świecie, gdzie gracz wciela się w postać kapitana żaglowca. Celem gry jest przemierzanie różnych regionów na mapie, rozwiązując zagadki, walcząc z piratami i zdobywając doświadczenie oraz punkty.
+GeoBoat to gra w stylu platformowym, osadzona w morskim świecie, gdzie gracz wciela się w postać kapitana żaglowca. Celem gry jest przemierzanie różnych regionów na mapie, rozwiązując zagadki i zdobywając doświadczenie oraz punkty za wykonywanie quizów.
 
 ## Technologie
 Projekt GeoBoat został stworzony przy użyciu szeregu zaawansowanych technologii:
@@ -26,11 +26,10 @@ Projekt GeoBoat został stworzony przy użyciu szeregu zaawansowanych technologi
 1. W terminalu wykonaj polecenie npm start, aby uruchomić serwer gry.
 2. Otwórz przeglądarkę i przejdź pod adres http://localhost:8081/game.
 ### Rozgrywka
-1. Steruj postacią kapitana żaglowca za pomocą klawiszy strzałek.
+1. Steruj postacią kapitana żaglowca za pomocą klawiszy WSAD.
 2. Przemierzaj tajemnicze regiony na mapie, aby zdobywać punkty doświadczenia (XP).
-3. Rozwiązuj różnorodne zagadki i walcz z piratami, aby zdobyć cenne skarby i zwiększyć swoje umiejętności.
-4. Zbieraj serca, aby zwiększyć wytrzymałość swojej łodzi i kontynuować ekscytujące podróże.
-5. Twoje decyzje wpływają na wynik i ranking gracza, sprawdź jak wysoko możesz się wspiąć na liście najlepszych odkrywców.
+3. Rozwiązuj różnorodne quizy aby zdobyć cenne doświadczenie i zwiększyć swoją wiedzę.
+4. Twoje decyzje wpływają na wynik i ranking gracza, sprawdź jak wysoko możesz się wspiąć na liście najlepszych odkrywców.
 ## Licencja
 Ten projekt jest objęty licencją MIT. Szczegóły znajdują się w pliku LICENSE.
 
