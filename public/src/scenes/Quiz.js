@@ -1,7 +1,7 @@
 import {setScore, lockQuestion, unlockQuestion, fetchData, updateUser} from '../data_access/data_access.js';
 
 export function startQuiz() {
-    console.log(this.userData[0].punktyXP);
+    console.log(this.user.punktyXP);
     categorySelection.call(this);
 }
 async function categorySelection() {
@@ -390,10 +390,10 @@ async function showEndScreen() {
     var i = 0;
     var water = 0;
     //Czy zdobyto nowy poziom
-    if (50 * this.userData[0].poziom <= this.userData[0].punktyXP + this.earnedXP)
+    if (50 * this.user.poziom <= this.user.punktyXP + this.earnedXP)
         i = 1
     //Czy głębokie wody będą dostępne
-    if (this.userData[0].poziom > 1)
+    if (this.user.poziom > 1)
         water = 1
     //Ekran nowego poziomu
     //////////////////////////
@@ -401,10 +401,10 @@ async function showEndScreen() {
     //Zapis do bazy i aktualizacja danych
     setScore(this.scoredPoints, this.numberOfQuestions, this.earnedXP, 0);
     console.log('zdobytexp: ', this.earnedXP);
-    updateUser(this.userData[0].punktyXP + this.earnedXP, this.userData[0].poziom + i, this.userData[0].wytrzymaloscLodzi,
-        this.userData[0].maxPredkoscLodzi, water, 1);
+    updateUser(this.user.punktyXP + this.earnedXP, this.user.poziom + i, this.user.wytrzymaloscLodzi,
+        this.user.maxPredkoscLodzi, water, 1);
     this.userData = await fetchData('dane/uzytkownicy').then((data) => this.userData = data);
-    console.log('nowy stan: ', this.userData[0].punktyXP);
+    console.log('nowy stan: ', this.user.punktyXP);
 
     // Gratulacje
     let header = 'Gratulacje, quiz ukończony'

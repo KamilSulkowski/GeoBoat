@@ -20,8 +20,10 @@ export default class UI extends Phaser.Scene {
     preload() {
     }
 
-    async create() {
+    async create(login) {
         this.gameScene = this.scene.get('worldMap');
+        this.userName = login;
+        console.log("UserName: ", this.userName);
 
         getUserData.call(this);
         console.log(this.userData);
@@ -205,9 +207,11 @@ export default class UI extends Phaser.Scene {
         // Update paska szybkości
         this.updateSpeedBar();
 
+        //Wyświetlanie nazwy i poziomu gracza
         if (this.userData) {
-            this.userText.setText(this.userData[0].nazwa);
-            this.expText.setText('Level ' + this.userData[0].poziom);
+            this.user = this.userData.find((row) => row.nazwa === this.userName);
+            this.userText.setText(this.userName);
+            this.expText.setText('Level ' + this.user.poziom);
         }
 
         // Update tekstu stanu łodzi
@@ -528,7 +532,7 @@ export default class UI extends Phaser.Scene {
         this.profilText.setOrigin(0.5);
 
         // Tekst "Nazwa użytkownika"
-        this.userText = this.add.text((modalX + modalWidth / 2), modalY + 70, this.userData[0].nazwa, {
+        this.userText = this.add.text((modalX + modalWidth / 2), modalY + 70, this.userName, {
             fontFamily: 'Arial',
             fontSize: '18px',
             fill: '#000000'
@@ -542,7 +546,7 @@ export default class UI extends Phaser.Scene {
             fill: '#000000'
         });
         // Tekst "Poziom"
-        this.lvlText = this.add.text(modalX + modalWidth / 2, modalY + 170, 'Poziom ' + this.userData[0].poziom, {
+        this.lvlText = this.add.text(modalX + modalWidth / 2, modalY + 170, 'Poziom ' + this.user.poziom, {
             fontFamily: 'Arial',
             fontSize: '18px',
             fill: '#000000'

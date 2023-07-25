@@ -49,7 +49,7 @@ export class Login extends Phaser.Scene {
             if (login === 'admin') {
                 scene.stop('login');
                 scene.start('worldMap');
-                scene.run('ui');
+                scene.run('ui', login);
                 scene.bringToTop('ui')
             }
             else {
