@@ -373,12 +373,12 @@ export default class UI extends Phaser.Scene {
         const textColor = '#ffffff';
         const yOffset = 150;
         const yOffsetIncrement = 30;
+        this.PlayerInfoDump = []
+
         const maxVisiblePlayers = 10;
         const container = this.add.container(modalX + 10, modalY + 120);
         const totalContainerHeight = yOffsetIncrement * this.Players.length;
         const visibleContainerHeight = yOffsetIncrement * maxVisiblePlayers;
-
-        this.PlayerInfoDump = []
 
         // Create the track
         this.sliderTrack = this.add.rectangle(200, 300, 300, 10, 0xCCCCCC);
