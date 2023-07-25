@@ -1,4 +1,11 @@
 import {startQuiz, closeQuiz} from "./Quiz.js";
+import {fetchData} from '../data_access/data_access.js';
+
+async function getUserData() {
+    this.userData = await fetchData('dane/uzytkownicy').then((data) => this.userData = data);
+    console.log(this.userData);
+}
+
 export default class UI extends Phaser.Scene {
     constructor() {
         super('ui');
@@ -19,8 +26,12 @@ export default class UI extends Phaser.Scene {
     preload() {
     }
 
-    create() {
+    async create() {
         this.gameScene = this.scene.get('worldMap');
+
+        getUserData.call(this);
+        console.log(this.userData);
+
         // Pobranie wysokości/długości sceny
         this.bw = this.cameras.main.width; // width main kamery
         this.bh = this.cameras.main.height;// height main kamery
@@ -326,23 +337,17 @@ export default class UI extends Phaser.Scene {
 
         //
         // Przypisujemy info o graczach w arraya
-        this.Players = [
-            {
-                name: "Małpa D. Luźny",
-                XP: 13,
-                Level: 2,
-            },
-            {
-                name: "Edward NowaBrama",
-                XP: 2,
-                Level: 1,
-            },
-            {
-                name: "Jacek Wróblewski",
-                XP: 41,
-                Level: 4,
-            },
-        ]
+        this.Players = [];
+        let i = 0;
+        for(;i < 12; i++) {
+            this.Player =
+                {
+                    name: this.userData[i].nazwa,
+                    XP: this.userData[i].punktyXP,
+                    Level: this.userData[i].poziom,
+                }
+            this.Players.push(this.Player);
+        }
         this.Players.sort((a, b) => b.XP - a.XP);
         // Rysowanie
         const fontSize = '18px';
@@ -500,7 +505,7 @@ export default class UI extends Phaser.Scene {
         this.profilText.setOrigin(0.5);
 
         // Tekst "Nazwa użytkownika"
-        this.userText = this.add.text((modalX + modalWidth / 2), modalY + 70, 'Nazwa użytkownika', {
+        this.userText = this.add.text((modalX + modalWidth / 2), modalY + 70, this.userData[0].nazwa, {
             fontFamily: 'Arial',
             fontSize: '18px',
             fill: '#ffffff'
@@ -514,7 +519,7 @@ export default class UI extends Phaser.Scene {
             fill: '#ffffff'
         });
         // Tekst "Poziom"
-        this.lvlText = this.add.text(modalX + modalWidth / 2, modalY + 170, 'Poziom', {
+        this.lvlText = this.add.text(modalX + modalWidth / 2, modalY + 170, 'Poziom ' + this.userData[0].poziom, {
             fontFamily: 'Arial',
             fontSize: '18px',
             fill: '#ffffff'
