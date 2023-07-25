@@ -153,6 +153,30 @@ export default class UI extends Phaser.Scene {
 
         this.boatRepairAnimation();
 
+        
+        // // Create a graphics object to act as the track of the slider
+        // var trackGraphics = this.add.graphics();
+        // trackGraphics.fillStyle(0x888888);
+        // trackGraphics.fillRect(100, 200, 200, 10);
+
+        // // Create a graphics object to act as the thumb of the slider
+        // var thumbGraphics = this.add.graphics();
+        // thumbGraphics.fillStyle(0xffffff);
+        // thumbGraphics.fillRect(100, 195, 10, 20);
+
+        // // Add slider behavior
+        // var config = {
+        //     orientation: 'x', // 'x' for horizontal, 'y' for vertical
+        //     track: trackGraphics,
+        //     thumb: thumbGraphics,
+        //     inputLength: 200, // The length of the slider track (same as the width of the track)
+        //     valuechangeCallback: function (value) {
+        //         console.log('Slider value:', value);
+        //     }
+        // };
+
+        // var slider = this.plugins.get('rexsliderplugin').add(thumbGraphics, config);
+
     }
 
     onLeftScrollClick() {
@@ -296,10 +320,8 @@ export default class UI extends Phaser.Scene {
         const textColor = '#ffffff';
 
         this.rankingOpen = true;
-        this.modal = this.add.graphics();
-
         this.rankBackground = this.add.image(this.bw*0.5, this.bh*0.5, "modalBackground")
-
+        this.modal = this.add.graphics();
         this.menuText = this.add.text(modalX + modalWidth / 2, modalY + 30, 'Ranking użytkowników', {
             fontFamily: 'Arial',
             fontSize: '24px',
@@ -333,13 +355,11 @@ export default class UI extends Phaser.Scene {
         const modalHeight = 500;
         const modalX = (this.bw - modalWidth) / 2;
         const modalY = (this.bh - modalHeight) / 2;
-        // Pobieramy sobie gdzieś tu info o graczach
 
-        //
         // Przypisujemy info o graczach w arraya
         this.Players = [];
         let i = 0;
-        for(;i < 12; i++) {
+        for(;i < 15; i++) {
             this.Player =
                 {
                     name: this.userData[i].nazwa,
@@ -349,13 +369,61 @@ export default class UI extends Phaser.Scene {
             this.Players.push(this.Player);
         }
         this.Players.sort((a, b) => b.XP - a.XP);
+
         // Rysowanie
         const fontSize = '18px';
         const textColor = '#ffffff';
         const yOffset = 150;
         const yOffsetIncrement = 30;
+        const maxVisiblePlayers = 10;
+        // const container = this.add.container(modalX + 10, modalY + 120);
+        // const totalContainerHeight = yOffsetIncrement * this.Players.length;
+        // const visibleContainerHeight = yOffsetIncrement * maxVisiblePlayers;
 
         this.PlayerInfoDump = []
+
+        // this.sliderTrack = this.add.graphics();
+        // this.sliderTrack.fillStyle(0x000000, 0.2);
+        // this.sliderTrack.fillRect(modalX + modalWidth - 20, modalY + 120, 10, modalHeight - 140);
+        // this.sliderThumb = this.add.graphics();
+        // this.sliderThumb.fillStyle(0xffffff);
+        // this.sliderThumb.fillRect(modalX + modalWidth - 20, modalY + 120, 10, visibleContainerHeight);
+
+        // const thumbSprite = this.add.rectangle(modalX + modalWidth - 20, modalY + 120, 10, visibleContainerHeight, 0x000000, 0);
+        // thumbSprite.setInteractive();
+
+        // this.add.existing(this.sliderTrack);
+        // this.add.existing(this.sliderThumb);
+        // this.add.existing(thumbSprite);
+        // this.sliderThumb.setInteractive();
+        // this.input.setDraggable(this.sliderThumb);
+        // if (thumbSprite && thumbSprite.setInteractive) {
+        //     this.input.setDraggable(thumbSprite);
+        //     thumbSprite.on('drag', (pointer, dragX, dragY) => {
+        //         const minY = modalY + 120;
+        //         const maxY = modalY + modalHeight - visibleContainerHeight;
+        //         const containerY = Phaser.Math.Clamp(dragY, minY, maxY);
+        
+        //         container.y = modalY + 120 - ((containerY - minY) * (totalContainerHeight - visibleContainerHeight)) / (modalHeight - 140);
+        //     });
+        // }
+
+        // function updateContainerVisibility() {
+        //     const containerY = container.y - modalY - 120;
+        //     const startIndex = Math.floor((containerY / (totalContainerHeight - visibleContainerHeight)) * this.Players.length);
+        //     const endIndex = Math.min(startIndex + maxVisiblePlayers, this.Players.length);
+    
+        //     for (let i = 0; i < this.PlayerInfoDump.length; i++) { //Players podmiana
+        //         this.PlayerInfoDump[i].visible = i >= startIndex && i < endIndex;
+        //     }
+        // }
+    
+        // // Update the container visibility initially
+        // updateContainerVisibility.call(this);
+
+        // //this.sliderThumb.on('drag', updateContainerVisibility, this);
+
+        // this.add.existing(container);
 
         this.displayPosition = this.add.text(modalX + 10, modalY + 120, "Rank: ", {
             fontFamily: 'Arial',
@@ -364,6 +432,7 @@ export default class UI extends Phaser.Scene {
 
         });
         this.displayPosition.setOrigin(0);
+        this.displayPosition.setStroke(this.strokeColor, this.strokeThick);
 
         this.displayName = this.add.text(modalX + 90, modalY + 120, "Player name: ", {
             fontFamily: 'Arial',
@@ -372,6 +441,7 @@ export default class UI extends Phaser.Scene {
 
         });
         this.displayName.setOrigin(0);
+        this.displayName.setStroke(this.strokeColor, this.strokeThick);
 
         this.displayXP = this.add.text(modalX + 300, modalY + 120, "XP gained: ", {
             fontFamily: 'Arial',
@@ -380,6 +450,7 @@ export default class UI extends Phaser.Scene {
 
         });
         this.displayXP.setOrigin(0);
+        this.displayXP.setStroke(this.strokeColor, this.strokeThick);
 
         this.displayLevel = this.add.text(modalX + 410, modalY + 120, "Level: ", {
             fontFamily: 'Arial',
@@ -388,6 +459,13 @@ export default class UI extends Phaser.Scene {
 
         });
         this.displayLevel.setOrigin(0);
+        this.displayLevel.setStroke(this.strokeColor, this.strokeThick);
+
+        this.modal.fillStyle(0xffffff, 0.5);
+        this.modal.fillRect(modalX+10, modalY + 145, modalWidth-20,1);
+
+        this.strokeColor = '0x000000'
+        this.strokeThick = 2
 
         for (let i = 0; i < this.Players.length; i++) {
 
@@ -400,17 +478,18 @@ export default class UI extends Phaser.Scene {
 
             });
             this.playerPosition.setOrigin(0);
+            this.playerPosition.setStroke(this.strokeColor, this.strokeThick);
 
-            this.PlayerName = this.add.text(modalX + 90, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.name, {
+
+            this.playerName = this.add.text(modalX + 90, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.name, {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
 
             });
-            this.PlayerName.setOrigin(0);
-            this.modal.fillStyle(0x000000, 0.2);
-            this.modal.fillRect(modalX+10, modalY + yOffset + yOffsetIncrement * i + 20, modalWidth-20,1);
-            
+            this.playerName.setOrigin(0);
+            this.playerName.setStroke(this.strokeColor, this.strokeThick);
+
             this.playerXP = this.add.text(modalX + 300, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.XP, {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
@@ -418,6 +497,7 @@ export default class UI extends Phaser.Scene {
 
             });
             this.playerXP.setOrigin(0);
+            this.playerXP.setStroke(this.strokeColor, this.strokeThick);
 
             this.PlayerLevel = this.add.text(modalX + 410, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.Level, {
                 fontFamily: 'Arial',
@@ -426,16 +506,19 @@ export default class UI extends Phaser.Scene {
 
             });
             this.PlayerLevel.setOrigin(0);
+            this.PlayerLevel.setStroke(this.strokeColor, this.strokeThick);
+
+            //  this.modal.fillStyle(0xffffff, 0.5);
+            //  this.modal.fillRect(modalX+10, modalY + yOffset + yOffsetIncrement * i + 20, modalWidth-20,1);
+
 
             this.PlayerInfoDump.push(this.playerPosition);
-            this.PlayerInfoDump.push(this.PlayerName);
+            this.PlayerInfoDump.push(this.playerName);
             this.PlayerInfoDump.push(this.playerXP);
             this.PlayerInfoDump.push(this.PlayerLevel);
         }
-
-
-
-
+        // this.modal.fillStyle(0x000000, 0.2);
+        // this.modal.fillRect(modalX+7, modalY+120, 486, 366);
     }
     closeRanking() {
         if (this.rankingOpen) {
@@ -452,6 +535,8 @@ export default class UI extends Phaser.Scene {
                 this.displayLevel.destroy();
                 this.displayPosition.destroy();
                 this.rankBackground.destroy();
+                // this.sliderThumb.destroy();
+                // this.sliderTrack.destroy();
             }
             this.rankingOpen = false;
         }
