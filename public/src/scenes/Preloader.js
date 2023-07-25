@@ -25,8 +25,18 @@ export default class Preloader extends Phaser.Scene {
             frameWidth: 376,
             frameHeight: 188
         });
+        this.load.spritesheet("buttonAnim", "assets/animation/buttonSheet.png", {
+            frameWidth: 94,
+            frameHeight: 32
+        });
+        this.load.spritesheet('backToWorld', "assets/arrow-Sheet.png", {
+            frameWidth: 64,
+            frameHeight: 64
+        });
         
+        this.load.image("modalBackground", "assets/modalBcg.png")
         this.load.image("scrollMap", "assets/scrollMap.png")
+        this.load.image("scrollMapUI", "assets/globe.png")
         this.load.image("pirate", "assets/pirat.png")
         this.load.image("fullHeart", "assets/fullHeart.png")
         this.load.image("emptyHeart", "assets/emptyHeart.png")
@@ -46,16 +56,20 @@ export default class Preloader extends Phaser.Scene {
         this.load.image('tiled', "assets/worldtiles.png");
 
         this.load.tilemapTiledJSON('worldMap','Maps/worldMap.json');
-        this.load.tilemapTiledJSON('regionMap', 'Maps/regionMap.json');
-        this.load.tilemapTiledJSON('jamajka', 'Maps/jamajkaRegion.json');
+        this.load.tilemapTiledJSON('jamajka', 'Maps/jamajka.json');
+        this.load.tilemapTiledJSON('havana', 'Maps/havana.json');
+        this.load.tilemapTiledJSON('panama', 'Maps/panama.json');
 
-        this.load.image("PPH", "assets/portPH.png")
+        this.load.image("PPH", "assets/dock.png")
         this.load.image("CPH", "assets/collisionPH.png")
-        this.load.image("QPH", "assets/quizPH.png")
+        this.load.image("QPH", "assets/house.png")
         this.load.image('QTPH', "assets/quizTalkPH.png");
         this.load.image('FPH', "assets/finPH.png");
 
         this.load.image("roseHall", "assets/roseHall.png")
+
+
+        this.load.plugin('rexsliderplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexsliderplugin.min.js', true);
     }
     create() {
 

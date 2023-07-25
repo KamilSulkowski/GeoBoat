@@ -1,4 +1,4 @@
-import {setWynik, setOdp, zablokujPytanie, odblokujPytanie, fetchData, updateUser} from '../data_access/data_access.js';
+import {setScore, lockQuestion, unlockQuestion, fetchData, updateUser} from '../data_access/data_access.js';
 
 export function startQuiz() {
     categorySelection.call(this);
@@ -15,19 +15,18 @@ async function categorySelection() {
     this.modal.fillRoundedRect(this.modalX, this.modalY, this.modalWidth, this.modalHeight, 25);
 
     //Pobranie danych z bazy
-    this.pytania = await fetchData('dane/pytania').then((data) => this.pytania = data);
-    this.odpowiedzi = await fetchData('dane/odpowiedzi').then((data) => this.odpowiedzi = data);
-    this.wynik = await fetchData('dane/wynik').then((data) => this.wynik = data);
+    this.questions = await fetchData('dane/pytania').then((data) => this.questions = data);
+    this.answers = await fetchData('dane/odpowiedzi').then((data) => this.answers = data);
     this.categoriesJSON = await fetchData('dane/kategorie').then((data) => this.categoriesJSON = data);
-
-    let idRegionu = 1;  //Jamajka
+    console.log(this.userData);
+    let regionId = 1;  //Jamajka
 
     //Pobranie kategorii dla wybranego regionu
     this.categories = [];
     this.selectedCategories = [];
     let i = 0;
     for(i in this.categoriesJSON) {
-        if (this.categoriesJSON[i].idKategorie === idRegionu) {
+        if (this.categoriesJSON[i].idKategorie === regionId) {
             this.categories.push(this.categoriesJSON[i].nazwa);
             let k = this.categoriesJSON[i].id;
             this.selectedCategories.push(k);
@@ -92,57 +91,55 @@ async function categorySelection() {
     });
 }
 
-function prepareQuiz(cat) {
-    let selectedCategory = cat
+function prepareQuiz(selectedCategory) {
+    setScore(0, 0, 0, 0);
 
     // Pobranie dostępnych pytań z bazy
     let j = 0;
-    let dostepneP = [];
-    for(j in this.pytania) {
-        if (this.pytania[j].idKategorii === selectedCategory) {
-            dostepneP.push(this.pytania[j].id);
+    let baseQuestions = [];
+    for(j in this.questions) {
+        if (this.questions[j].idKategorii === selectedCategory) {
+            baseQuestions.push(this.questions[j].id);
         }
     }
 
     // Losowanie kolejności pytań
-    let len = dostepneP.length;
-    let dostepnePytania = [];
+    let len = baseQuestions.length;
+    let availableQuestions = [];
     for(let i = 0; i < len; i++) {
         let random = Math.floor(Math.random() * (len - i));
         console.log('random', random);
-        let n = dostepneP[random];
-        dostepneP.splice(random, 1);
-        dostepnePytania.push(n);
+        let n = baseQuestions[random];
+        baseQuestions.splice(random, 1);
+        availableQuestions.push(n);
     }
 
     // Pobranie dostępnych odpowiedzi
     let i = 0;
-    let dostepneO = [];
-    for(i in this.odpowiedzi) {
-        if (dostepnePytania.includes(this.odpowiedzi[i].idPytania)) {
-            dostepneO.push(this.odpowiedzi[i].id);
+    let baseAnswers = [];
+    for(i in this.answers) {
+        if (availableQuestions.includes(this.answers[i].idPytania)) {
+            baseAnswers.push(this.answers[i].id);
         }
     }
 
     // Losowanie kolejności odpowiedzi
-    len = dostepneO.length;
-    let dostepneOdpowiedzi = [];
+    len = baseAnswers.length;
+    let availableAnswers = [];
     for(let i = 0; i < len; i++) {
         let random = Math.floor(Math.random() * (len - i));
         console.log('random', random);
-        let n = dostepneO[random];
-        dostepneO.splice(random, 1);
-        dostepneOdpowiedzi.push(n);
+        let n = baseAnswers[random];
+        baseAnswers.splice(random, 1);
+        availableAnswers.push(n);
     }
 
-    console.log(dostepnePytania);
-    console.log(dostepneOdpowiedzi);
-    return {dostepnePytania, dostepneOdpowiedzi};
+    console.log(availableQuestions);
+    console.log(availableAnswers);
+    return {availableQuestions: availableQuestions, availableAnswers: availableAnswers};
 }
 
 function showQuiz(categoryNumber){
-    setWynik(0, 0, 0, 0);
-
     //Tytuł
     this.menuText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + 20, 'Quiz', { fontFamily: 'Arial', fontSize: '24px', fill: '#000000' });
     this.menuText.setOrigin(0.5);
@@ -153,31 +150,33 @@ function showQuiz(categoryNumber){
     this.modal.strokeLineShape(LineSep);
 
     // Postać co będzie se ruszać ustami jak pytanie będzie lecieć
-    this.quizCharacterImage = this.add.image(this.modalX + 110, this.modalY + 150, 'pirate');
+    this.quizCharacterImage = this.add.image(this.modalX + 110, this.modalY + 150, 'QTPH');
     this.quizCharacterImage.setScale(0.75);
 
-    this.aktualnePytanie = 0;
-    this.punktyZdobyte = 0;
-    this.liczbaPytan = 10;
+    this.currentQuestion = 0;
+    this.scoredPoints = 0;
+    this.earnedXP = 0;
+    this.XPerQuestion = 5;      // Ilość zdobytego XP za poprawną odpowiedź
+    this.numberOfQuestions = 10;
 
-    const dostepne = prepareQuiz.call(this, categoryNumber);
-    this.dostepnePytania = dostepne.dostepnePytania;
-    this.dostepneOdpowiedzi = dostepne.dostepneOdpowiedzi;
-    this.p = this.pytania.find((row) => row.id === this.dostepnePytania[0]);
+    const available = prepareQuiz.call(this, categoryNumber);
+    this.availableQuestions = available.availableQuestions;
+    this.availableAnswers = available.availableAnswers;
+    this.p = this.questions.find((row) => row.id === this.availableQuestions[0]);
     console.log(this.p);
     this.o = [];
     this.odp = [];
-    for (let i = 0; i < this.dostepneOdpowiedzi.length; i++) {
-        let f = this.odpowiedzi.find((row) => row.id === this.dostepneOdpowiedzi[i])
+    for (let i = 0; i < this.availableAnswers.length; i++) {
+        let f = this.answers.find((row) => row.id === this.availableAnswers[i])
         this.o.push(f);
     }
-    for (let i = 0; i < this.dostepneOdpowiedzi.length; i++) {
+    for (let i = 0; i < this.availableAnswers.length; i++) {
         if (this.o[i].idPytania === this.p.id)
             this.odp.push(this.o[i]);
     }
 
-    if (this.dostepnePytania.length < 10)
-        this.liczbaPytan = this.dostepnePytania.length;
+    if (this.availableQuestions.length < 10)
+        this.numberOfQuestions = this.availableQuestions.length;
     drawQuestionAndAnswers.call(this);
 }
 function drawQuestionAndAnswers(){
@@ -238,7 +237,7 @@ function drawQuestionAndAnswers(){
     };
 
     // Liczba pytań
-    this.QuestionNumberDisplayedContent = (this.aktualnePytanie) + " / " + (this.liczbaPytan)
+    this.QuestionNumberDisplayedContent = (this.currentQuestion) + " / " + (this.numberOfQuestions)
     console.log(this.QuestionNumberDisplayedContent)
     this.QuestionNumberDisplayed = this.add.text(this.modalX + this.modalWidth / 2 - 340, this.modalY + this.modalHeight - 45, this.QuestionNumberDisplayedContent, {
         fontFamily: 'Arial',
@@ -269,23 +268,23 @@ function drawQuestionAndAnswers(){
 
     this.submitButton.on('pointerdown', () => {
         if (parseInt(this.selectedAnswerIndex) === parseInt(this.correctIndex))
-            this.punktyZdobyte += 1;
+            this.scoredPoints += 1;
         if(this.submitButton)
             this.submitButton.destroy();
 
         console.log('Selected answer index:', this.selectedAnswerIndex);
-        console.log('Punkty zdobyte: ', this.punktyZdobyte);
+        console.log('Punkty zdobyte: ', this.scoredPoints);
         showResult.call(this);
     });
 }
 
 function newQuestion() {
     // Nowe pytanie i nowe odpowiedzi
-    this.p = this.pytania.find((row) => row.id === this.dostepnePytania[this.aktualnePytanie]);
+    this.p = this.questions.find((row) => row.id === this.availableQuestions[this.currentQuestion]);
     console.log(this.p);
-    this.aktualnePytanie += 1;
+    this.currentQuestion += 1;
     this.odp = [];
-    for (let i = 0; i < this.dostepneOdpowiedzi.length; i++) {
+    for (let i = 0; i < this.availableAnswers.length; i++) {
         if (this.o[i].idPytania === this.p.id)
             this.odp.push(this.o[i]);
     }
@@ -321,8 +320,13 @@ function newQuestion() {
 
 function showResult() {
     let information;
-    if (parseInt(this.selectedAnswerIndex) === parseInt(this.correctIndex))
+    if (parseInt(this.selectedAnswerIndex) === parseInt(this.correctIndex)) {
         information = 'Poprawna odpowiedź';
+        if (this.p.czyZablokowane === 0) {
+            this.earnedXP += this.XPerQuestion;
+            lockQuestion(this.p.id);
+        }
+    }
     else {
         information = 'Błędna odpowiedź';
     }
@@ -347,38 +351,38 @@ function showResult() {
     this.nextQuestionButton.visible = true;
 
     this.nextQuestionButton.on('pointerdown', () => {
-    if(this.aktualnePytanie === this.liczbaPytan) {
-        if (this.menuText) {
-            this.menuText.destroy();
-            this.quizCharacterImage.destroy();
+        if(this.currentQuestion === this.numberOfQuestions) {
+            if (this.menuText) {
+                this.menuText.destroy();
+                this.quizCharacterImage.destroy();
+                this.quizQuestionText.destroy();
+                if(this.questionImage)
+                    this.questionImage.destroy();
+                for (this.quizAnswerText of this.quizAnswerTexts) {
+                    this.quizAnswerText.destroy();
+                }
+                this.QuestionNumberDisplayed.destroy();
+                if(this.nextQuestionButton)
+                    this.nextQuestionButton.destroy();
+            }
+            this.correctionText.destroy();
+
+            showEndScreen.call(this);
+        }
+        else {
             this.quizQuestionText.destroy();
-            if(this.questionImage)
-                this.questionImage.destroy();
+            this.correctionText.destroy();
             for (this.quizAnswerText of this.quizAnswerTexts) {
                 this.quizAnswerText.destroy();
             }
-            this.QuestionNumberDisplayed.destroy();
-            if(this.nextQuestionButton)
+            if (this.questionImage)
+                this.questionImage.destroy();
+            if (this.nextQuestionButton)
                 this.nextQuestionButton.destroy();
-        }
-        this.correctionText.destroy();
+            this.QuestionNumberDisplayed.destroy();
 
-        showEndScreen.call(this);
-    }
-    else {
-        this.quizQuestionText.destroy();
-        this.correctionText.destroy();
-        for (this.quizAnswerText of this.quizAnswerTexts) {
-            this.quizAnswerText.destroy();
+            drawQuestionAndAnswers.call(this);
         }
-        if (this.questionImage)
-            this.questionImage.destroy();
-        if (this.nextQuestionButton)
-            this.nextQuestionButton.destroy();
-        this.QuestionNumberDisplayed.destroy();
-
-        drawQuestionAndAnswers.call(this);
-    }
     });
 }
 function showEndScreen() {
@@ -392,7 +396,7 @@ function showEndScreen() {
     this.submitButton.visible = true;
 
     // Wynik
-    let points = "Wynik: \n " + (this.punktyZdobyte) + " / " + (this.liczbaPytan)
+    let points = "Wynik: \n " + (this.scoredPoints) + " / " + (this.numberOfQuestions)
     this.points = this.add.text(this.modalWidth / 2 + 50, this.modalHeight / 2 + 50, points, {
         fontFamily: 'Arial',
         fontSize: '50px',
@@ -427,7 +431,9 @@ function showEndScreen() {
         }
         this.QuestionNumberDisplayed.destroy();
 
-        setWynik(this.punktyZdobyte, this.liczbaPytan, 0, 0);
+        setScore(this.scoredPoints, this.numberOfQuestions, this.earnedXP, 0);
+        updateUser(this.userData[0].punktyXP + this.earnedXP, this.userData[0].poziom, this.userData[0].wytrzymaloscLodzi,
+            this.userData[0].maxPredkoscLodzi, 1);
 
         this.modal.clear();
         if (this.menuText) {
@@ -443,35 +449,8 @@ function showEndScreen() {
         }
 
         console.log('Selected answer index:', this.selectedAnswerIndex);
-        console.log('Punkty zdobyte!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ', this.punktyZdobyte);
+        console.log('Punkty zdobyte!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ', this.scoredPoints);
     });
-}
-function updateDatabase() {
-    console.log('Prawidlowa:', this.selectedAnswerIndex);
-    console.log('Wybrano:', this.correctIndex);
-    if (parseInt(this.selectedAnswerIndex) === parseInt(this.correctIndex)) {
-        console.log('thdgfbsgrsbbgs:', this.wynik[0].punktyZdobyte);
-        setWynik(parseInt(this.wynik[0].punktyZdobyte) + 1, 0, 0, 0);
-        fetch('/dane/wynik')
-            .then((response) => response.json())
-            .then((data) => {
-                let x = data;
-                console.log(x);
-            })
-            .catch((error) => console.error('Error', error));
-        console.log("Poprawna odpowiedz");
-        zablokujPytanie(this.p.id);
-        fetch('/dane/wynik')
-            .then(response => response.text())
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        fetch('/dane/pytania')
-            .then(response => response.text())
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
 }
 
 export function closeQuiz(){
