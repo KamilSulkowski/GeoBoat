@@ -17,10 +17,8 @@ async function categorySelection() {
     //Pobranie danych z bazy
     this.questions = await fetchData('dane/pytania').then((data) => this.questions = data);
     this.answers = await fetchData('dane/odpowiedzi').then((data) => this.answers = data);
-    this.score = await fetchData('dane/wynik').then((data) => this.score = data);
     this.categoriesJSON = await fetchData('dane/kategorie').then((data) => this.categoriesJSON = data);
-    this.userData =  await fetchData('dane/uzytkownicy').then((data) => this.userData = data);
-
+    console.log(this.userData);
     let regionId = 1;  //Jamajka
 
     //Pobranie kategorii dla wybranego regionu
