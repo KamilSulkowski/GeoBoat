@@ -1,10 +1,5 @@
 import {startQuiz, closeQuiz} from "./Quiz.js";
-import {fetchData} from '../data_access/data_access.js';
-
-async function getUserData() {
-    this.userData = await fetchData('dane/uzytkownicy').then((data) => this.userData = data);
-    console.log(this.userData);
-}
+import {getUserData} from '../data_access/data_access.js';
 
 export default class UI extends Phaser.Scene {
     constructor() {
@@ -209,6 +204,11 @@ export default class UI extends Phaser.Scene {
         this.menu.angle += 2*this.gameScene.boatSpeed;
         // Update paska szybkości
         this.updateSpeedBar();
+
+        if (this.userData) {
+            this.userText.setText(this.userData[0].nazwa);
+            this.expText.setText('Level ' + this.userData[0].poziom);
+        }
 
         // Update tekstu stanu łodzi
         if(this.HP === 0){
