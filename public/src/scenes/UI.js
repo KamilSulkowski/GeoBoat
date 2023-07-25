@@ -375,54 +375,49 @@ export default class UI extends Phaser.Scene {
         const yOffsetIncrement = 30;
         this.PlayerInfoDump = []
 
-        const maxVisiblePlayers = 10;
-        const container = this.add.container(modalX + 10, modalY + 120);
-        const totalContainerHeight = yOffsetIncrement * this.Players.length;
-        const visibleContainerHeight = yOffsetIncrement * maxVisiblePlayers;
-
-        // Create the track
-        this.sliderTrack = this.add.rectangle(200, 300, 300, 10, 0xCCCCCC);
-        track.setOrigin(0);
-
-        // Create the thumb
-        this.sliderThumb = this.add.rectangle(200, 295, 20, 20, 0xAAAAAA);
-        thumb.setOrigin(0.5, 0.5);
-
-        const thumbSprite = this.add.rectangle(modalX + modalWidth - 20, modalY + 120, 10, visibleContainerHeight, 0x000000, 0);
-        thumbSprite.setInteractive();
-
-        this.add.existing(this.sliderTrack);
-        this.add.existing(this.sliderThumb);
-        this.add.existing(thumbSprite);
-        this.sliderThumb.setInteractive();
-        this.input.setDraggable(this.sliderThumb);
-        if (thumbSprite && thumbSprite.setInteractive) {
-            this.input.setDraggable(thumbSprite);
-            thumbSprite.on('drag', (pointer, dragX, dragY) => {
-                const minY = modalY + 120;
-                const maxY = modalY + modalHeight - visibleContainerHeight;
-                const containerY = Phaser.Math.Clamp(dragY, minY, maxY);
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        // const maxVisiblePlayers = 46; // 46 = 11 użytkowników
+        // const container = this.add.container(modalX + 10, modalY + 120);
+        // const totalContainerHeight = yOffsetIncrement * this.Players.length;
+        // const visibleContainerHeight = yOffsetIncrement * maxVisiblePlayers;
         
-                container.y = modalY + 120 - ((containerY - minY) * (totalContainerHeight - visibleContainerHeight)) / (modalHeight - 140);
-            });
-        }
+        // this.sliderTrack = this.add.rectangle(190, 50, 20, 500, 0x000000);
+        // this.sliderTrack.setOrigin(0);
+        // this.sliderThumb = this.add.rectangle(200, 50, 20, 20, 0xAAAAAA);
+        // this.sliderThumb.setOrigin(0.5, 0.5);
 
-        function updateContainerVisibility() {
-            const containerY = container.y - modalY - 120;
-            const startIndex = Math.floor((containerY / (totalContainerHeight - visibleContainerHeight)) * this.Players.length);
-            const endIndex = Math.min(startIndex + maxVisiblePlayers, this.Players.length);
+        // this.add.existing(this.sliderTrack);
+        // this.add.existing(this.sliderThumb);
+        // this.sliderThumb.setInteractive();
+        // this.input.setDraggable(this.sliderThumb);
+
+        // if (this.sliderThumb) {
+        //     this.input.setDraggable(this.sliderThumb);
+        //     this.sliderThumb.on('drag', (pointer, dragX, dragY) => {
+        //         const minY = modalY + 450;
+        //         const maxY = modalY + modalHeight - visibleContainerHeight;
+        //         const containerY = Phaser.Math.Clamp(dragY, minY, maxY);
+
+        //         this.sliderThumb.y = containerY;
+        //         updateContainerVisibility.call(this);
+        //     });
+        // }
+
+        // function updateContainerVisibility() {
+        //     const containerY = container.y - modalY - 120;
+        //     const trackY = this.sliderTrack.y;
+        //     const percentage = (containerY - trackY) / (totalContainerHeight - visibleContainerHeight);
+        //     const startIndex = Math.floor(percentage * (this.Players.length - maxVisiblePlayers));
+        //     const endIndex = startIndex + maxVisiblePlayers;
+        //     for (let i = 0; i < this.PlayerInfoDump.length; i++) {
+        //         this.PlayerInfoDump[i].visible = i >= startIndex && i < endIndex;
+        //     }
+        // }
     
-            for (let i = 0; i < this.PlayerInfoDump.length; i++) { //Players podmiana
-                this.PlayerInfoDump[i].visible = i >= startIndex && i < endIndex;
-            }
-        }
-    
-        // Update the container visibility initially
-        updateContainerVisibility.call(this);
-
-        //this.sliderThumb.on('drag', updateContainerVisibility, this);
-
-        this.add.existing(container);
+        // // Update the container visibility initially
+        // this.sliderThumb.on('drag', updateContainerVisibility, this);
+        // this.add.existing(container);
+        ///////////////////////////////////////////////////////////////////////////////////////////////
 
         this.displayPosition = this.add.text(modalX + 10, modalY + 120, "Rank: ", {
             fontFamily: 'Arial',
