@@ -58,10 +58,6 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("roseHall", "assets/roseHall.png")
     }
     create() {
-
-        this.scene.start('worldMap');
-        this.scene.run('ui');
-        this.scene.bringToTop('ui');
-
+        this.scene.start('login');
     }
 }
