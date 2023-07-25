@@ -23,9 +23,9 @@ export class Havana extends Phaser.Scene {
         const havana = this.make.tilemap({key: 'havana'});
 
         this.tileSetWorld = havana.addTilesetImage('tile', 'tiled',16,16);
-        this.water = havana.createStaticLayer('water', this.tileSetWorld);
-        this.ground = havana.createStaticLayer('ground', this.tileSetWorld);
-        this.stones = havana.createStaticLayer('stones', this.tileSetWorld);
+        this.water = havana.createLayer('water', this.tileSetWorld);
+        this.ground = havana.createLayer('ground', this.tileSetWorld);
+        this.stones = havana.createLayer('stones', this.tileSetWorld);
 
         this.ground.setCollisionByProperty({collides: true});
         this.stones.setCollisionByProperty({collides: true});

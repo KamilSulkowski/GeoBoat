@@ -35,10 +35,10 @@ export class WorldMap extends Phaser.Scene {
         const worldMap = this.make.tilemap({key: 'worldMap'});
 
         this.tileSetWorld = worldMap.addTilesetImage('tile', 'tiled',16,16);
-        this.extra = worldMap.createStaticLayer('extra', this.tileSetWorld);
-        this.water = worldMap.createStaticLayer('water', this.tileSetWorld);
-        this.ground = worldMap.createStaticLayer('ground', this.tileSetWorld);
-        this.deepwater = worldMap.createStaticLayer('deepwater', this.tileSetWorld);
+        this.extra = worldMap.createLayer('extra', this.tileSetWorld);
+        this.water = worldMap.createLayer('water', this.tileSetWorld);
+        this.ground = worldMap.createLayer('ground', this.tileSetWorld);
+        this.deepwater = worldMap.createLayer('deepwater', this.tileSetWorld);
 
         this.water.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
         this.deepwater.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
@@ -419,6 +419,7 @@ export class WorldMap extends Phaser.Scene {
             const waveX = boatX + distance * Math.cos(angle);
             const waveY = boatY + distance * Math.sin(angle);
 
+
             // Check if the wave is overlapping with the ground layer, if so, skip creating the wave
             if (this.ground.getTileAtWorldXY(waveX, waveY)) {
                 return;
@@ -447,6 +448,12 @@ export class WorldMap extends Phaser.Scene {
             // Check for collision with the ground layer
             this.physics.add.collider(wave, this.ground, () => {
                 wave.destroy(); // Destroy the wave upon collision with the ground
+            });
+            // Check for collision with the ship
+            this.physics.add.collider(wave, this.boat, () => {
+                // Reduce the ship's speed by 10 upon collision with a wave
+                this.boatSpeed -= 10;
+                wave.destroy();
             });
         }
     }
