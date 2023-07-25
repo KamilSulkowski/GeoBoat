@@ -18,7 +18,7 @@ async function categorySelection() {
     this.questions = await fetchData('dane/pytania').then((data) => this.questions = data);
     this.answers = await fetchData('dane/odpowiedzi').then((data) => this.answers = data);
     this.categoriesJSON = await fetchData('dane/kategorie').then((data) => this.categoriesJSON = data);
-    console.log(this.userData);
+    //console.log(this.userData);
     let regionId = 1;  //Jamajka
 
     //Pobranie kategorii dla wybranego regionu
@@ -32,7 +32,7 @@ async function categorySelection() {
             this.selectedCategories.push(k);
         }
     }
-    console.log([this.selectedCategories]);
+    //console.log([this.selectedCategories]);
 
     //Wypisanie nazw kategorii
     const yOffset = 300;

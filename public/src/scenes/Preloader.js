@@ -33,6 +33,10 @@ export default class Preloader extends Phaser.Scene {
             frameWidth: 64,
             frameHeight: 64
         });
+        this.load.spritesheet('pirateTeacher', "assets/animation/pirateTeacherSheet.png", {
+            frameWidth: 16,
+            frameHeight: 32
+        });
         
         this.load.image("modalBackground", "assets/modalBcg.png")
         this.load.image("scrollMap", "assets/scrollMap.png")

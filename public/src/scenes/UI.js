@@ -3,7 +3,7 @@ import {fetchData} from '../data_access/data_access.js';
 
 async function getUserData() {
     this.userData = await fetchData('dane/uzytkownicy').then((data) => this.userData = data);
-    console.log(this.userData);
+    //console.log(this.userData);
 }
 
 export default class UI extends Phaser.Scene {
@@ -27,9 +27,13 @@ export default class UI extends Phaser.Scene {
 
     async create() {
         this.gameScene = this.scene.get('worldMap');
+        this.sceneJam = this.scene.get('Jamajka');
+        this.sceneHav = this.scene.get('Havana');
+        this.scenePan = this.scene.get('Panama');
+
 
         getUserData.call(this);
-        console.log(this.userData);
+        //console.log(this.userData);
 
         this.scene = this.scene.get('game');
         // Pobranie wysokości/długości sceny
@@ -247,7 +251,7 @@ export default class UI extends Phaser.Scene {
         this.menu.angle += this.scene.currentBoatSpeed/300;
         // Update paska szybkości
         this.updateSpeedBar();
-        console.log(this.scene.HP)
+        //console.log(this.scene.HP)
         // Update tekstu stanu łodzi
         if(this.scene.HP === 0){
             this.boatRepair.setVisible(true);
@@ -695,6 +699,95 @@ export default class UI extends Phaser.Scene {
                 this.compassA.destroy();
                 this.coords.setVisible(false);
             });
+        }
+    }
+
+    // NAUKA - MODAL
+    toggleLearning(regionFlag) {
+        if (this.learnerOpen) {
+            this.closeLearning();
+        } else {
+            this.showLearning(regionFlag);
+        }
+    }
+    showLearning(regionFlag) {
+        console.log(regionFlag)
+        if(regionFlag = "Jamajka"){
+            this.pirateText = {
+                a1: '',
+                a2: '',
+                a3: '',
+                a4: '',
+                a5: '',
+                a6: '',
+                a7: '',
+                a8: '',
+                a9: '',
+                a10: '',
+            }
+        }else if(regionFlag = "Panama"){
+            this.pirateText = {
+                a1: '',
+                a2: '',
+                a3: '',
+                a4: '',
+                a5: '',
+                a6: '',
+                a7: '',
+                a8: '',
+                a9: '',
+                a10: '',
+            }
+
+        }else if(regionFlag = "Havana"){
+            this.pirateText = {
+                a1: '',
+                a2: '',
+                a3: '',
+                a4: '',
+                a5: '',
+                a6: '',
+                a7: '',
+                a8: '',
+                a9: '',
+                a10: '',
+            }
+        }
+        this.modalWidth = 800;
+        this.modalHeight = 600;
+        this.modalX = (this.bw - this.modalWidth) / 2;
+        this.modalY = (this.bh - this.modalHeight) / 2;
+    
+        this.learnerOpen = true;
+        this.modal = this.add.graphics();
+        this.modal.fillStyle(0xffffff, 0.95);
+        this.modal.fillRoundedRect(this.modalX, this.modalY, this.modalWidth, this.modalHeight, 25);
+
+        const squareSize = 150;
+        this.teacherPic = this.add.image(this.modalX+95, this.modalY+130, "profilePic");
+        this.teacherPic.setScale(2)
+        this.teacherPic.setDisplaySize(squareSize, squareSize)
+
+        // Tekst "Profil"
+        this.pirateTeacherText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + 30, 'Profil', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#000000'
+        });
+        this.pirateTeacherText.setOrigin(0.5);
+
+        this.drawLearning(this.pirateText);
+    }
+    drawLearning(textContentSoPirateWillKnowWhatToTeach){
+
+        //
+    }
+    closeLearning() {
+        if (this.learnerOpen) {
+            this.learnerOpen = false;
+            this.modal.destroy();
+            this.teacherPic.destroy();
+            this.pirateTeacherText.destroy();
         }
     }
 }

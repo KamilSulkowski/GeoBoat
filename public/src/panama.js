@@ -11,6 +11,7 @@ export class Panama extends Phaser.Scene {
         this.inZoneKey = null; //Zmienna do zapamiętywania klawisza do wchodzenia na region
         this.adrift = 0;    //Zmienna do kolizji odbicia
         this.boatSpeed = 0; //Zmienna do ustawiania prędkości łódki
+        this.regionFlag = "Panama";
     }
     preload(){
 

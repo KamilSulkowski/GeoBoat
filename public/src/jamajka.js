@@ -11,6 +11,7 @@ export class Jamajka extends Phaser.Scene {
         this.inZoneKey = null; //Zmienna do zapamiętywania klawisza do wchodzenia na region
         this.adrift = 0;    //Zmienna do kolizji odbicia
         this.boatSpeed = 0; //Zmienna do ustawiania prędkości łódki
+        this.regionFlag = "Jamajka";
     }
     preload(){
 
@@ -36,10 +37,18 @@ export class Jamajka extends Phaser.Scene {
 
         this.gameScene.currentMap = 'jamajka';
 
-        this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
+        this.boat = this.physics.add.sprite(370, 1320, "boat");
+        //this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
         this.port = this.physics.add.sprite(1150, 350 , "PPH");
         this.cityPort = this.physics.add.sprite(300, 1355, "QPH");
         this.backToWorld = this.physics.add.sprite(1900, 1900, "backToWorld");
+        this.pirateTeacher = this.physics.add.sprite(365, 1265, "pirateTeacher");
+
+        // Zmiana obszaru kolizji dla npca
+        this.pirateTeacher.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
+        this.pirateTeacher.body.setSize(60, 120, 0.5, 0.5); // Set the size and offset of the collision body
+        this.pirateTeacher.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
+
         // Zmiana obszaru kolizji dla gracza
         this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
@@ -103,6 +112,19 @@ export class Jamajka extends Phaser.Scene {
                 this.inZoneKey.on('down', () => {this.changeMap()});
             }
         });
+        this.physics.add.overlap(this.boat, this.pirateTeacher, () => {
+            this.inZone = true;
+            if (this.inZone === true && !this.learnText) {
+                this.learnText = this.add.text(this.pirateTeacher.x + 0 ,this.pirateTeacher.y - 50, 'Wciśnij E, żeby dowiedzieć się czegoś o tym miejscu.')
+                    .setScale(1.5)
+                    .setBackgroundColor('#808080')
+                    .setColor('#000000')
+                    .setStyle({fontFamily: "Arial"});
+                this.inZoneKey = this.input.keyboard.addKey('E');
+                this.inZoneKey.on('down', () => { this.uiScene.toggleLearning(this.regionFlag)});
+            }
+        });
+
         // Animacja łódki gracza
         this.anims.create({
             key: 'boatAnimation',
@@ -166,6 +188,13 @@ export class Jamajka extends Phaser.Scene {
             if (this.backToWorldText) {
                 this.backToWorldText.destroy();
                 this.backToWorldText = null;
+                this.inZoneKey.destroy();
+            }
+        }
+        if (!this.inZone && !this.physics.overlap(this.boat, this.pirateTeacher)) {
+            if (this.learnText) {
+                this.learnText.destroy();
+                this.learnText = null;
                 this.inZoneKey.destroy();
             }
         }
