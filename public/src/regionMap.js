@@ -121,9 +121,9 @@ export class RegionMap extends Phaser.Scene {
         // Cooldown debuffa (Naprawa łodzi w czasie)
         this.shipDebuff()
         // Zmiana strzałki kompasu w zależności od pozycji łodzi
-        if (this.uiScene) {
-            this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
-        }
+        // if (this.uiScene) {
+        //     this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
+        // }
         if(this.boatSpeed !== 0){
             this.boat.anims.resume();
         }else{
@@ -158,7 +158,6 @@ export class RegionMap extends Phaser.Scene {
     handleCollision() {
         if (this.gameScene.timer >= 100) {
             console.log("KOLIZJA");
-            this.boat.setTint(0xff0000);
             this.boatSpeed = this.gameScene.boatMaxSpeed;
 
             this.adrift = 1;

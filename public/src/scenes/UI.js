@@ -232,7 +232,7 @@ export default class UI extends Phaser.Scene {
 
     boatRepairAnimation(){
         // Identyfikator zniszczonej łodzi
-        this.boatRepair = this.add.sprite(this.scene.boatCurrentX, this.scene.boatCurrentY, "repairAnim")
+        this.boatRepair = this.add.sprite(this.bw*0.5, this.bh*0.5, "repairAnim")
         this.anims.create({
             key: 'hammerAnimation',
             frames: this.anims.generateFrameNumbers('repairAnim', { start: 0, end: 3 }),

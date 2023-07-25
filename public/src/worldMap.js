@@ -163,7 +163,6 @@ export class WorldMap extends Phaser.Scene {
     handleCollision(){
         if (this.gameScene.timer >= 100) {
             console.log("KOLIZJA");
-            this.boat.setTint(0xff0000);
             this.boatSpeed = this.gameScene.boatMaxSpeed;
 
             this.adrift = 1;
