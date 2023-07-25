@@ -3,7 +3,6 @@ import {fetchData} from '../data_access/data_access.js';
 
 async function getUserData() {
     this.userData = await fetchData('dane/uzytkownicy').then((data) => this.userData = data);
-    console.log(this.userData);
 }
 
 export default class UI extends Phaser.Scene {
@@ -248,7 +247,7 @@ export default class UI extends Phaser.Scene {
         this.menu.angle += this.scene.currentBoatSpeed/300;
         // Update paska szybkości
         this.updateSpeedBar();
-        console.log(this.HP)
+        console.log(this.scene.HP)
         // Update tekstu stanu łodzi
         if(this.scene.HP === 0){
             this.boatRepair.setVisible(true);
@@ -375,54 +374,55 @@ export default class UI extends Phaser.Scene {
         const yOffset = 150;
         const yOffsetIncrement = 30;
         const maxVisiblePlayers = 10;
-        // const container = this.add.container(modalX + 10, modalY + 120);
-        // const totalContainerHeight = yOffsetIncrement * this.Players.length;
-        // const visibleContainerHeight = yOffsetIncrement * maxVisiblePlayers;
+        const container = this.add.container(modalX + 10, modalY + 120);
+        const totalContainerHeight = yOffsetIncrement * this.Players.length;
+        const visibleContainerHeight = yOffsetIncrement * maxVisiblePlayers;
 
         this.PlayerInfoDump = []
 
-        // this.sliderTrack = this.add.graphics();
-        // this.sliderTrack.fillStyle(0x000000, 0.2);
-        // this.sliderTrack.fillRect(modalX + modalWidth - 20, modalY + 120, 10, modalHeight - 140);
-        // this.sliderThumb = this.add.graphics();
-        // this.sliderThumb.fillStyle(0xffffff);
-        // this.sliderThumb.fillRect(modalX + modalWidth - 20, modalY + 120, 10, visibleContainerHeight);
+        // Create the track
+        this.sliderTrack = this.add.rectangle(200, 300, 300, 10, 0xCCCCCC);
+        track.setOrigin(0);
 
-        // const thumbSprite = this.add.rectangle(modalX + modalWidth - 20, modalY + 120, 10, visibleContainerHeight, 0x000000, 0);
-        // thumbSprite.setInteractive();
+        // Create the thumb
+        this.sliderThumb = this.add.rectangle(200, 295, 20, 20, 0xAAAAAA);
+        thumb.setOrigin(0.5, 0.5);
 
-        // this.add.existing(this.sliderTrack);
-        // this.add.existing(this.sliderThumb);
-        // this.add.existing(thumbSprite);
-        // this.sliderThumb.setInteractive();
-        // this.input.setDraggable(this.sliderThumb);
-        // if (thumbSprite && thumbSprite.setInteractive) {
-        //     this.input.setDraggable(thumbSprite);
-        //     thumbSprite.on('drag', (pointer, dragX, dragY) => {
-        //         const minY = modalY + 120;
-        //         const maxY = modalY + modalHeight - visibleContainerHeight;
-        //         const containerY = Phaser.Math.Clamp(dragY, minY, maxY);
+        const thumbSprite = this.add.rectangle(modalX + modalWidth - 20, modalY + 120, 10, visibleContainerHeight, 0x000000, 0);
+        thumbSprite.setInteractive();
+
+        this.add.existing(this.sliderTrack);
+        this.add.existing(this.sliderThumb);
+        this.add.existing(thumbSprite);
+        this.sliderThumb.setInteractive();
+        this.input.setDraggable(this.sliderThumb);
+        if (thumbSprite && thumbSprite.setInteractive) {
+            this.input.setDraggable(thumbSprite);
+            thumbSprite.on('drag', (pointer, dragX, dragY) => {
+                const minY = modalY + 120;
+                const maxY = modalY + modalHeight - visibleContainerHeight;
+                const containerY = Phaser.Math.Clamp(dragY, minY, maxY);
         
-        //         container.y = modalY + 120 - ((containerY - minY) * (totalContainerHeight - visibleContainerHeight)) / (modalHeight - 140);
-        //     });
-        // }
+                container.y = modalY + 120 - ((containerY - minY) * (totalContainerHeight - visibleContainerHeight)) / (modalHeight - 140);
+            });
+        }
 
-        // function updateContainerVisibility() {
-        //     const containerY = container.y - modalY - 120;
-        //     const startIndex = Math.floor((containerY / (totalContainerHeight - visibleContainerHeight)) * this.Players.length);
-        //     const endIndex = Math.min(startIndex + maxVisiblePlayers, this.Players.length);
+        function updateContainerVisibility() {
+            const containerY = container.y - modalY - 120;
+            const startIndex = Math.floor((containerY / (totalContainerHeight - visibleContainerHeight)) * this.Players.length);
+            const endIndex = Math.min(startIndex + maxVisiblePlayers, this.Players.length);
     
-        //     for (let i = 0; i < this.PlayerInfoDump.length; i++) { //Players podmiana
-        //         this.PlayerInfoDump[i].visible = i >= startIndex && i < endIndex;
-        //     }
-        // }
+            for (let i = 0; i < this.PlayerInfoDump.length; i++) { //Players podmiana
+                this.PlayerInfoDump[i].visible = i >= startIndex && i < endIndex;
+            }
+        }
     
-        // // Update the container visibility initially
-        // updateContainerVisibility.call(this);
+        // Update the container visibility initially
+        updateContainerVisibility.call(this);
 
-        // //this.sliderThumb.on('drag', updateContainerVisibility, this);
+        //this.sliderThumb.on('drag', updateContainerVisibility, this);
 
-        // this.add.existing(container);
+        this.add.existing(container);
 
         this.displayPosition = this.add.text(modalX + 10, modalY + 120, "Rank: ", {
             fontFamily: 'Arial',
@@ -534,8 +534,8 @@ export default class UI extends Phaser.Scene {
                 this.displayLevel.destroy();
                 this.displayPosition.destroy();
                 this.rankBackground.destroy();
-                // this.sliderThumb.destroy();
-                // this.sliderTrack.destroy();
+                this.sliderThumb.destroy();
+                this.sliderTrack.destroy();
             }
             this.rankingOpen = false;
         }
