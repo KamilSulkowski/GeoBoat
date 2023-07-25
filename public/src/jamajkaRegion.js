@@ -11,14 +11,7 @@ export class jamajkaRegion extends Phaser.Scene {
         this.inZoneKey = null; //Zmienna do zapamiętywania klawisza do wchodzenia na region
         this.text = null;   //Tekst wyświetlany po wjechaniu w inny obiekt (Port)
         this.adrift = 0;    //Zmienna do kolizji odbicia
-        this.timer = 0;     //Zmienna do przeliczania czasu (używana przy łodzi atm)
         this.boatSpeed = 0; //Zmienna do ustawiania prędkości łódki
-        this.boatMaxSpeed = 4 // Maksymalna prędkość łodzi
-        this.boatMaxReverseSpeed = -0.5 // Maksymalna prędkość cofania łodzi
-        this.currentMap = null; //Zmienna do zapamiętywania na jakiej mapie jest gracz
-        this.shipCooldown = 0;//Zmienna do sprawdzania czasu naprawy
-        this.shipRepairTime = 10000 //Zmienna czasu naprawy 10000 = 10s
-        this.shipDamaged = false;//Flaga stanu statku (naprawa/sprawny)
     }
     preload(){
 
@@ -26,10 +19,11 @@ export class jamajkaRegion extends Phaser.Scene {
     create() {
         //Pobranie wartości z pliku UI.js
         this.uiScene = this.scene.get('ui');
+        this.gameScene = this.scene.get('game');
 
         const jamajka = this.make.tilemap({key: 'jamajka'});
 
-        this.tileSetWorld = jamajka.addTilesetImage('worldtiles', 'worldtiles',16,16);
+        this.tileSetWorld = jamajka.addTilesetImage('tile', 'tiled',16,16);
         this.water = jamajka.createStaticLayer('water', this.tileSetWorld);
         this.ground = jamajka.createStaticLayer('ground', this.tileSetWorld);
         this.stones = jamajka.createStaticLayer('stones', this.tileSetWorld);
@@ -37,22 +31,11 @@ export class jamajkaRegion extends Phaser.Scene {
         this.ground.setCollisionByProperty({collides: true});
         this.stones.setCollisionByProperty({collides: true});
 
-
-
-
-        const debugGraphics = this.add.graphics().setAlpha(0.75);
-        this.ground.renderDebug(debugGraphics, {
-            tileColor: null, // Color of non-colliding tiles,
-            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        });
-
-
         // Dodaj fizykę do warstw
 
         this.cameras.main.setBounds(0, 0, 2000, 2000);
 
-        this.currentMap = 'jamajka';
+        this.gameScene.currentMap = 'jamajka';
 
         this.boat = this.physics.add.sprite(500, 500, "boat");
         this.boat2 = this.physics.add.sprite(600, 600 , "PPH");
@@ -112,7 +95,7 @@ export class jamajkaRegion extends Phaser.Scene {
 
         // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
         this.boat.setCollideWorldBounds(true);
-        this.physics.add.collider(this.boat, this.boat_collider, this.handleCollision, null, this);
+        this.physics.add.collider(this.boat, this.ground, this.handleCollision, null, this);
 
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
@@ -122,23 +105,26 @@ export class jamajkaRegion extends Phaser.Scene {
 
     update(time, delta) {
         super.update(time, delta);
-        this.timer += delta;
-        this.shipCooldown += delta;
+        this.gameScene.timer += delta;
+        this.gameScene.shipCooldown += delta;
         // Cooldown debuffa (Naprawa łodzi w czasie)
         this.shipDebuff()
         // Zmiana strzałki kompasu w zależności od pozycji łodzi
         if(this.uiScene){
             this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
         }
-        if(this.boatSpeed != 0){
+        if(this.gameScene.currentBoatSpeed !== 0){
             this.boat.anims.resume();
         }else{
             this.boat.anims.pause();
         }
         // Poruszanie łodzią
-        this.moveBoat(this.timer);
-        this.boatEngine(this.engine, this.timer);
+        this.moveBoat(this.gameScene.timer);
+        this.boatEngine(this.engine, this.gameScene.timer);
+        this.gameScene.currentBoatSpeed = this.boatSpeed;
         this.cameras.main.startFollow(this.boat);
+        this.gameScene.boatCurrentX = this.boat.x;
+        this.gameScene.boatCurrentY = this.boat.y;
         // Sprawdzenie, czy łódka opuściła obszar kolizji
         this.inZone = false;
         if (this.inZone === false && this.physics.overlap(this.boat, this.boat2) === false) {
@@ -158,45 +144,52 @@ export class jamajkaRegion extends Phaser.Scene {
         this.physics.add.collider(this.boat, this.ground);
     }
     handleCollision(){
-        console.log("KOLIZJA");
-        this.boatSpeed = -1;
-        this.adrift = 1;
+        if (this.gameScene.timer >= 100) {
+            console.log("KOLIZJA");
+            this.boat.setTint(0xff0000);
+            this.boatSpeed = this.gameScene.boatMaxSpeed;
 
-        // Zmiana życia łodzi, jak ma 0 HP to i tak już jest
-        if(this.uiScene.HP > 0){
-            this.uiScene.setHeartState()
+            this.adrift = 1;
+
+            // Zmiana życia łodzi, jak ma 0 HP to i tak już jest
+            if (this.gameScene.HP > 0) {
+                this.uiScene.setHeartState()
+            }
+            this.gameScene.timer = 0;
         }
     }
     // Funkcje debuffa łodzi
     shipWrecked(){
         console.log("Shipwrecked")
-        this.shipCooldown = 0;
-        this.boatMaxSpeed = 0;
+        this.gameScene.shipCooldown = 0;
+        this.gameScene.boatMaxSpeed = 0;
     }
     shipDebuff(){
-        if(this.shipDamaged && this.shipCooldown >= this.shipRepairTime){
-            if(this.uiScene.HP === 3){
-                this.shipDamaged = false;
+        if(this.gameScene.shipDamaged && this.gameScene.shipCooldown >= this.gameScene.shipRepairTime){
+            if(this.gameScene.HP === 3){
+                this.gameScene.shipDamaged = false;
 
             }else{
                 console.log("Naprawiono")
-                this.boatMaxSpeed = 4;
+                this.gameScene.boatMaxSpeed = 150;
                 this.uiScene.recoverHeart();
             }
-            this.shipCooldown = 0;
+            this.gameScene.shipCooldown = 0;
         }
     }
     changeMap() {
-        console.log("zmiana mapy1: " + this.currentMap + " inzone: " + this.inZone);
-        switch (this.currentMap) {
+        console.log("zmiana mapy1: " + this.gameScene.currentMap + " inzone: " + this.inZone);
+        switch (this.gameScene.currentMap) {
             case 'jamajka':
-                this.currentMap = 'worldMap';
+                this.gameScene.boatRespawnX = 2600;
+                this.gameScene.boatRespawnY = 950;
+                this.gameScene.currentMap = 'worldMap';
                 this.scene.stop('jamajka');
                 this.scene.launch('worldMap');
                 this.scene.sendToBack('worldMap');
                 break;
         }
-        console.log("zmiana mapy2: " + this.currentMap + " inzone: " + this.inZone);
+        console.log("zmiana mapy2: " + this.gameScene.currentMap + " inzone: " + this.inZone);
     }
 
     moveBoat(){
@@ -205,38 +198,37 @@ export class jamajkaRegion extends Phaser.Scene {
         direction.setToPolar(this.boat.rotation, 1);
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
+        const changeAngle = 1;
+        //const isOnDeepWater = this.physics.overlap(this.boat, this.deepwater);
         // Wyhamowanie przy dryfowaniu (odbiciu od lądu)
-        if(this.adrift === 1 && this.boatSpeed <= 0){
-            if(this.timer >= 100){
-                this.boatSpeed += 0.1;
-                this.timer = 0;
+        if(this.adrift === 1){
+            if(this.gameScene.timer >= 100){
+                this.boatSpeed += 10;
+                this.gameScene.timer = 0;
             }
-            if(this.boatSpeed >= 0.001){
+            if(this.boatSpeed >= 0){
                 this.boatSpeed = 0;
                 this.adrift = 0;
             }
         }
         // Obracanie
         if(this.keys.left?.isDown){
-            this.boat.angle -= this.boatSpeed / 2;
+            this.boat.angle -= changeAngle;
         }else if(this.keys.right?.isDown){
-            this.boat.angle += this.boatSpeed / 2;
+            this.boat.angle += changeAngle;
         }
         if(this.keys.up?.isDown){
             // Jeżeli łódź się cofa, zatrzymaj ją
-            if(this.boatSpeed === -0.25 && this.timer >= 500){
+            if(this.boatSpeed === -20 && this.gameScene.timer >= 500){
                 this.boatSpeed = 0;
-                this.timer = 0;
+                this.gameScene.timer = 0;
             } // Poruszanie łodzi (Rozpędzanie w czasie)
-            if(this.boatSpeed <= this.boatMaxSpeed){
-                if(this.timer >= 100){
-                    console.log(this.timer)
-                    this.boatSpeed += 0.1;
-                    this.boat.y -= this.boatSpeed *dy;
-                    this.boat.x -= this.boatSpeed *dx;
-                    this.timer = 0;
-
-                    console.log(this.boatSpeed)
+            if(this.boatSpeed <= this.gameScene.boatMaxSpeed){
+                if(this.gameScene.timer >= 100){
+                    //console.log(this.gameScene.timer)
+                    this.boatSpeed += 20;
+                    this.boat.setAcceleration(Math.cos(direction) * this.boatSpeed, Math.sin(direction) * this.boatSpeed);
+                    this.gameScene.timer = 0;
                 }
             }
         }else if(this.keys.up?.isUp){
@@ -244,22 +236,42 @@ export class jamajkaRegion extends Phaser.Scene {
             this.engine = true;
         }
         if(this.keys.down?.isDown){
-            //Zatrzymywanie/cofanie
+            //Zatrzymywanie/cofanie łodzi
             this.boatStop()
+        }else if (this.keys.down?.isUp) {
+            // Zwolniono klawisz "down"
+            if (this.boatSpeed < 0 && this.gameScene.timer >= 250) {
+                this.boatSpeed += 10;
+                this.boat.setVelocity(this.boatSpeed, this.boatSpeed);
+                this.gameScene.timer = 0;
+            }
         }
+
+        // if (isOnDeepWater) {
+        //     this.gameScene.boatMaxReverseSpeed = -20;
+        //     this.gameScene.boatMaxSpeed = 50;
+        // }
+
     }
     // funkcja do zatrzymywania i cofania łodzi
     boatStop(){
-        if(this.boatSpeed > 0){
-            if(this.timer >= 100){
-                this.boatSpeed -= 0.25;
-                this.timer = 0;
-            }// cofanie
-        }else if(this.boatSpeed < 0){
-            this.boatSpeed = this.boatMaxReverseSpeed;
-            this.adrift = 1;
-            console.log(this.boatSpeed)
+        if (this.boatSpeed > 0) {
+            if (this.gameScene.timer >= 100) {
+                this.boatSpeed -= 10;
+                this.boat.setVelocity(this.boatSpeed, this.boatSpeed);
+                this.gameScene.timer = 0;
+            }
         }
+        if (this.boatSpeed <= 0 && this.gameScene.timer >= 250) {
+            this.boatSpeed -= 10;
+            this.boat.setVelocity(this.boatSpeed, this.boatSpeed);
+            if (this.boatSpeed <= this.gameScene.boatMaxReverseSpeed) {
+                this.boatSpeed = this.gameScene.boatMaxReverseSpeed;
+                this.boat.setVelocity(this.boatSpeed, this.boatSpeed);
+            }
+            this.gameScene.timer = 0;
+        }
+
     }
     // funkcja do utrzymywania prędkości łodzi
     boatEngine(engine, timer){
@@ -269,8 +281,12 @@ export class jamajkaRegion extends Phaser.Scene {
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
         if (engine = 1){
-            this.boat.y -= this.boatSpeed *dy;
-            this.boat.x -= this.boatSpeed *dx;
+            this.boat.setVelocity(-this.boatSpeed *dx, -this.boatSpeed *dy);
         }
     }
+    deepWaterHandleCollision() {
+        console.log("deepwater");
+
+    }
 }
+
