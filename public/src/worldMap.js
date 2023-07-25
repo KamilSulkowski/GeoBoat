@@ -165,10 +165,7 @@ export class WorldMap extends Phaser.Scene {
         this.shipCooldown += delta;
         // Cooldown debuffa (Naprawa łodzi w czasie)
         this.shipDebuff()
-        // Zmiana strzałki kompasu w zależności od pozycji łodzi
-        if(this.uiScene){
-            this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
-        }
+
         if(this.boatSpeed != 0){
             this.boat.anims.resume();
         }else{

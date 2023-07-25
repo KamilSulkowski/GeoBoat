@@ -25,8 +25,14 @@ export default class Preloader extends Phaser.Scene {
             frameWidth: 376,
             frameHeight: 188
         });
+        this.load.spritesheet("buttonAnim", "assets/animation/buttonSheet.png", {
+            frameWidth: 94,
+            frameHeight: 32
+        });
         
+        this.load.image("modalBackground", "assets/modalBcg.png")
         this.load.image("scrollMap", "assets/scrollMap.png")
+        this.load.image("scrollMapUI", "assets/globe.png")
         this.load.image("pirate", "assets/pirat.png")
         this.load.image("fullHeart", "assets/fullHeart.png")
         this.load.image("emptyHeart", "assets/emptyHeart.png")

@@ -8,6 +8,7 @@ export default class UI extends Phaser.Scene {
         this.quizOpen = false;
         this.rankingOpen = false;
         this.mapOpen = false;
+        this.scrollIsMoving = false;
         this.fillSpeedValue = 0;
         this.speedDecreaseRate = 0.1;
         this.rankingFlag = false;
@@ -83,10 +84,9 @@ export default class UI extends Phaser.Scene {
         .setColor('#ffffff')
         .setStyle({fontFamily: "CustomFont"});
 
-        // Kompas
-        this.compassH = this.add.image(this.bw-126, this.bh-(this.bh-38), "compassHead")
-        this.compassA = this.add.image(this.bw-126, this.bh-(this.bh-38), "compassArrow")
-        this.compassH.scale = 0.5;
+        // Mapa
+        this.scrollMap = this.add.image(this.bw-126, this.bh-(this.bh-38), "scrollMapUI")
+        this.scrollMap.scale = 1;
         this.input.keyboard.on('keydown-M', this.toggleMap, this);
 
         // Ster
@@ -99,6 +99,14 @@ export default class UI extends Phaser.Scene {
         this.rankMenu.on('pointerdown', this.toggleRanking, this);
         this.input.keyboard.on('keydown-R', this.toggleRanking, this);
 
+        //Współrzędne (kamera gracza)
+        this.coords = this.add.text(this.bw*0.95, this.bh*0.825, 'Lat - ' + this.gameScene.boat.x + ' Long - ' + this.gameScene.boat.y)
+        .setOrigin(0.5)
+        .setScale(1)
+        .setFontSize(14)
+        .setColor('#ffffff')
+        .setStyle({fontFamily: "CustomFont"});
+        this.coords.setVisible(false);
 
         // Ikona użytkownika
         this.profileBorder = this.add.image(this.bw*0.5-100, this.bh-(this.bh-40), "profileBorder")
@@ -135,52 +143,54 @@ export default class UI extends Phaser.Scene {
         this.boatRepairAnimation();
 
     }
-    // Obracanie strzałką kompasu
-    setCompassArrowAngle(angle){
-        this.compassA.angle = angle;
-    }
 
     onLeftScrollClick() {
-        if(this.leftScrollScrolled){
-            this.tweens.add({
-                targets: this.leftScroll,
-                y: this.leftScroll.y - this.scrollHeight,
-                duration: 400,
-                ease: 'Power1',
-                onComplete: () => {}
-            });
-            this.leftScrollScrolled = false;
-        }else{
-            this.tweens.add({
-                targets: this.leftScroll,
-                y: this.leftScroll.y + this.scrollHeight,
-                duration: 400,
-                ease: 'Power1',
-                onComplete: () => {}
-            });
-            this.leftScrollScrolled = true;
+        if(!this.scrollIsMoving){
+            this.scrollIsMoving = true;
+            if(this.leftScrollScrolled){
+                this.tweens.add({
+                    targets: this.leftScroll,
+                    y: this.leftScroll.y - this.scrollHeight,
+                    duration: 400,
+                    ease: 'Power1',
+                    onComplete: () => { this.scrollIsMoving = false; }
+                });
+                this.leftScrollScrolled = false;
+            }else{
+                this.tweens.add({
+                    targets: this.leftScroll,
+                    y: this.leftScroll.y + this.scrollHeight,
+                    duration: 400,
+                    ease: 'Power1',
+                    onComplete: () => { this.scrollIsMoving = false; }
+                });
+                this.leftScrollScrolled = true;
+            }
         }
     }
     
     onRightScrollClick() {
-        if(this.rightScrollScrolled){
-            this.tweens.add({
-                targets: this.rightScroll,
-                y: this.rightScroll.y - this.scrollHeight,
-                duration: 400,
-                ease: 'Power1',
-                onComplete: () => {}
-            });
-            this.rightScrollScrolled = false;
-        }else{
-            this.tweens.add({
-                targets: this.rightScroll,
-                y: this.rightScroll.y + this.scrollHeight,
-                duration: 400,
-                ease: 'Power1',
-                onComplete: () => {}
-            });
-            this.rightScrollScrolled = true;
+        if(!this.scrollIsMoving){
+            this.scrollIsMoving = true;
+            if(this.rightScrollScrolled){
+                this.tweens.add({
+                    targets: this.rightScroll,
+                    y: this.rightScroll.y - this.scrollHeight,
+                    duration: 400,
+                    ease: 'Power1',
+                    onComplete: () => { this.scrollIsMoving = false; }
+                });
+                this.rightScrollScrolled = false;
+            }else{
+                this.tweens.add({
+                    targets: this.rightScroll,
+                    y: this.rightScroll.y + this.scrollHeight,
+                    duration: 400,
+                    ease: 'Power1',
+                    onComplete: () => { this.scrollIsMoving = false; }
+                });
+                this.rightScrollScrolled = true;
+            }
         }
     }
 
@@ -199,7 +209,7 @@ export default class UI extends Phaser.Scene {
     }
 
     update(time, delta) {
-        this.menu.angle += 2*this.gameScene.boatSpeed;
+        this.menu.angle = 4*this.gameScene.boat.angle;
         // Update paska szybkości
         this.updateSpeedBar();
         console.log(this.HP)
@@ -212,6 +222,7 @@ export default class UI extends Phaser.Scene {
             this.gameScene.boat.clearTint();
         }
 
+        this.coords.setText('Lat - ' + this.gameScene.boat.x + ' Long - ' + this.gameScene.boat.y)
         this.regionText.setText('Region: ' + this.gameScene.currentMap)
 
         // Update tekstu pod HP
@@ -271,68 +282,37 @@ export default class UI extends Phaser.Scene {
         const modalHeight = 500;
         const modalX = (this.bw - modalWidth) / 2;
         const modalY = (this.bh - modalHeight) / 2;
+        const textColor = '#ffffff';
 
         this.rankingOpen = true;
         this.modal = this.add.graphics();
-        this.modal.fillStyle(0xffffff, 0.95);
-        this.modal.fillRoundedRect(modalX, modalY, modalWidth, modalHeight, 25);
 
-        this.menuText = this.add.text(modalX + modalWidth / 2, modalY + 20, 'Ranking użytkowników', {
+        this.rankBackground = this.add.image(this.bw*0.5, this.bh*0.5, "modalBackground")
+
+        this.menuText = this.add.text(modalX + modalWidth / 2, modalY + 30, 'Ranking użytkowników', {
             fontFamily: 'Arial',
             fontSize: '24px',
-            fill: '#000000'
+            fill: textColor
         });
         this.menuText.setOrigin(0.5);
-        this.modal.fillStyle(0x000000, 0.95);
-        this.modal.fillRect(modalX, modalY + 50, modalWidth,3);
 
-        //Przyciski zmiany rankingu
-    // this.rank1 = this.add.text(modalX + 80, modalY +80, 'Ranking jakiś', {
-    //     fontFamily: 'Arial',
-    //     fontSize: '18px',
-    //     fill: '#000000',
-    //     padding: {
-    //         x: 20,
-    //         y: 10,
-    //     },
-    // });
-    // this.rank1.setStroke('#000000', 4);
-    // this.rank1.setOrigin(0.5);
-    // this.rank1.setInteractive();
-    // this.rank1.on('pointerdown', () => {
-
-    // });
-    this.rank2 = this.add.text(modalX + modalWidth/2, modalY + 80, 'Ranking ogólny', {
+    //    Przyciski zmiany rankingu
+    this.buttonRank2 = this.add.sprite(modalX + modalWidth/2, modalY + 75, "buttonAnim")
+    this.buttonRank2.scale = 1.75;
+    this.rank2 = this.add.text(modalX + modalWidth/2, modalY + 73, 'Top 100', {
         fontFamily: 'Arial',
         fontSize: '18px',
         fill: '#ffffff',
-        backgroundColor: '#007bff',
         padding: {
             x: 20,
             y: 10,
         },
     });
     this.rank2.setOrigin(0.5);
-    this.rank2.setInteractive();
-    this.rank2.on('pointerdown', () => {
+    this.buttonRank2.setInteractive();
+    this.buttonRank2.on('pointerdown', () => {
         if(this.rankingFlag){this.drawRanking();}
     });
-    // this.rank3 = this.add.text(modalX + modalWidth - 80, modalY + 80, 'Ranking jakiś', {
-    //     fontFamily: 'Arial',
-    //     fontSize: '18px',
-    //     fill: '#000000',
-    //     backgroundColor: '#007bff',
-    //     padding: {
-    //         x: 20,
-    //         y: 10,
-    //     },
-    // });
-    // this.rank3.setOrigin(0.5);
-    // this.rank3.setInteractive();
-    // this.rank3.on('pointerdown', () => {
-        
-    // });
-
     // Ranking właściwy (wyświetlanie pól o użytkownikach)
     this.drawRanking();
     }
@@ -366,7 +346,7 @@ export default class UI extends Phaser.Scene {
         this.Players.sort((a, b) => b.XP - a.XP);
         // Rysowanie
         const fontSize = '18px';
-        const textColor = '#000000';
+        const textColor = '#ffffff';
         const yOffset = 150;
         const yOffsetIncrement = 30;
 
@@ -388,7 +368,7 @@ export default class UI extends Phaser.Scene {
         });
         this.displayName.setOrigin(0);
 
-        this.displayXP = this.add.text(modalX + 330, modalY + 120, "XP gained: ", {
+        this.displayXP = this.add.text(modalX + 300, modalY + 120, "XP gained: ", {
             fontFamily: 'Arial',
             fontSize: fontSize,
             fill: textColor,
@@ -396,7 +376,7 @@ export default class UI extends Phaser.Scene {
         });
         this.displayXP.setOrigin(0);
 
-        this.displayLevel = this.add.text(modalX + 440, modalY + 120, "Level: ", {
+        this.displayLevel = this.add.text(modalX + 410, modalY + 120, "Level: ", {
             fontFamily: 'Arial',
             fontSize: fontSize,
             fill: textColor,
@@ -426,7 +406,7 @@ export default class UI extends Phaser.Scene {
             this.modal.fillStyle(0x000000, 0.2);
             this.modal.fillRect(modalX+10, modalY + yOffset + yOffsetIncrement * i + 20, modalWidth-20,1);
             
-            this.playerXP = this.add.text(modalX + 330, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.XP, {
+            this.playerXP = this.add.text(modalX + 300, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.XP, {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
@@ -434,7 +414,7 @@ export default class UI extends Phaser.Scene {
             });
             this.playerXP.setOrigin(0);
 
-            this.PlayerLevel = this.add.text(modalX + 440, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.Level, {
+            this.PlayerLevel = this.add.text(modalX + 410, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.Level, {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
@@ -450,6 +430,7 @@ export default class UI extends Phaser.Scene {
 
 
 
+
     }
     closeRanking() {
         if (this.rankingOpen) {
@@ -457,6 +438,7 @@ export default class UI extends Phaser.Scene {
             if (this.menuText) {
                 this.menuText.destroy();
                 this.rank2.destroy();
+                this.buttonRank2.destroy();
                 for (this.Player of this.PlayerInfoDump) {
                     this.Player.destroy();
                 }
@@ -464,6 +446,7 @@ export default class UI extends Phaser.Scene {
                 this.displayXP.destroy();
                 this.displayLevel.destroy();
                 this.displayPosition.destroy();
+                this.rankBackground.destroy();
             }
             this.rankingOpen = false;
         }
@@ -485,26 +468,14 @@ export default class UI extends Phaser.Scene {
 
         this.profileOpen = true;
         this.profilModal = this.add.graphics();
-        this.profilModal.fillStyle(0xffffff, 0.95);
-        this.profilModal.fillRoundedRect(modalX, modalY, modalWidth, modalHeight, 25);
+        this.profilBackground = this.add.image(this.bw*0.5, this.bh*0.5, "modalBackground")
 
-        // Dodanie kwadratu po lewej górnej stronie
         const squareSize = 150;
-        this.profilModal.fillStyle(0xcccccc, 2); // Kolor kwadratu (szary)
-        this.profilModal.fillRoundedRect(modalX+20, modalY+60, squareSize, squareSize);
 
         // Dodanie obrazu nałożonego na kwadrat
-        this.profilePic = this.add.image(modalX+95, modalY+135, "profilePic");
+        this.profilePic = this.add.image(modalX+95, modalY+130, "profilePic");
         this.profilePic.setScale(2)
         this.profilePic.setDisplaySize(squareSize, squareSize)
-
-        // Dodanie linii pod napisem "Profil"
-        this.profilModal.fillStyle(0xCFB53B, 1); // Kolor linii (złoty)
-        this.profilModal.fillRect(modalX, modalY + 50, modalWidth,3);
-
-        // Dodanie linii nad tabelą
-        this.profilModal.fillStyle(0xCFB53B, 1); // Kolor linii (złoty)
-        this.profilModal.fillRect(modalX, modalY + 230, modalWidth,3);
 
         //Dodanie prostokąta w którym będzie nazwa użytkownika
         const rectWidth = 300;
@@ -520,13 +491,11 @@ export default class UI extends Phaser.Scene {
         this.profilModal.fillStyle(0xcccccc, 2); // Kolor prostokąta (szary)
         this.profilModal.fillRoundedRect(modalX+185, modalY+160, rectWidth, rectHeight);
 
-        this.createTable()
-
         // Tekst "Profil"
-        this.profilText = this.add.text(modalX + modalWidth / 2, modalY + 20, 'Profil', {
+        this.profilText = this.add.text(modalX + modalWidth / 2, modalY + 30, 'Profil', {
             fontFamily: 'Arial',
             fontSize: '24px',
-            fill: '#000000'
+            fill: '#ffffff'
         });
         this.profilText.setOrigin(0.5);
 
@@ -534,7 +503,7 @@ export default class UI extends Phaser.Scene {
         this.userText = this.add.text((modalX + modalWidth / 2), modalY + 70, 'Nazwa użytkownika', {
             fontFamily: 'Arial',
             fontSize: '18px',
-            fill: '#000000'
+            fill: '#ffffff'
         });
         this.profilText.setOrigin(0.5);
 
@@ -542,13 +511,13 @@ export default class UI extends Phaser.Scene {
         this.regionText = this.add.text(modalX + modalWidth / 2, modalY + 120, 'Region', {
             fontFamily: 'Arial',
             fontSize: '18px',
-            fill: '#000000'
+            fill: '#ffffff'
         });
         // Tekst "Poziom"
         this.lvlText = this.add.text(modalX + modalWidth / 2, modalY + 170, 'Poziom', {
             fontFamily: 'Arial',
             fontSize: '18px',
-            fill: '#000000'
+            fill: '#ffffff'
         });
     }
     closeProfil() {
@@ -572,47 +541,8 @@ export default class UI extends Phaser.Scene {
             if (this.lvlText) {
                 this.lvlText.destroy();
             }
+            this.profilBackground.destroy();
             this.profileOpen = false;
-        }
-    }
-
-    createTable() {
-        const tableX = ((this.bw - 500) / 2)+30; // Pozycja X tabeli
-        const tableY = ((this.bh - 500) / 2)+230; // Pozycja Y tabeli
-        const cellWidth = 150; // Szerokość komórki tabeli
-        const cellHeight = 50; // Wysokość komórki tabeli
-        const numRows = 5; // Liczba wierszy w tabeli
-        const numCols = 3; // Liczba kolumn w tabeli
-
-        // Tworzenie kontenera na tabelę
-        this.tableContainer = this.add.container(tableX, tableY);
-
-        // Tworzenie tła tabeli
-        const tableBackground = this.add.graphics();
-        tableBackground.fillStyle(0xffffff);
-        tableBackground.fillRect(0, 0, cellWidth * numCols, cellHeight * numRows);
-        tableBackground.lineStyle(2, 0xCFB53B);
-        tableBackground.strokeRect(0, 0, cellWidth * numCols, cellHeight * numRows);
-        this.tableContainer.add(tableBackground);
-
-        // Tworzenie komórek tabeli
-        for (let row = 0; row < numRows; row++) {
-            for (let col = 0; col < numCols; col++) {
-                const cell = this.add.graphics();
-                cell.fillStyle(0xcccccc);
-                cell.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
-                cell.lineStyle(2, 0xCFB53B);
-                cell.strokeRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
-                this.tableContainer.add(cell);
-
-                const cellText = this.add.text(col * cellWidth + cellWidth / 2, row * cellHeight + cellHeight / 2, `Row ${row + 1}, Col ${col + 1}`, {
-                    fontFamily: 'Arial',
-                    fontSize: '16px',
-                    fill: '#000000'
-                });
-                cellText.setOrigin(0.5);
-                this.tableContainer.add(cellText);
-            }
         }
     }
 
@@ -641,7 +571,7 @@ export default class UI extends Phaser.Scene {
             key: 'mapOpen',
             frames: this.anims.generateFrameNumbers('mapAnim', { start: 0, end: 4 }),
             frameRate: 30, 
-            repeat: 0 
+            repeat: 0
         });
         this.anims.create({
             key: 'mapClose',
@@ -654,19 +584,28 @@ export default class UI extends Phaser.Scene {
     }
     drawMap(){
         this.scrollMap = this.add.sprite(this.bw*0.5, this.bh*0.6, "scrollMap")
-        this.scrollMap.scale = 2.5;
+        this.scrollMap.scale = 4;
 
         this.scrollMap.play('mapOpen');
-        this.scrollMap.scale=2.5;
-        
+        this.scrollMap.scale=4;
+
+        // Kompas
+        this.compassH = this.add.image(this.bw*0.95, this.bh*0.9, "compassHead")
+        this.compassA = this.add.image(this.bw*0.95, this.bh*0.9, "compassArrow")
+        this.compassH.scale = 1;
+        this.compassA.scale = 2;
+        this.coords.setVisible(true);
     }
     closeMap() {
         this.scrollMap.play('mapClose');
-        this.scrollMap.scale=2.5;
+        this.scrollMap.scale=4;
         if (this.mapOpen) {
             this.scrollMap.on('animationcomplete', () => {
                 this.mapOpen = false;
                 this.scrollMap.destroy();
+                this.compassH.destroy();
+                this.compassA.destroy();
+                this.coords.setVisible(false);
             });
         }
     }
