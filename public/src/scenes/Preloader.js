@@ -84,10 +84,6 @@ export default class Preloader extends Phaser.Scene {
         this.load.plugin('rexsliderplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexsliderplugin.min.js', true);
     }
     create() {
-
-        this.scene.start('worldMap');
-        this.scene.run('ui');
-        this.scene.bringToTop('ui');
-
+        this.scene.start('login');
     }
 }

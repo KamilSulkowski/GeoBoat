@@ -43,12 +43,13 @@ export function unlockQuestion(idPyt) {
     fetchThen('/dane/odblokowaniePytania', pytanie)
 }
 
-export function updateUser(punktyXP, poziom, wytrzymaloscLodzi, maxPredkoscLodzi, id) {
+export function updateUser(punktyXP, poziom, wytrzymaloscLodzi, maxPredkoscLodzi, czyGlebokieWodyDostepne, id) {
     const data = {
         punktyXP: punktyXP,
         poziom: poziom,
         wytrzymaloscLodzi: wytrzymaloscLodzi,
         maxPredkoscLodzi: maxPredkoscLodzi,
+        czyGlebokieWodyDostepne: czyGlebokieWodyDostepne,
         id: id
     };
     fetchThen('/dane/aktualizacjaUzytkownika', data)
@@ -63,4 +64,9 @@ export async function fetchData(path) {
     catch (e) {
         console.error(e.message);
     }
+}
+
+export async function getUserData() {
+    this.userData = await fetchData('dane/uzytkownicy').then((data) => this.userData = data);
+    console.log(this.userData);
 }
