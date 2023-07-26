@@ -570,7 +570,7 @@ export default class UI extends Phaser.Scene {
         const squareSize = 150;
 
         // Dodanie obrazu nałożonego na kwadrat
-        this.profilePic = this.add.image(modalX+95, modalY+130, "tadeuszProfil");
+        this.profilePic = this.add.image(modalX+130, modalY+130, "tadeuszProfil");
         this.profilePic.setScale(2)
         this.profilePic.setDisplaySize(squareSize, squareSize)
 
