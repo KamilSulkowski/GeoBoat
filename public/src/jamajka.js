@@ -47,14 +47,19 @@ export class Jamajka extends Phaser.Scene {
         this.boat = this.physics.add.sprite(370, 1320, "boat");
         //this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
         this.port = this.physics.add.sprite(1150, 350 , "PPH");
-        this.cityPort = this.physics.add.sprite(300, 1355, "QPH");
+        this.cityPort = this.physics.add.sprite(305, 1440, "QPH");
         this.backToWorld = this.physics.add.sprite(1900, 1900, "backToWorld");
-        this.pirateTeacher = this.physics.add.sprite(365, 1265, "pirateTeacher");
+        this.pirateTeacher = this.physics.add.sprite(385, 1265, "pirateTeacher");
 
-        // Zmiana obszaru kolizji dla npca
+        // Zmiana obszaru kolizji dla npca naukowego
         this.pirateTeacher.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
-        this.pirateTeacher.body.setSize(60, 120, 0.5, 0.5); // Set the size and offset of the collision body
+        this.pirateTeacher.body.setSize(120, 140, 0.5, 0.5); // Set the size and offset of the collision body
         this.pirateTeacher.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
+
+        // Zmiana obszaru kolizji dla npca quizowego
+        this.cityPort.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
+        this.cityPort.body.setSize(120, 120, 0.5, 0.5); // Set the size and offset of the collision body
+        this.cityPort.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
 
         // Zmiana obszaru kolizji dla gracza
         this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
