@@ -1,5 +1,5 @@
 import {startQuiz, closeQuiz} from "./Quiz.js";
-import {getUserData, updateUser} from '../data_access/data_access.js';
+import {getUserData, updateLocation} from '../data_access/data_access.js';
 
 export default class UI extends Phaser.Scene {
     constructor() {
@@ -248,7 +248,8 @@ export default class UI extends Phaser.Scene {
         }
 
         //Pobieranie położenia gracza
-        updateUser()
+        if (this.userData)
+            updateLocation(this.user.lokalizacjaX, this.user.lokalizacjaY, this.user.id);
 
         // Update tekstu stanu łodzi
         if(this.scene.HP === 0){
@@ -456,7 +457,7 @@ export default class UI extends Phaser.Scene {
         const modalX = (this.bw - modalWidth) / 2;
         const modalY = (this.bh - modalHeight) / 2;
         const fontSize = '18px';
-        const textColor = '#ffffff';
+        let textColor = '#ffffff';
         const yOffset = 150;
         const yOffsetIncrement = 30;
         let endingIndex = Math.min(currentIndex + 10, this.Players.length - 1);
@@ -465,6 +466,10 @@ export default class UI extends Phaser.Scene {
         this.PlayerInfoDump.forEach((playerInfo) => playerInfo.destroy());
         this.PlayerInfoDump = [];
         for (let i = currentIndex; i < endingIndex; i++) {
+            if (this.Players[i].name === this.user.nazwa)
+                textColor = '#d84315'
+            else
+                textColor = '#ffffff'
 
             this.PlayerInfo = this.Players[i];
             let userOffset = i - currentIndex;

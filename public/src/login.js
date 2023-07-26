@@ -47,6 +47,7 @@ export class Login extends Phaser.Scene {
             console.log('Login:', login);
 
             if (login === 'admin') {
+                form.remove();
                 scene.stop('login');
                 scene.start('worldMap');
                 scene.run('ui', login);

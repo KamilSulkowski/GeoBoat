@@ -256,6 +256,27 @@ app.post('/dane/aktualizacjaUzytkownika', (req, res) => {
     });
 });
 
+// Zapis lokalizacji gracza
+app.post('/dane/aktualizacjaLokalizacji', (req, res) => {
+
+    const data = {
+        lokalizacjaX: req.body.lokalizacjaX,
+        lokalizacjaY: req.body.lokalizacjaY,
+        id: req.body.id
+    };
+
+    let sql = "UPDATE uzytkownik SET lokalizacjaX = ?, lokalizacjaY = ? WHERE id = ?";
+
+    db.run(sql, [data.lokalizacjaX, data.lokalizacjaY, data.id], function (err) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error');
+        } else {
+            res.status(200).send('Dane zapisano poprawnie');
+        }
+    });
+});
+
 app.use(function(req, res){
     res.status(404);
 });

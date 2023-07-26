@@ -55,6 +55,15 @@ export function updateUser(punktyXP, poziom, wytrzymaloscLodzi, maxPredkoscLodzi
     fetchThen('/dane/aktualizacjaUzytkownika', data)
 }
 
+export function updateLocation(x, y, id) {
+    const data = {
+        lokalizacjaX: x,
+        lokalizacjaY: y,
+        id: id
+    };
+    fetchThen('/dane/aktualizacjaLokalizacji', data)
+}
+
 export async function fetchData(path) {
     try {
         const response = await fetch(path);
