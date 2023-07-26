@@ -1,5 +1,5 @@
 import {startQuiz, closeQuiz} from "./Quiz.js";
-import {getUserData} from '../data_access/data_access.js';
+import {getUserData, updateUser} from '../data_access/data_access.js';
 
 export default class UI extends Phaser.Scene {
     constructor() {
@@ -256,6 +256,9 @@ export default class UI extends Phaser.Scene {
             this.userText.setText(this.userName);
             this.expText.setText('Level ' + this.user.poziom);
         }
+
+        //Pobieranie położenia gracza
+        updateUser()
 
         // Update tekstu stanu łodzi
         if(this.scene.HP === 0){
