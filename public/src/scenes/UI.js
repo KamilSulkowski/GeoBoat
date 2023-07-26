@@ -720,52 +720,52 @@ export default class UI extends Phaser.Scene {
         if(regionFlag = "Jamajka"){
             this.pirateText = [
                     {
-                        Polityka: '',
+                        Polityka: 'a1',
                         Kultura: '',
                         Kuchnia: '',
                     },
                     {
-                        Polityka: '',
+                        Polityka: 'a2',
                         Kultura: '',
                         Kuchnia: '',
                     },
                     {
-                        Polityka: '',
+                        Polityka: 'a3',
                         Kultura: '',
                         Kuchnia: '',
                     },
                     {
-                        Polityka: '',
+                        Polityka: 'a4',
                         Kultura: '',
                         Kuchnia: '',
                     },
                     {
-                        Polityka: '',
+                        Polityka: 'a5',
                         Kultura: '',
                         Kuchnia: '',
                     },
                     {
-                        Polityka: '',
+                        Polityka: 'a6',
                         Kultura: '',
                         Kuchnia: '',
                     },
                     {
-                        Polityka: '',
+                        Polityka: 'a7',
                         Kultura: '',
                         Kuchnia: '',
                     },
                     {
-                        Polityka: '',
+                        Polityka: 'a8',
                         Kultura: '',
                         Kuchnia: '',
                     },
                     {
-                        Polityka: '',
+                        Polityka: 'a9',
                         Kultura: '',
                         Kuchnia: '',
                     },
                     {
-                        Polityka: '',
+                        Polityka: 'a10',
                         Kultura: '',
                         Kuchnia: '',
                     },
@@ -792,7 +792,7 @@ export default class UI extends Phaser.Scene {
         this.teacherPic.setScale(2)
         this.teacherPic.setDisplaySize(squareSize, squareSize)
 
-        // Tekst "Profil"
+        // Tekst tytułowy
         this.pirateTeacherText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + 30, 'Pirat Wiedzorozdawacz', {
             fontFamily: 'Arial',
             fontSize: '24px',
@@ -800,8 +800,8 @@ export default class UI extends Phaser.Scene {
         });
         this.pirateTeacherText.setOrigin(0.5);
 
-        // Tekst powitalny
-        this.pirateTeacherHelloText = this.add.text(this.modalX+30, this.modalY+210, 'Ahoj szczurze lądowy! Znajdujesz się na Jamajce, to fantastyczne miejsce pełne egzotycznych przygód i barwnych kultur. Od zielonych dżungli po błękitne plaże, Jamajka zaprasza Cię do odkrycia jej sekretów i niezapomnianych chwil!', {
+        // Tekst górny
+        this.pirateTeacherHelloText = this.add.text(this.modalX+30, this.modalY+210, '', {
             fontFamily: 'Arial',
             fontSize: '24px',
             fill: '#000000',
@@ -809,11 +809,168 @@ export default class UI extends Phaser.Scene {
         });
         this.pirateTeacherHelloText.setOrigin(0);
 
-        this.drawLearning(this.pirateText);
-    }
-    drawLearning(textContentSoPirateWillKnowWhatToSayToTeachOthersHehe){
+        // Tekst dolny
+        this.pirateTeacherBottomText = this.add.text(this.modalX+30, this.modalY+350, 'Mogę Cię wiele nauczyć, ale ty wybierz czego chciałbyś się dzisiaj dowiedzieć!', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#000000',
+            wordWrap: { width: 740, useAdvancedWrap: true }
+        });
+        this.pirateTeacherBottomText.setOrigin(0);
 
-        //
+        if(regionFlag === "Jamajka"){
+            this.pirateTeacherHelloText.setText('Ahoj szczurze lądowy! Znajdujesz się na Jamajce, to fantastyczne miejsce pełne egzotycznych przygód i barwnych kultur. Od zielonych dżungli po błękitne plaże, Jamajka zaprasza Cię do odkrycia jej sekretów i przeżycia niezapomnianych chwil!')
+        }else if(regionFlag === "Panama"){
+            this.pirateTeacherHelloText.setText('Ahoj szczurze lądowy! Znajdujesz się w Panamie, to fantastyczne miejsce pełne egzotycznych przygód i barwnych kultur. Od zielonych dżungli po błękitne plaże, Panama zaprasza Cię do odkrycia jej sekretów i przeżycia niezapomnianych chwil!')
+        }else if(regionFlag === "Havana"){
+            this.pirateTeacherHelloText.setText('Ahoj szczurze lądowy! Znajdujesz się na Kubie, to fantastyczne miejsce pełne egzotycznych przygód i barwnych kultur. Od zielonych dżungli po błękitne plaże, Havana zaprasza Cię do odkrycia jej sekretów i przeżycia niezapomnianych chwil!')
+        }
+
+        this.categoryButton1 = this.add.text(this.modalX + this.modalWidth / 2 - 150, this.modalY + this.modalHeight - 125, 'Polityka', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#ffffff',
+            backgroundColor: '#007bff',
+            padding: {
+                x: 20,
+                y: 10,
+            },
+        });
+        this.categoryButton1.setOrigin(0.5);
+        this.categoryButton1.setInteractive({ useHandCursor: true });
+        this.categoryButton1.visible = true;
+        this.categoryButton1.on('pointerdown', () => {
+            this.categoryButton1.setBackgroundColor('#52a5ff');
+            this.categoryButton2.setBackgroundColor('#007bff');
+            this.categoryButton3.setBackgroundColor('#007bff');
+            this.category = "Polityka"
+            this.nextScreenButton.visible = true;
+        })
+
+        this.categoryButton2 = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 125, 'Kultura', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#ffffff',
+            backgroundColor: '#007bff',
+            padding: {
+                x: 20,
+                y: 10,
+            },
+        });
+        this.categoryButton2.setOrigin(0.5);
+        this.categoryButton2.setInteractive({ useHandCursor: true });
+        this.categoryButton2.visible = true;
+        this.categoryButton2.on('pointerdown', () => {
+            this.categoryButton1.setBackgroundColor('#007bff');
+            this.categoryButton2.setBackgroundColor('#52a5ff');
+            this.categoryButton3.setBackgroundColor('#007bff');
+            this.category = "Kultura"
+            this.nextScreenButton.visible = true;
+        })
+
+        this.categoryButton3 = this.add.text(this.modalX + this.modalWidth / 2 + 150, this.modalY + this.modalHeight - 125, 'Kuchnia', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#ffffff',
+            backgroundColor: '#007bff',
+            padding: {
+                x: 20,
+                y: 10,
+            },
+        });
+        this.categoryButton3.setOrigin(0.5);
+        this.categoryButton3.setInteractive({ useHandCursor: true });
+        this.categoryButton3.visible = true;
+        this.categoryButton3.on('pointerdown', () => {
+            this.categoryButton1.setBackgroundColor('#007bff');
+            this.categoryButton2.setBackgroundColor('#007bff');
+            this.categoryButton3.setBackgroundColor('#52a5ff');
+            this.category = "Kuchnia"
+            this.nextScreenButton.visible = true;
+        })
+
+
+        //Przejście dalej
+        this.nextScreenButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Dalej', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#ffffff',
+            backgroundColor: '#007bff',
+            padding: {
+                x: 20,
+                y: 10,
+            },
+        });
+        this.nextScreenButton.setOrigin(0.5);
+        this.nextScreenButton.setInteractive({ useHandCursor: true });
+        this.nextScreenButton.visible = false;
+
+        this.nextScreenButton.on('pointerdown', () => {
+            if (this.learnerOpen) {
+                this.nextScreenButton.destroy();
+                this.categoryButton1.destroy();
+                this.categoryButton2.destroy();
+                this.categoryButton3.destroy();
+                this.drawLearning(this.pirateText, this.category);
+            }
+        });
+    }
+    drawLearning(Content, Category){
+        this.pirateTeacherText.setText(Category)
+        this.textFromContent = []
+        this.indexForContent = 0
+        if(Category === "Polityka"){
+            for(let i = 0; i < Content.length; i++){
+                this.textFromContent.push(Content[i].Polityka);
+
+                this.pirateTeacherHelloText.setText('A więc chcesz się dowiedzieć czegoś o polityce Jamajki?')
+                this.pirateTeacherBottomText.setText('')
+            }
+        }else if(Category === "Kultura"){
+            for(let i = 0; i < Content.length; i++){
+                this.textFromContent.push(Content[i].Kultura);
+
+                this.pirateTeacherHelloText.setText('A więc chcesz się dowiedzieć czegoś o kulturze Jamajki?')
+                this.pirateTeacherBottomText.setText('')
+            }
+        }else if(Category === "Kuchnia"){
+            for(let i = 0; i < Content.length; i++){
+                this.textFromContent.push(Content[i].Kuchnia);
+
+                this.pirateTeacherHelloText.setText('A więc chcesz się dowiedzieć czegoś o kuchni Jamajki?')
+                this.pirateTeacherBottomText.setText('')
+            }
+        }
+
+        //Przejście dalej
+        this.nextToLearnButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Dalej', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#ffffff',
+            backgroundColor: '#007bff',
+            padding: {
+                x: 20,
+                y: 10,
+            },
+        });
+        this.nextToLearnButton.setOrigin(0.5);
+        this.nextToLearnButton.setInteractive({ useHandCursor: true });
+        this.nextToLearnButton.visible = true;
+
+        this.nextToLearnButton.on('pointerdown', () => {
+            if (this.learnerOpen && this.indexForContent != this.textFromContent.length && this.textFromContent[this.indexForContent] != '') {
+                this.pirateTeacherHelloText.setText(this.textFromContent[this.indexForContent])
+                this.indexForContent += 1
+            }else if(this.learnerOpen){
+                this.learnerOpen = false;
+                this.modal.destroy();
+                this.teacherPic.destroy();
+                this.pirateTeacherText.destroy();
+                this.pirateTeacherHelloText.destroy();
+                this.pirateTeacherBottomText.destroy();
+                this.nextToLearnButton.destroy();
+            }
+        });
     }
     closeLearning() {
         if (this.learnerOpen) {
@@ -822,6 +979,16 @@ export default class UI extends Phaser.Scene {
             this.teacherPic.destroy();
             this.pirateTeacherText.destroy();
             this.pirateTeacherHelloText.destroy();
+            this.pirateTeacherBottomText.destroy();
+            this.nextScreenButton.destroy();
+            if (this.categoryButton1){
+                this.categoryButton1.destroy();
+                this.categoryButton2.destroy();
+                this.categoryButton3.destroy();
+            }
+            if (this.nextToLearnButton){
+                this.nextToLearnButton.destroy();
+            }
         }
     }
 }
