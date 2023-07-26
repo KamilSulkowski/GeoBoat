@@ -474,9 +474,13 @@ export function closeQuiz(){
         this.modal.clear();
         if (this.menuText) {
             this.menuText.destroy();
-            this.quizQuestionText.destroy();
-            for (this.quizAnswerText of this.quizAnswerTexts) {
-                this.quizAnswerText.destroy();
+            if(this.quizQuestionText){
+                this.quizQuestionText.destroy();
+            }
+            if(this.answerTexts !== null){
+                for (this.quizAnswerText of this.quizAnswerTexts) {
+                    this.quizAnswerText.destroy();
+                }
             }
             if(this.questionImage)
                 this.questionImage.destroy();
