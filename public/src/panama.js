@@ -4,7 +4,6 @@ export class Panama extends Phaser.Scene {
         this.tileSetWorld = null;
         this.water = null;
         this.ground = null;
-        this.stones = null;
         this.boat = null; // Przypisujemy łódź do właściwości klasy
         this.engine = 0;    //Zmienna do sprawdzania stanu rozpędu/hamowania łodzi
         this.inZone = false;//Flaga kolizji
@@ -24,8 +23,8 @@ export class Panama extends Phaser.Scene {
         const panama = this.make.tilemap({key: 'panama'});
 
         this.tileSetWorld = panama.addTilesetImage('tile', 'tiled',16,16);
-        this.water = panama.createStaticLayer('water', this.tileSetWorld);
-        this.ground = panama.createStaticLayer('ground', this.tileSetWorld);
+        this.water = panama.createLayer('water', this.tileSetWorld);
+        this.ground = panama.createLayer('ground', this.tileSetWorld);
 
         this.ground.setCollisionByProperty({collides: true});
 

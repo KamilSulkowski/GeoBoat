@@ -24,9 +24,9 @@ export class Jamajka extends Phaser.Scene {
         const jamajka = this.make.tilemap({key: 'jamajka'});
 
         this.tileSetWorld = jamajka.addTilesetImage('tile', 'tiled',16,16);
-        this.water = jamajka.createStaticLayer('water', this.tileSetWorld);
-        this.ground = jamajka.createStaticLayer('ground', this.tileSetWorld);
-        this.stones = jamajka.createStaticLayer('stones', this.tileSetWorld);
+        this.water = jamajka.createLayer('water', this.tileSetWorld);
+        this.ground = jamajka.createLayer('ground', this.tileSetWorld);
+        this.stones = jamajka.createLayer('stones', this.tileSetWorld);
 
         this.ground.setCollisionByProperty({collides: true});
         this.stones.setCollisionByProperty({collides: true});

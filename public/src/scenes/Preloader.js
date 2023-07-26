@@ -37,6 +37,14 @@ export default class Preloader extends Phaser.Scene {
             frameWidth: 16,
             frameHeight: 32
         });
+        this.load.spritesheet('seagull', "assets/seagull-Sheet.png", {
+            frameWidth: 16,
+            frameHeight: 16
+        });
+        this.load.spritesheet('wave', "assets/waves.png", {
+            frameWidth: 32,
+            frameHeight: 32
+        });
         
         this.load.image("modalBackground", "assets/modalBcg.png")
         this.load.image("scrollMap", "assets/scrollMap.png")
