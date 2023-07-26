@@ -82,8 +82,6 @@ export default class Preloader extends Phaser.Scene {
 
         this.load.image("roseHall", "assets/roseHall.png")
 
-
-        this.load.plugin('rexsliderplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexsliderplugin.min.js', true);
     }
     create() {
         this.scene.start('login');

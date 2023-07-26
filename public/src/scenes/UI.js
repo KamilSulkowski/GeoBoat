@@ -18,6 +18,11 @@ export default class UI extends Phaser.Scene {
         this.rightScrollScrolled = false;
     }
     preload() {
+        this.load.scenePlugin({
+            key: 'rexuiplugin',
+            url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
+            sceneKey: 'rexUI'
+        });
     }
 
     async create(login) {
@@ -153,31 +158,6 @@ export default class UI extends Phaser.Scene {
         .setStyle({fontFamily: "CustomFont"});
 
         this.boatRepairAnimation();
-
-        
-        // // Create a graphics object to act as the track of the slider
-        // var trackGraphics = this.add.graphics();
-        // trackGraphics.fillStyle(0x888888);
-        // trackGraphics.fillRect(100, 200, 200, 10);
-
-        // // Create a graphics object to act as the thumb of the slider
-        // var thumbGraphics = this.add.graphics();
-        // thumbGraphics.fillStyle(0xffffff);
-        // thumbGraphics.fillRect(100, 195, 10, 20);
-
-        // // Add slider behavior
-        // var config = {
-        //     orientation: 'x', // 'x' for horizontal, 'y' for vertical
-        //     track: trackGraphics,
-        //     thumb: thumbGraphics,
-        //     inputLength: 200, // The length of the slider track (same as the width of the track)
-        //     valuechangeCallback: function (value) {
-        //         console.log('Slider value:', value);
-        //     }
-        // };
-
-        // var slider = this.plugins.get('rexsliderplugin').add(thumbGraphics, config);
-
     }
 
     onLeftScrollClick() {
@@ -250,6 +230,8 @@ export default class UI extends Phaser.Scene {
         this.updateSpeedBar();
         //console.log(this.scene.HP)
 
+
+
         //Wyświetlanie nazwy i poziomu gracza
         if (this.userData) {
             this.user = this.userData.find((row) => row.nazwa === this.userName);
@@ -265,7 +247,7 @@ export default class UI extends Phaser.Scene {
         }
 
         this.coords.setText('Lat - ' + this.gameScene.boat.x + ' Long - ' + this.gameScene.boat.y)
-        this.regionText.setText('Region: ' + this.scene.currentMap)
+        //this.regionText.setText('Region: ' + this.scene.currentMap)
 
         // Update tekstu pod HP
         if(this.scene.HP != 3){
@@ -273,6 +255,8 @@ export default class UI extends Phaser.Scene {
         }else{
             this.stateText.setText("Fully repaired");
         }
+
+
     }
 
         // Update serduszek życia
@@ -366,7 +350,7 @@ export default class UI extends Phaser.Scene {
         // Przypisujemy info o graczach w arraya
         this.Players = [];
         let i = 0;
-        for(;i < 15; i++) {
+        for(;i < this.userData.length; i++) {
             this.Player =
                 {
                     name: this.userData[i].nazwa,
@@ -382,56 +366,10 @@ export default class UI extends Phaser.Scene {
         const textColor = '#ffffff';
         const yOffset = 150;
         const yOffsetIncrement = 30;
-        const maxVisiblePlayers = 10;
-        // const container = this.add.container(modalX + 10, modalY + 120);
-        // const totalContainerHeight = yOffsetIncrement * this.Players.length;
-        // const visibleContainerHeight = yOffsetIncrement * maxVisiblePlayers;
 
         this.PlayerInfoDump = []
 
-        // this.sliderTrack = this.add.graphics();
-        // this.sliderTrack.fillStyle(0x000000, 0.2);
-        // this.sliderTrack.fillRect(modalX + modalWidth - 20, modalY + 120, 10, modalHeight - 140);
-        // this.sliderThumb = this.add.graphics();
-        // this.sliderThumb.fillStyle(0xffffff);
-        // this.sliderThumb.fillRect(modalX + modalWidth - 20, modalY + 120, 10, visibleContainerHeight);
-
-        // const thumbSprite = this.add.rectangle(modalX + modalWidth - 20, modalY + 120, 10, visibleContainerHeight, 0x000000, 0);
-        // thumbSprite.setInteractive();
-
-        // this.add.existing(this.sliderTrack);
-        // this.add.existing(this.sliderThumb);
-        // this.add.existing(thumbSprite);
-        // this.sliderThumb.setInteractive();
-        // this.input.setDraggable(this.sliderThumb);
-        // if (thumbSprite && thumbSprite.setInteractive) {
-        //     this.input.setDraggable(thumbSprite);
-        //     thumbSprite.on('drag', (pointer, dragX, dragY) => {
-        //         const minY = modalY + 120;
-        //         const maxY = modalY + modalHeight - visibleContainerHeight;
-        //         const containerY = Phaser.Math.Clamp(dragY, minY, maxY);
-        
-        //         container.y = modalY + 120 - ((containerY - minY) * (totalContainerHeight - visibleContainerHeight)) / (modalHeight - 140);
-        //     });
-        // }
-
-        // function updateContainerVisibility() {
-        //     const containerY = container.y - modalY - 120;
-        //     const startIndex = Math.floor((containerY / (totalContainerHeight - visibleContainerHeight)) * this.Players.length);
-        //     const endIndex = Math.min(startIndex + maxVisiblePlayers, this.Players.length);
-    
-        //     for (let i = 0; i < this.PlayerInfoDump.length; i++) { //Players podmiana
-        //         this.PlayerInfoDump[i].visible = i >= startIndex && i < endIndex;
-        //     }
-        // }
-    
-        // // Update the container visibility initially
-        // updateContainerVisibility.call(this);
-
-        // //this.sliderThumb.on('drag', updateContainerVisibility, this);
-
-        // this.add.existing(container);
-
+        //
         this.displayPosition = this.add.text(modalX + 10, modalY + 120, "Rank: ", {
             fontFamily: 'Arial',
             fontSize: fontSize,
@@ -474,11 +412,53 @@ export default class UI extends Phaser.Scene {
         this.strokeColor = '0x000000'
         this.strokeThick = 2
 
-        for (let i = 0; i < this.Players.length; i++) {
+        ///////////////////////////////
+        this.currentIndex = 0;
+        // Slider
+        this.totalUsers = this.Players.length
+        this.slider = this.rexUI.add.slider({
+            x: modalX + 480,
+            y: modalY + 315,
+            width: 20,
+            height: 340,
+            orientation: 'y',
+            
+            thumb: this.rexUI.add.roundRectangle(0, 0, 0, 100, 10, '0x000000'),
+
+            valuechangeCallback: (value) => {
+                const maxIndex = this.totalUsers - 10;
+                this.currentIndex = Math.floor(value * maxIndex);
+                this.drawUsersInRanking(this.currentIndex);
+            },
+            space: {
+                top: 4,
+                bottom: 4
+            },
+            input: 'drag', // 'drag'|'click'
+        })
+            .layout();
+        this.drawUsersInRanking(this.currentIndex);
+    }
+    drawUsersInRanking(currentIndex){
+        const modalWidth = 500;
+        const modalHeight = 500;
+        const modalX = (this.bw - modalWidth) / 2;
+        const modalY = (this.bh - modalHeight) / 2;
+        const fontSize = '18px';
+        const textColor = '#ffffff';
+        const yOffset = 150;
+        const yOffsetIncrement = 30;
+        let endingIndex = Math.min(currentIndex + 10, this.Players.length - 1);
+
+
+        this.PlayerInfoDump.forEach((playerInfo) => playerInfo.destroy());
+        this.PlayerInfoDump = [];
+        for (let i = currentIndex; i < endingIndex; i++) {
 
             this.PlayerInfo = this.Players[i];
+            let userOffset = i - currentIndex;
 
-            this.playerPosition = this.add.text(modalX + 10, modalY + yOffset + yOffsetIncrement * i, i+1, {
+            this.playerPosition = this.add.text(modalX + 10, modalY + yOffset + yOffsetIncrement * userOffset, i+1, {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
@@ -488,7 +468,7 @@ export default class UI extends Phaser.Scene {
             this.playerPosition.setStroke(this.strokeColor, this.strokeThick);
 
 
-            this.playerName = this.add.text(modalX + 90, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.name, {
+            this.playerName = this.add.text(modalX + 90, modalY + yOffset + yOffsetIncrement * userOffset, this.PlayerInfo.name, {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
@@ -497,7 +477,7 @@ export default class UI extends Phaser.Scene {
             this.playerName.setOrigin(0);
             this.playerName.setStroke(this.strokeColor, this.strokeThick);
 
-            this.playerXP = this.add.text(modalX + 300, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.XP, {
+            this.playerXP = this.add.text(modalX + 300, modalY + yOffset + yOffsetIncrement * userOffset, this.PlayerInfo.XP, {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
@@ -506,7 +486,7 @@ export default class UI extends Phaser.Scene {
             this.playerXP.setOrigin(0);
             this.playerXP.setStroke(this.strokeColor, this.strokeThick);
 
-            this.PlayerLevel = this.add.text(modalX + 410, modalY + yOffset + yOffsetIncrement * i, this.PlayerInfo.Level, {
+            this.PlayerLevel = this.add.text(modalX + 410, modalY + yOffset + yOffsetIncrement * userOffset, this.PlayerInfo.Level, {
                 fontFamily: 'Arial',
                 fontSize: fontSize,
                 fill: textColor,
@@ -523,9 +503,8 @@ export default class UI extends Phaser.Scene {
             this.PlayerInfoDump.push(this.playerName);
             this.PlayerInfoDump.push(this.playerXP);
             this.PlayerInfoDump.push(this.PlayerLevel);
+
         }
-        // this.modal.fillStyle(0x000000, 0.2);
-        // this.modal.fillRect(modalX+7, modalY+120, 486, 366);
     }
     closeRanking() {
         if (this.rankingOpen) {
@@ -542,8 +521,7 @@ export default class UI extends Phaser.Scene {
                 this.displayLevel.destroy();
                 this.displayPosition.destroy();
                 this.rankBackground.destroy();
-                // this.sliderThumb.destroy();
-                // this.sliderTrack.destroy();
+                this.slider.destroy();
             }
             this.rankingOpen = false;
         }
