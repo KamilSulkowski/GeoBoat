@@ -10,7 +10,7 @@ export default class Game extends Phaser.Scene {
         this.boatMaxSpeed = 150 // Maksymalna prędkość łodzi
         this.timer = 0;     //Zmienna do przeliczania czasu (używana przy łodzi atm)
         this.currentBoatSpeed = 0; //Zmienna do ustawiania prędkości łódki
-        this.currentMap = null; //Zmienna do przechowywania aktualnej mapy
+        this.currentMap = 'worldmap'; //Zmienna do przechowywania aktualnej mapy
         this.HP = 3; //Zmienna do przechowywania aktualnej ilości HP
         this.boatCurrentX = 0;
         this.boatCurrentY = 0;

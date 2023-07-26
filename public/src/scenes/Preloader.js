@@ -46,28 +46,32 @@ export default class Preloader extends Phaser.Scene {
             frameHeight: 32
         });
         
-        this.load.image("modalBackground", "assets/modalBcg.png")
-        this.load.image("scrollMap", "assets/scrollMap.png")
-        this.load.image("scrollMapUI", "assets/globe.png")
-        this.load.image("pirate", "assets/pirat.png")
-        this.load.image("fullHeart", "assets/fullHeart.png")
-        this.load.image("emptyHeart", "assets/emptyHeart.png")
-        this.load.image("compassArrow", "assets/compassArrow.png")
-        this.load.image("compassHead", "assets/compassHead.png")
-        this.load.image("menuCog", "assets/menuCog.png")
-        this.load.image("menuBar", "assets/board1.png")
-        this.load.image("menuLongBar", "assets/board2.png")
-        this.load.image("rankBadge", "assets/rankBadge.png")
-        this.load.image("profilePic", "assets/profilePic.png")
-        this.load.image("profileBorder", "assets/profileBorder.png")
-        this.load.image("scrollMenuMovement", "assets/scrollMenuMovement.png")
-        this.load.image("scrollMenuInputs", "assets/scrollMenuInputs.png")
-        this.load.image("scrollMenuMiddle", "assets/scrollMenuMiddle.png")
-        this.load.image("tadeuszProfil", "assets/tadeuszpiratlvl100.png")
-        this.load.image("tadeuszMiniProfil", "assets/tadeuszpiratlvl100Profil.png")
-
+        this.load.image("modalBackground", "assets/modalBcg.png");
+        this.load.image("scrollMap", "assets/scrollMap.png");
+        this.load.image("scrollMapUI", "assets/globe.png");
+        this.load.image("pirate", "assets/pirat.png");
+        this.load.image("fullHeart", "assets/fullHeart.png");
+        this.load.image("emptyHeart", "assets/emptyHeart.png");
+        this.load.image("compassArrow", "assets/compassArrow.png");
+        this.load.image("compassHead", "assets/compassHead.png");
+        this.load.image("menuCog", "assets/menuCog.png");
+        this.load.image("menuBar", "assets/board1.png");
+        this.load.image("menuLongBar", "assets/board2.png");
+        this.load.image("rankBadge", "assets/rankBadge.png");
+        this.load.image("profilePic", "assets/profilePic.png");
+        this.load.image("profileBorder", "assets/profileBorder.png");
+        this.load.image("scrollMenuMovement", "assets/scrollMenuMovement.png");
+        this.load.image("scrollMenuInputs", "assets/scrollMenuInputs.png");
+        this.load.image("scrollMenuMiddle", "assets/scrollMenuMiddle.png");
+        this.load.image("tadeuszProfil", "assets/tadeuszpiratlvl100profilPic.png");
+        this.load.image("tadeuszMiniProfil", "assets/tadeuszpiratlvl100Profil.png");
+        this.load.image('geoboatLogo', "assets/geoboat.png");
 
         this.load.image('tiled', "assets/worldtiles.png");
+        this.load.image('house_scaled', "assets/house_scaled.png");
+        this.load.image('housebig', "assets/housebig.png");
+        this.load.image('palm', "assets/palm.png");
+        this.load.image('tower', "assets/tower.png");
 
         this.load.tilemapTiledJSON('worldMap','Maps/worldMap.json');
         this.load.tilemapTiledJSON('jamajka', 'Maps/jamajka.json');
@@ -76,14 +80,12 @@ export default class Preloader extends Phaser.Scene {
 
         this.load.image("PPH", "assets/dock.png")
         this.load.image("CPH", "assets/collisionPH.png")
-        this.load.image("QPH", "assets/house.png")
+        this.load.image("QPH", "assets/dock2.png")
         this.load.image('QTPH', "assets/quizTalkPH.png");
         this.load.image('FPH', "assets/finPH.png");
 
-        this.load.image("roseHall", "assets/roseHall.png")
+        this.load.image("roseHall", "assets/roseHall.png");
 
-
-        this.load.plugin('rexsliderplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexsliderplugin.min.js', true);
     }
     create() {
         this.scene.start('login');

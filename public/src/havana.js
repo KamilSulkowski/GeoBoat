@@ -22,9 +22,10 @@ export class Havana extends Phaser.Scene {
 
     }
     create() {
+        this.gameScene = this.scene.get('game');
+        this.gameScene.currentMap = 'havana';
         //Pobranie wartości z pliku UI.js
         this.uiScene = this.scene.get('ui');
-        this.gameScene = this.scene.get('game');
 
         const havana = this.make.tilemap({key: 'havana'});
 
@@ -32,7 +33,14 @@ export class Havana extends Phaser.Scene {
         this.water = havana.createLayer('water', this.tileSetWorld);
         this.ground = havana.createLayer('ground', this.tileSetWorld);
         this.stones = havana.createLayer('stones', this.tileSetWorld);
-
+        this.tileHouseBig = havana.addTilesetImage('housebig', 'housebig',16,16);
+        this.tileTower = havana.addTilesetImage('tower', 'tower',16,16);
+        this.tilePalm = havana.addTilesetImage('palm', 'palm',16,16);
+        this.tileHouse = havana.addTilesetImage('house_scaled', 'house_scaled',16,16);
+        havana.createLayer('housebig', this.tileHouseBig);
+        havana.createLayer('tower', this.tileTower);
+        havana.createLayer('palm', this.tilePalm);
+        havana.createLayer('house_scaled', this.tileHouse);
         this.ground.setCollisionByProperty({collides: true});
         this.stones.setCollisionByProperty({collides: true});
 
