@@ -713,46 +713,65 @@ export default class UI extends Phaser.Scene {
     showLearning(regionFlag) {
         console.log(regionFlag)
         if(regionFlag = "Jamajka"){
-            this.pirateText = {
-                a1: '',
-                a2: '',
-                a3: '',
-                a4: '',
-                a5: '',
-                a6: '',
-                a7: '',
-                a8: '',
-                a9: '',
-                a10: '',
-            }
+            this.pirateText = [
+                    {
+                        Polityka: '',
+                        Kultura: '',
+                        Kuchnia: '',
+                    },
+                    {
+                        Polityka: '',
+                        Kultura: '',
+                        Kuchnia: '',
+                    },
+                    {
+                        Polityka: '',
+                        Kultura: '',
+                        Kuchnia: '',
+                    },
+                    {
+                        Polityka: '',
+                        Kultura: '',
+                        Kuchnia: '',
+                    },
+                    {
+                        Polityka: '',
+                        Kultura: '',
+                        Kuchnia: '',
+                    },
+                    {
+                        Polityka: '',
+                        Kultura: '',
+                        Kuchnia: '',
+                    },
+                    {
+                        Polityka: '',
+                        Kultura: '',
+                        Kuchnia: '',
+                    },
+                    {
+                        Polityka: '',
+                        Kultura: '',
+                        Kuchnia: '',
+                    },
+                    {
+                        Polityka: '',
+                        Kultura: '',
+                        Kuchnia: '',
+                    },
+                    {
+                        Polityka: '',
+                        Kultura: '',
+                        Kuchnia: '',
+                    },
+                ]
         }else if(regionFlag = "Panama"){
-            this.pirateText = {
-                a1: '',
-                a2: '',
-                a3: '',
-                a4: '',
-                a5: '',
-                a6: '',
-                a7: '',
-                a8: '',
-                a9: '',
-                a10: '',
-            }
+            this.pirateText = [{}]
 
         }else if(regionFlag = "Havana"){
-            this.pirateText = {
-                a1: '',
-                a2: '',
-                a3: '',
-                a4: '',
-                a5: '',
-                a6: '',
-                a7: '',
-                a8: '',
-                a9: '',
-                a10: '',
-            }
+            this.pirateText = [{}]
         }
+
         this.modalWidth = 800;
         this.modalHeight = 600;
         this.modalX = (this.bw - this.modalWidth) / 2;
@@ -764,21 +783,30 @@ export default class UI extends Phaser.Scene {
         this.modal.fillRoundedRect(this.modalX, this.modalY, this.modalWidth, this.modalHeight, 25);
 
         const squareSize = 150;
-        this.teacherPic = this.add.image(this.modalX+95, this.modalY+130, "profilePic");
+        this.teacherPic = this.add.image(this.modalX + this.modalWidth / 2, this.modalY+125, "profilePic");
         this.teacherPic.setScale(2)
         this.teacherPic.setDisplaySize(squareSize, squareSize)
 
         // Tekst "Profil"
-        this.pirateTeacherText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + 30, 'Profil', {
+        this.pirateTeacherText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + 30, 'Pirat Wiedzorozdawacz', {
             fontFamily: 'Arial',
             fontSize: '24px',
             fill: '#000000'
         });
         this.pirateTeacherText.setOrigin(0.5);
 
+        // Tekst powitalny
+        this.pirateTeacherHelloText = this.add.text(this.modalX+30, this.modalY+210, 'Ahoj szczurze lądowy! Znajdujesz się na Jamajce, to fantastyczne miejsce pełne egzotycznych przygód i barwnych kultur. Od zielonych dżungli po błękitne plaże, Jamajka zaprasza Cię do odkrycia jej sekretów i niezapomnianych chwil!', {
+            fontFamily: 'Arial',
+            fontSize: '24px',
+            fill: '#000000',
+            wordWrap: { width: 740, useAdvancedWrap: true }
+        });
+        this.pirateTeacherHelloText.setOrigin(0);
+
         this.drawLearning(this.pirateText);
     }
-    drawLearning(textContentSoPirateWillKnowWhatToTeach){
+    drawLearning(textContentSoPirateWillKnowWhatToSayToTeachOthersHehe){
 
         //
     }
@@ -788,6 +816,7 @@ export default class UI extends Phaser.Scene {
             this.modal.destroy();
             this.teacherPic.destroy();
             this.pirateTeacherText.destroy();
+            this.pirateTeacherHelloText.destroy();
         }
     }
 }
