@@ -58,9 +58,9 @@ export class WorldMap extends Phaser.Scene {
 
         // ładowanie łódki
         this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
-        this.jamajka = this.physics.add.sprite(3150, 1700 , "PPH");
-        this.havana = this.physics.add.sprite(3050, 1780 , "PPH");
-        this.panama = this.physics.add.sprite(3250, 1580 , "PPH");
+        this.jamajka = this.physics.add.sprite(3150, 1680 , "QPH");
+        this.havana = this.physics.add.sprite(1670, 650 , "QPH");
+        this.panama = this.physics.add.sprite(3250, 1580 , "QPH");
         // Zmiana obszaru kolizji dla gracza
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
         this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
@@ -276,6 +276,7 @@ export class WorldMap extends Phaser.Scene {
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
         const changeAngle = 1;
+        console.log(this.boat.x + " " + this.boat.y);
         //const isOnDeepWater = this.physics.overlap(this.boat, this.deepwater);
         // Wyhamowanie przy dryfowaniu (odbiciu od lądu)
         if(this.adrift === 1){
