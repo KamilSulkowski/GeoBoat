@@ -16,6 +16,7 @@ export class Havana extends Phaser.Scene {
        this.maxWaves = 50; // Maximum number of waves allowed on the screen
        this.waveDelay = 2000; // Delay between each wave appearance
        this.lastWaveTime = 0; // Timestamp of the last wave appearance
+       this.regionFlag = "Havana";
     }
     preload(){
 

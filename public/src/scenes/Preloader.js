@@ -33,6 +33,10 @@ export default class Preloader extends Phaser.Scene {
             frameWidth: 64,
             frameHeight: 64
         });
+        this.load.spritesheet('pirateTeacher', "assets/animation/pirateTeacherSheet.png", {
+            frameWidth: 16,
+            frameHeight: 32
+        });
         this.load.spritesheet('seagull', "assets/seagull-Sheet.png", {
             frameWidth: 16,
             frameHeight: 16
@@ -41,6 +45,7 @@ export default class Preloader extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32
         });
+        
         this.load.image("modalBackground", "assets/modalBcg.png")
         this.load.image("scrollMap", "assets/scrollMap.png")
         this.load.image("scrollMapUI", "assets/globe.png")
@@ -81,10 +86,6 @@ export default class Preloader extends Phaser.Scene {
         this.load.plugin('rexsliderplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexsliderplugin.min.js', true);
     }
     create() {
-
-        this.scene.start('worldMap');
-        this.scene.run('ui');
-        this.scene.bringToTop('ui');
-
+        this.scene.start('login');
     }
 }

@@ -2,7 +2,7 @@ export default class Game extends Phaser.Scene {
     constructor() {
         super('game');
         this.boatRespawnX = 3150; //Współrzędne respawnu łodzi
-        this.boatRespawnY = 1750; //Współrzędne respawnu łodzi
+        this.boatRespawnY = 1720; //Współrzędne respawnu łodzi
         this.shipDamaged = false; //Zmienna określająca czy statek został zniszczony
         this.shipRepairTime = 10000; //Czas naprawy statku
         this.shipCooldown = 0;//Zmienna do sprawdzania czasu naprawy
