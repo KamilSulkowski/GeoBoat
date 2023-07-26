@@ -22,17 +22,26 @@ export class Jamajka extends Phaser.Scene {
 
     }
     create() {
-        //Pobranie wartości z pliku UI.js
-        this.uiScene = this.scene.get('ui');
-        this.gameScene = this.scene.get('game');
 
+        //Pobranie wartości z pliku UI.js
+
+        this.gameScene = this.scene.get('game');
+        this.gameScene.currentMap = 'jamajka';
+        this.uiScene = this.scene.get('ui');
         const jamajka = this.make.tilemap({key: 'jamajka'});
 
         this.tileSetWorld = jamajka.addTilesetImage('tile', 'tiled',16,16);
         this.water = jamajka.createLayer('water', this.tileSetWorld);
         this.ground = jamajka.createLayer('ground', this.tileSetWorld);
         this.stones = jamajka.createLayer('stones', this.tileSetWorld);
-
+        this.tileHouseBig = jamajka.addTilesetImage('housebig', 'housebig',16,16);
+        this.tileTower = jamajka.addTilesetImage('tower', 'tower',16,16);
+        this.tilePalm = jamajka.addTilesetImage('palm', 'palm',16,16);
+        this.tileHouse = jamajka.addTilesetImage('house_scaled', 'house_scaled',16,16);
+        jamajka.createLayer('housebig', this.tileHouseBig);
+        jamajka.createLayer('tower', this.tileTower);
+        jamajka.createLayer('palm', this.tilePalm);
+        jamajka.createLayer('house_scaled', this.tileHouse);
         this.ground.setCollisionByProperty({collides: true});
         this.stones.setCollisionByProperty({collides: true});
 
@@ -47,7 +56,7 @@ export class Jamajka extends Phaser.Scene {
         this.boat = this.physics.add.sprite(370, 1320, "boat");
         //this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
         this.port = this.physics.add.sprite(1150, 350 , "PPH");
-        this.cityPort = this.physics.add.sprite(305, 1440, "QPH");
+        this.cityPort = this.physics.add.sprite(590, 1270, "QPH");
         this.backToWorld = this.physics.add.sprite(1900, 1900, "backToWorld");
         this.pirateTeacher = this.physics.add.sprite(385, 1265, "pirateTeacher");
 
@@ -66,7 +75,13 @@ export class Jamajka extends Phaser.Scene {
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
         this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
 
-
+        //Animacja strzałki
+        this.anims.create({
+            key: 'backToWorldAnimation',
+            frames: this.anims.generateFrameNumbers('backToWorld', { start: 0, end: 4 }),
+            frameRate: 10,
+            repeat: -1
+        });
         this.backToWorld.play('backToWorldAnimation');
 
         this.boat.play('boatAnimation');

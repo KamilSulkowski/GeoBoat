@@ -18,7 +18,7 @@ export class Login extends Phaser.Scene {
         submitButton.setAttribute('type', 'submit');
         submitButton.innerText = 'Graj';
         form.appendChild(submitButton);
-        this.add.dom(690, 500, form);
+        this.add.dom(this.cameras.main.centerX-25, this.cameras.main.centerY, form);
 
         const formElement = document.getElementById('form');
         formElement.style.width = '300px';
@@ -53,7 +53,7 @@ export class Login extends Phaser.Scene {
                 scene.bringToTop('ui')
             }
             else {
-                t.text(660, 600, 'Niepoprawny login!', {
+                t.text(640, 450, 'Niepoprawny login!', {
                     fontFamily: 'Arial',
                     fontSize: '16px',
                     fill: '#000000',
@@ -62,18 +62,6 @@ export class Login extends Phaser.Scene {
             }
 
         });
-
-        this.add.rectangle(560, 0, 5, 600, '#ffffff')
-        this.add.rectangle(890, 0, 5, 600, '#ffffff')
-        this.s = this.add.text(550, 300, 'Witaj w GeoBoat!', {
-            fontFamily: 'Arial',
-            fontSize: '40px',
-            fill: '#ffffff',
-            backgroundColor: '#802b00',
-            padding: {
-                x: 20,
-                y: 10,
-            },
-        });
+    this.add.image((this.cameras.main.centerX), (this.cameras.main.centerY-200), 'geoboatLogo');
     }
 }

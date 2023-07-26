@@ -22,15 +22,26 @@ export class Panama extends Phaser.Scene {
 
     }
     create() {
+        this.gameScene = this.scene.get('game');
+        this.gameScene.currentMap = 'panama';
         //Pobranie wartości z pliku UI.js
         this.uiScene = this.scene.get('ui');
-        this.gameScene = this.scene.get('game');
 
         const panama = this.make.tilemap({key: 'panama'});
 
         this.tileSetWorld = panama.addTilesetImage('tile', 'tiled',16,16);
         this.water = panama.createLayer('water', this.tileSetWorld);
         this.ground = panama.createLayer('ground', this.tileSetWorld);
+        this.tileHouseBig = panama.addTilesetImage('housebig', 'housebig',16,16);
+        this.tileTower = panama.addTilesetImage('tower', 'tower',16,16);
+        this.tilePalm = panama.addTilesetImage('palm', 'palm',16,16);
+        this.tileHouse = panama.addTilesetImage('house_scaled', 'house_scaled',16,16);
+        panama.createLayer('housebig', this.tileHouseBig);
+        panama.createLayer('tower', this.tileTower);
+        panama.createLayer('palm', this.tilePalm);
+        panama.createLayer('house_scaled', this.tileHouse);
+
+
 
         this.ground.setCollisionByProperty({collides: true});
 
@@ -44,15 +55,20 @@ export class Panama extends Phaser.Scene {
 
         this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
         this.port = this.physics.add.sprite(125, 940 , "PPH");
-        this.cityPort = this.physics.add.sprite(720, 680, "QPH");
+        this.cityPort = this.physics.add.sprite(520, 580, "QPH");
         this.backToWorld = this.physics.add.sprite(1900, 1900, "backToWorld");
         // Zmiana obszaru kolizji dla gracza
         this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
         this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
 
-
         //Animacja strzałki
+        this.anims.create({
+            key: 'backToWorldAnimation',
+            frames: this.anims.generateFrameNumbers('backToWorld', { start: 0, end: 4 }),
+            frameRate: 10,
+            repeat: -1
+        });
         this.backToWorld.play('backToWorldAnimation');
         // Animacja łódki gracza
         this.boat.play('boatAnimation');
