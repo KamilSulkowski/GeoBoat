@@ -1,6 +1,7 @@
 import {setScore, lockQuestion, unlockQuestion, fetchData, updateUser} from '../data_access/data_access.js';
 
 export function startQuiz() {
+    console.log(this.user.punktyXP);
     categorySelection.call(this);
 }
 async function categorySelection() {
@@ -18,7 +19,7 @@ async function categorySelection() {
     this.questions = await fetchData('dane/pytania').then((data) => this.questions = data);
     this.answers = await fetchData('dane/odpowiedzi').then((data) => this.answers = data);
     this.categoriesJSON = await fetchData('dane/kategorie').then((data) => this.categoriesJSON = data);
-    console.log(this.userData);
+    //console.log(this.userData);
     let regionId = 1;  //Jamajka
 
     //Pobranie kategorii dla wybranego regionu
@@ -32,7 +33,7 @@ async function categorySelection() {
             this.selectedCategories.push(k);
         }
     }
-    console.log([this.selectedCategories]);
+    //console.log([this.selectedCategories]);
 
     //Wypisanie nazw kategorii
     const yOffset = 300;
@@ -385,7 +386,26 @@ function showResult() {
         }
     });
 }
-function showEndScreen() {
+async function showEndScreen() {
+    var i = 0;
+    var water = 0;
+    //Czy zdobyto nowy poziom
+    if (50 * this.user.poziom <= this.user.punktyXP + this.earnedXP)
+        i = 1
+    //Czy głębokie wody będą dostępne
+    if (this.user.poziom > 1)
+        water = 1
+    //Ekran nowego poziomu
+    //////////////////////////
+
+    //Zapis do bazy i aktualizacja danych
+    setScore(this.scoredPoints, this.numberOfQuestions, this.earnedXP, 0);
+    console.log('zdobytexp: ', this.earnedXP);
+    updateUser(this.user.punktyXP + this.earnedXP, this.user.poziom + i, this.user.wytrzymaloscLodzi,
+        this.user.maxPredkoscLodzi, water, 1);
+    this.userData = await fetchData('dane/uzytkownicy').then((data) => this.userData = data);
+    console.log('nowy stan: ', this.user.punktyXP);
+
     // Gratulacje
     let header = 'Gratulacje, quiz ukończony'
 
@@ -431,10 +451,6 @@ function showEndScreen() {
         }
         this.QuestionNumberDisplayed.destroy();
 
-        setScore(this.scoredPoints, this.numberOfQuestions, this.earnedXP, 0);
-        updateUser(this.userData[0].punktyXP + this.earnedXP, this.userData[0].poziom, this.userData[0].wytrzymaloscLodzi,
-            this.userData[0].maxPredkoscLodzi, 1);
-
         this.modal.clear();
         if (this.menuText) {
             this.menuText.destroy();
@@ -449,7 +465,7 @@ function showEndScreen() {
         }
 
         console.log('Selected answer index:', this.selectedAnswerIndex);
-        console.log('Punkty zdobyte!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ', this.scoredPoints);
+        console.log('Punkty zdobyte!: ', this.scoredPoints);
     });
 }
 

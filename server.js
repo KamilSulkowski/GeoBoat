@@ -240,12 +240,13 @@ app.post('/dane/aktualizacjaUzytkownika', (req, res) => {
         poziom: req.body.poziom,
         wytrzymaloscLodzi: req.body.wytrzymaloscLodzi,
         maxPredkoscLodzi: req.body.maxPredkoscLodzi,
+        czyGlebokieWodyDostepne: req.body.czyGlebokieWodyDostepne,
         id: req.body.id
     };
 
-    let sql = "UPDATE uzytkownik SET punktyXP = ?, poziom = ?, wytrzymaloscLodzi = ?, maxPredkoscLodzi = ? WHERE id = ?";
+    let sql = "UPDATE uzytkownik SET punktyXP = ?, poziom = ?, wytrzymaloscLodzi = ?, maxPredkoscLodzi = ?, czyGlebokieWodyDostepne = ? WHERE id = ?";
 
-    db.run(sql, [data.punktyXP, data.poziom, data.wytrzymaloscLodzi, data.maxPredkoscLodzi, data.id], function (err) {
+    db.run(sql, [data.punktyXP, data.poziom, data.wytrzymaloscLodzi, data.maxPredkoscLodzi, data.czyGlebokieWodyDostepne, data.id], function (err) {
         if (err) {
             console.error(err);
             res.status(500).send('Error');

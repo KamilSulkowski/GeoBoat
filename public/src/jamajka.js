@@ -11,6 +11,12 @@ export class Jamajka extends Phaser.Scene {
         this.inZoneKey = null; //Zmienna do zapamiętywania klawisza do wchodzenia na region
         this.adrift = 0;    //Zmienna do kolizji odbicia
         this.boatSpeed = 0; //Zmienna do ustawiania prędkości łódki
+        this.birdGroup = null; //Zmienna do grupy ptaków
+        this.birdTimer = null; //Zmienna do timera ptaków
+        this.maxWaves = 50; // Maximum number of waves allowed on the screen
+        this.waveDelay = 2000; // Delay between each wave appearance
+        this.lastWaveTime = 0; // Timestamp of the last wave appearance
+        this.regionFlag = "Jamajka";
     }
     preload(){
 
@@ -35,32 +41,29 @@ export class Jamajka extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, 2000, 2000);
 
         this.gameScene.currentMap = 'jamajka';
+        this.birdGroup = this.physics.add.group()
+        this.waves = this.physics.add.group();
 
-        this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
+        this.boat = this.physics.add.sprite(370, 1320, "boat");
+        //this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
         this.port = this.physics.add.sprite(1150, 350 , "PPH");
         this.cityPort = this.physics.add.sprite(300, 1355, "QPH");
         this.backToWorld = this.physics.add.sprite(1900, 1900, "backToWorld");
+        this.pirateTeacher = this.physics.add.sprite(365, 1265, "pirateTeacher");
+
+        // Zmiana obszaru kolizji dla npca
+        this.pirateTeacher.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
+        this.pirateTeacher.body.setSize(60, 120, 0.5, 0.5); // Set the size and offset of the collision body
+        this.pirateTeacher.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
+
         // Zmiana obszaru kolizji dla gracza
         this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
         this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
 
-        //Animacja strzałki
-        this.anims.create({
-            key: 'backToWorldAnimation',
-            frames: this.anims.generateFrameNumbers('backToWorld', { start: 0, end: 5 }),
-            frameRate: 10,
-            repeat: -1
-        });
+
         this.backToWorld.play('backToWorldAnimation');
 
-        // Animacja łódki gracza
-        this.anims.create({
-            key: 'boatAnimation',
-            frames: this.anims.generateFrameNumbers('boatAnim', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        });
         this.boat.play('boatAnimation');
         this.boat.anims.pause();
 
@@ -103,6 +106,19 @@ export class Jamajka extends Phaser.Scene {
                 this.inZoneKey.on('down', () => {this.changeMap()});
             }
         });
+        this.physics.add.overlap(this.boat, this.pirateTeacher, () => {
+            this.inZone = true;
+            if (this.inZone === true && !this.learnText) {
+                this.learnText = this.add.text(this.pirateTeacher.x + 0 ,this.pirateTeacher.y - 50, 'Wciśnij E, żeby dowiedzieć się czegoś o tym miejscu.')
+                    .setScale(1.5)
+                    .setBackgroundColor('#808080')
+                    .setColor('#000000')
+                    .setStyle({fontFamily: "Arial"});
+                this.inZoneKey = this.input.keyboard.addKey('E');
+                this.inZoneKey.on('down', () => { this.uiScene.toggleLearning(this.regionFlag)});
+            }
+        });
+
         // Animacja łódki gracza
         this.anims.create({
             key: 'boatAnimation',
@@ -127,7 +143,10 @@ export class Jamajka extends Phaser.Scene {
         super.update(time, delta);
         this.gameScene.timer += delta;
         this.gameScene.shipCooldown += delta;
-        console.log(this.boat.x + " " + this.boat.y )
+        this.manageBirds();
+        if (this.waves.getLength() < 100) {
+            this.createWaves();
+        }
         // Cooldown debuffa (Naprawa łodzi w czasie)
         this.shipDebuff()
         // Zmiana strzałki kompasu w zależności od pozycji łodzi
@@ -166,6 +185,13 @@ export class Jamajka extends Phaser.Scene {
             if (this.backToWorldText) {
                 this.backToWorldText.destroy();
                 this.backToWorldText = null;
+                this.inZoneKey.destroy();
+            }
+        }
+        if (!this.inZone && !this.physics.overlap(this.boat, this.pirateTeacher)) {
+            if (this.learnText) {
+                this.learnText.destroy();
+                this.learnText = null;
                 this.inZoneKey.destroy();
             }
         }
@@ -314,6 +340,93 @@ export class Jamajka extends Phaser.Scene {
     deepWaterHandleCollision() {
         console.log("deepwater");
 
+    }
+    // Function to manage birds
+    manageBirds() {
+        const maxBirds = 90;
+
+        // Create bird group if not already created
+        if (!this.birdGroup) {
+            this.birdGroup = this.physics.add.group();
+        }
+
+        // Check if the number of birds is less than the maximum limit
+        if (this.birdGroup.getLength() < maxBirds) {
+            // Randomly spawn a bird at a random position on the map
+            const x = Phaser.Math.Between(0, 2000);
+            const y = Phaser.Math.Between(0, 2000);
+
+            // Create the bird sprite and add it to the bird group
+            const bird = this.birdGroup.create(x, y, 'seagull');
+            bird.anims.play('seagullAnimation', true);
+
+            // Set a timer to remove the bird after 10 seconds
+            this.time.addEvent({
+                delay: 10000,
+                callback: () => {
+                    bird.destroy();
+                },
+                callbackScope: this,
+            });
+
+            // Add random velocity to the bird
+            const birdSpeed = Phaser.Math.Between(50, 150);
+            bird.setVelocity(Phaser.Math.Between(-birdSpeed, birdSpeed), Phaser.Math.Between(-birdSpeed, birdSpeed));
+
+            // Update bird's rotation based on its velocity (direction of flight)
+            bird.rotation = Phaser.Math.Angle.Between(0, 0, bird.body.velocity.x, bird.body.velocity.y) + Math.PI / 2;
+        }
+
+        // Update rotation of existing birds
+        this.birdGroup.getChildren().forEach(bird => {
+            bird.rotation = Phaser.Math.Angle.Between(0, 0, bird.body.velocity.x, bird.body.velocity.y) + Math.PI / 2;
+        });
+    }
+    createWaves() {
+        const currentTime = this.time.now;
+
+        // Check if the maximum number of waves is already on the screen
+        if (this.waves.getLength() < this.maxWaves && currentTime - this.lastWaveTime >= this.waveDelay) {
+            // Randomly spawn a wave at a random position on the deepwater layer
+            const waveX = Phaser.Math.Between(0, 2000);
+            const waveY = Phaser.Math.Between(0, 2000);
+
+            // Check if the wave is overlapping with the ground layer, if so, skip creating the wave
+            if (this.ground.getTileAtWorldXY(waveX, waveY)) {
+                return;
+            }
+
+            // Create the wave sprite on the deepwater layer
+            const wave = this.waves.create(waveX, waveY, 'wave');
+            wave.anims.play('waveAnimation', true);
+
+            // Set a timer to remove the wave after 10 seconds
+            this.time.addEvent({
+                delay: 10000,
+                callback: () => {
+                    wave.destroy();
+                },
+                callbackScope: this,
+            });
+
+            // Set the wave's velocity to move towards the top right corner of the screen
+            const waveSpeed = Phaser.Math.Between(30, 100);
+            const waveAngle = Phaser.Math.Angle.Between(waveX, waveY, 2000, 0);
+            wave.setVelocity(waveSpeed * Math.cos(waveAngle), waveSpeed * Math.sin(waveAngle));
+
+            this.lastWaveTime = currentTime; // Update the timestamp of the last wave appearance
+
+            // Check for collision with the ground layer
+            this.physics.add.collider(wave, this.ground, () => {
+                wave.destroy(); // Destroy the wave upon collision with the ground
+            });
+            // Check for collision with the ship
+            this.physics.add.collider(wave, this.boat, () => {
+                // Reduce the ship's speed by 10 upon collision with a wave
+                this.boatSpeed -= 10;
+                wave.destroy();
+            });
+        }
     }
 }
 
