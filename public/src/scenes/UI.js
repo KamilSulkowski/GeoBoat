@@ -264,8 +264,22 @@ export default class UI extends Phaser.Scene {
             this.boatRepair.setVisible(false);
         }
 
-        this.coords.setText('Lat - ' + this.gameScene.boat.x + ' Long - ' + this.gameScene.boat.y)
-        this.regionText.setText('Region: ' + this.scene.currentMap)
+        try {
+            this.coords.setText('Lat - ' + this.gameScene.boat.x + ' Long - ' + this.gameScene.boat.y);
+            this.regionText.setText('Region: ' + this.scene.currentMap);
+        } catch (error) {
+            console.error("Błąd przy ustawianiu tekstu regionu:", error);
+
+            // Ponowne próbowanie po 0.5 sekundy
+            setTimeout(() => {
+                try {
+                    this.regionText.setText('Region: ' + this.scene.currentMap);
+                } catch (error) {
+                    console.error("Druga próba ustawiania tekstu regionu nie powiodła się:", error);
+                }
+            }, 1000);
+        }
+
 
         // Update tekstu pod HP
         if(this.scene.HP != 3){
