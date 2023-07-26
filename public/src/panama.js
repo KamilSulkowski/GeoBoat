@@ -22,9 +22,10 @@ export class Panama extends Phaser.Scene {
 
     }
     create() {
+        this.gameScene = this.scene.get('game');
+        this.gameScene.currentMap = 'panama';
         //Pobranie wartości z pliku UI.js
         this.uiScene = this.scene.get('ui');
-        this.gameScene = this.scene.get('game');
 
         const panama = this.make.tilemap({key: 'panama'});
 

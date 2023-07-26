@@ -16,6 +16,7 @@ export default class UI extends Phaser.Scene {
         this.scrollHeight = 130;
         this.leftScrollScrolled = false;
         this.rightScrollScrolled = false;
+        this.regionText = null;
     }
     preload() {
     }
@@ -89,12 +90,11 @@ export default class UI extends Phaser.Scene {
         .setFontSize(18)
         .setColor('#ffffff')
         .setStyle({fontFamily: "CustomFont"});
-        this.regionText = this.add.text(this.bw*0.5, this.bh-(this.bh-58), 'Region: ' + this.scene.currentMap)
-        .setOrigin(0.5)
-        .setScale(1)
-        .setFontSize(13)
-        .setColor('#ffffff')
-        .setStyle({fontFamily: "CustomFont"});
+        this.regionTextProfil = this.add.text(this.bw * 0.5, this.bh - (this.bh - 58), 'Region: ', {
+            fontFamily: 'CustomFont',
+            fontSize: '13px',
+            color: '#ffffff'
+        }).setOrigin(0.5).setScale(1);
 
         // Mapa
         this.scrollMap = this.add.image(this.bw-126, this.bh-(this.bh-38), "scrollMapUI")
@@ -248,7 +248,15 @@ export default class UI extends Phaser.Scene {
         this.menu.angle += this.scene.currentBoatSpeed/300;
         // Update paska szybkości
         this.updateSpeedBar();
-        //console.log(this.scene.HP)
+        this.coords.setText('Lat - ' + this.gameScene.boat.x + ' Long - ' + this.gameScene.boat.y);
+        this.regionTextProfil.text = 'Region: ' + this.scene.currentMap;
+        try {
+            this.regionText.text = 'Region: ' + this.scene.currentMap;
+        } catch (error) {
+            console.log("256 - UI -> tu jest błąd ale jednocześnie wszystko działa");
+        }
+
+
 
         //Wyświetlanie nazwy i poziomu gracza
         if (this.userData) {
@@ -262,22 +270,6 @@ export default class UI extends Phaser.Scene {
             this.boatRepair.setVisible(true);
         }else{
             this.boatRepair.setVisible(false);
-        }
-
-        try {
-            this.coords.setText('Lat - ' + this.gameScene.boat.x + ' Long - ' + this.gameScene.boat.y);
-            this.regionText.setText('Region: ' + this.scene.currentMap);
-        } catch (error) {
-            console.error("Błąd przy ustawianiu tekstu regionu:", error);
-
-            // Ponowne próbowanie po 0.5 sekundy
-            setTimeout(() => {
-                try {
-                    this.regionText.setText('Region: ' + this.scene.currentMap);
-                } catch (error) {
-                    console.error("Druga próba ustawiania tekstu regionu nie powiodła się:", error);
-                }
-            }, 1000);
         }
 
 

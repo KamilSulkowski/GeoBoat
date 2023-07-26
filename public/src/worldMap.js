@@ -142,7 +142,7 @@ export class WorldMap extends Phaser.Scene {
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
 
-
+        this.physics.add.collider(this.boat, this.deepwater, this.handleCollision , null, this);
         this.physics.add.collider(this.boat, this.ground, this.handleCollision , null, this);
         this.physics.add.collider(this.boat, this.extra, this.handleCollision , null, this);
     }

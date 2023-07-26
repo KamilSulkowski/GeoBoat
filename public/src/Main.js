@@ -23,7 +23,7 @@ export default new Phaser.Game({
             debug: true
         },
     },
-    scene: [Preloader, Login, Game, UI, WorldMap, Jamajka, Havana, Panama],
+    scene: [Preloader, Login, UI, Game, WorldMap, Jamajka, Havana, Panama],
     dom: {
         createContainer: true
     },

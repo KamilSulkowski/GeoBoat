@@ -22,9 +22,10 @@ export class Havana extends Phaser.Scene {
 
     }
     create() {
+        this.gameScene = this.scene.get('game');
+        this.gameScene.currentMap = 'havana';
         //Pobranie wartości z pliku UI.js
         this.uiScene = this.scene.get('ui');
-        this.gameScene = this.scene.get('game');
 
         const havana = this.make.tilemap({key: 'havana'});
 

@@ -22,10 +22,12 @@ export class Jamajka extends Phaser.Scene {
 
     }
     create() {
-        //Pobranie wartości z pliku UI.js
-        this.uiScene = this.scene.get('ui');
-        this.gameScene = this.scene.get('game');
 
+        //Pobranie wartości z pliku UI.js
+
+        this.gameScene = this.scene.get('game');
+        this.gameScene.currentMap = 'jamajka';
+        this.uiScene = this.scene.get('ui');
         const jamajka = this.make.tilemap({key: 'jamajka'});
 
         this.tileSetWorld = jamajka.addTilesetImage('tile', 'tiled',16,16);
