@@ -10,6 +10,7 @@ export class WorldMap extends Phaser.Scene {
         this.boat = null; // Przypisujemy łódź do właściwości klasy
         this.engine = 0;    //Zmienna do sprawdzania stanu rozpędu/hamowania łodzi
         this.inZone = false;//Flaga kolizji
+        this.inDeepWaterZone = false;
         this.inZoneKey = null; //Zmienna do zapamiętywania klawisza do wchodzenia na region
         this.adrift = 0;    //Zmienna do kolizji odbicia
         this.boatSpeed = 0; //Zmienna do ustawiania prędkości łódki
@@ -17,7 +18,7 @@ export class WorldMap extends Phaser.Scene {
         this.birdGroup = null; //Zmienna do grupy ptaków
         this.birdTimer = null; //Zmienna do timera ptaków
         this.waves = null; // Group to hold all the waves
-        this.maxWaves = 10; // Maximum number of waves allowed on the screen
+        this.maxWaves = 100; // Maximum number of waves allowed on the screen
         this.waveDelay = 2000; // Delay between each wave appearance
         this.lastWaveTime = 0; // Timestamp of the last wave appearance
     }
@@ -45,7 +46,6 @@ export class WorldMap extends Phaser.Scene {
         this.ground.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
         this.extra.setRenderOrder({renderX: 0, renderY: 0, renderWidth: 1920, renderHeight: 1080 });
 
-        //this.water.setCollisionByProperty({collides: true});
         this.deepwater.setCollisionByProperty({collides: true});
         this.ground.setCollisionByProperty({collides: true});
         this.extra.setCollisionByProperty({collides: true});
@@ -53,6 +53,7 @@ export class WorldMap extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, 8000, 4000); // Ustaw granice świata
 
         this.gameScene.currentMap = 'worldMap';
+        this.birdGroup = this.physics.add.group()
         this.waves = this.physics.add.group();
 
         // ładowanie łódki
@@ -76,7 +77,7 @@ export class WorldMap extends Phaser.Scene {
         // Animacja ptaka
         this.anims.create({
             key: 'seagullAnimation',
-            frames: this.anims.generateFrameNumbers('seagull', { start: 0, end: 3 }),
+            frames: this.anims.generateFrameNumbers('seagull', { start: 0, end: 2 }),
             frameRate: 6,
             repeat: -1
         });
@@ -140,10 +141,8 @@ export class WorldMap extends Phaser.Scene {
 
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
-        // Enable collisions for waves with the ground layer
-        this.physics.add.collider(this.waves, this.ground, this.handleWaveCollision, null, this);
 
-        this.physics.add.collider(this.boat, this.deepwater, this.handleCollision , null, this);
+
         this.physics.add.collider(this.boat, this.ground, this.handleCollision , null, this);
         this.physics.add.collider(this.boat, this.extra, this.handleCollision , null, this);
     }
@@ -154,7 +153,7 @@ export class WorldMap extends Phaser.Scene {
         this.gameScene.timer += delta;
         this.gameScene.shipCooldown += delta;
         this.manageBirds();
-        if (this.waves.getLength() < 10) {
+        if (this.waves.getLength() < 300) {
             this.createWaves();
         }
         // Cooldown debuffa (Naprawa łodzi w czasie)
@@ -200,7 +199,11 @@ export class WorldMap extends Phaser.Scene {
                 this.inZoneKey.destroy();
             }
         }
-
+        this.inDeepWaterZone = false;
+        if (this.inDeepWaterZone === false && this.physics.overlap(this.boat, this.deepwater) === false) {
+            this.gameScene.boatMaxSpeed = 150;
+            this.gameScene.boatMaxReverseSpeed = -50;
+        }
     }
     handleCollision(){
         if (this.gameScene.timer >= 100) {
@@ -320,12 +323,6 @@ export class WorldMap extends Phaser.Scene {
                 this.gameScene.timer = 0;
             }
         }
-
-        // if (isOnDeepWater) {
-        //     this.gameScene.boatMaxReverseSpeed = -20;
-        //     this.gameScene.boatMaxSpeed = 50;
-        // }
-
     }
     // funkcja do zatrzymywania i cofania łodzi
     boatStop(){
@@ -374,10 +371,10 @@ export class WorldMap extends Phaser.Scene {
         // Check if the number of birds is less than the maximum limit
         if (this.birdGroup.getLength() < maxBirds) {
             // Randomly spawn a bird at a random position on the map
-            const x = Phaser.Math.Between(0, this.physics.world.bounds.width);
-            const y = Phaser.Math.Between(0, this.physics.world.bounds.height);
+            const x = Phaser.Math.Between(0, 4000);
+            const y = Phaser.Math.Between(0, 4000);
 
-            // Create the bird sprite and add it to the bird group
+            // Create the bird sprite and add it to the bird groupp
             const bird = this.birdGroup.create(x, y, 'seagull');
             bird.anims.play('seagullAnimation', true);
 
@@ -409,16 +406,9 @@ export class WorldMap extends Phaser.Scene {
 
         // Check if the maximum number of waves is already on the screen
         if (this.waves.getLength() < this.maxWaves && currentTime - this.lastWaveTime >= this.waveDelay) {
-            // Randomly spawn a wave at a random position near the boat
-            const boatX = this.boat.x;
-            const boatY = this.boat.y;
-            const distance = Phaser.Math.Between(100, 500); // Distance from the boat
-
-            // Calculate the position of the wave in front of the boat
-            const angle = Phaser.Math.FloatBetween(0, Math.PI * 2);
-            const waveX = boatX + distance * Math.cos(angle);
-            const waveY = boatY + distance * Math.sin(angle);
-
+            // Randomly spawn a wave at a random position on the deepwater layer
+            const waveX = Phaser.Math.Between(0, 4000);
+            const waveY = Phaser.Math.Between(0, 4000);
 
             // Check if the wave is overlapping with the ground layer, if so, skip creating the wave
             if (this.ground.getTileAtWorldXY(waveX, waveY)) {
@@ -438,9 +428,9 @@ export class WorldMap extends Phaser.Scene {
                 callbackScope: this,
             });
 
-            // Set the wave's velocity to move towards the boat
+            // Set the wave's velocity to move towards the top right corner of the screen
             const waveSpeed = Phaser.Math.Between(30, 100);
-            const waveAngle = Phaser.Math.Angle.Between(waveX, waveY, boatX, boatY);
+            const waveAngle = Phaser.Math.Angle.Between(waveX, waveY, 4000, 0);
             wave.setVelocity(waveSpeed * Math.cos(waveAngle), waveSpeed * Math.sin(waveAngle));
 
             this.lastWaveTime = currentTime; // Update the timestamp of the last wave appearance
@@ -456,10 +446,6 @@ export class WorldMap extends Phaser.Scene {
                 wave.destroy();
             });
         }
-    }
-    handleWaveCollision(wave, ground) {
-        // Destroy the wave when it collides with the ground
-        wave.destroy();
     }
 }
 

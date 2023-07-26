@@ -121,7 +121,7 @@ export default class UI extends Phaser.Scene {
 
         // Ikona użytkownika
         this.profileBorder = this.add.image(this.bw*0.5-100, this.bh-(this.bh-40), "profileBorder")
-        this.profilePic = this.add.image(this.bw*0.5-100, this.bh-(this.bh-40), "profilePic")
+        this.profilePic = this.add.image(this.bw*0.5-100, this.bh-(this.bh-40), "tadeuszMiniProfil")
         this.profilePic.setInteractive();
         this.profilePic.on('pointerdown', this.toggleProfil, this);
         this.input.keyboard.on('keydown-P', this.toggleProfil, this);
@@ -247,7 +247,6 @@ export default class UI extends Phaser.Scene {
         this.menu.angle += this.scene.currentBoatSpeed/300;
         // Update paska szybkości
         this.updateSpeedBar();
-        console.log(this.scene.HP)
         // Update tekstu stanu łodzi
         if(this.scene.HP === 0){
             this.boatRepair.setVisible(true);
@@ -561,7 +560,7 @@ export default class UI extends Phaser.Scene {
         const squareSize = 150;
 
         // Dodanie obrazu nałożonego na kwadrat
-        this.profilePic = this.add.image(modalX+95, modalY+130, "profilePic");
+        this.profilePic = this.add.image(modalX+95, modalY+130, "tadeuszProfil");
         this.profilePic.setScale(2)
         this.profilePic.setDisplaySize(squareSize, squareSize)
 

@@ -58,8 +58,10 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("scrollMenuMovement", "assets/scrollMenuMovement.png")
         this.load.image("scrollMenuInputs", "assets/scrollMenuInputs.png")
         this.load.image("scrollMenuMiddle", "assets/scrollMenuMiddle.png")
+        this.load.image("tadeuszProfil", "assets/tadeuszpiratlvl100.png")
+        this.load.image("tadeuszMiniProfil", "assets/tadeuszpiratlvl100Profil.png")
 
-        this.load.image('worldtiles', "assets/worldtiles.png");
+
         this.load.image('tiled', "assets/worldtiles.png");
 
         this.load.tilemapTiledJSON('worldMap','Maps/worldMap.json');
