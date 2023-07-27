@@ -58,7 +58,7 @@ export class WorldMap extends Phaser.Scene {
         this.waves = this.physics.add.group();
 
         // ładowanie łódki
-        this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
+        this.boat = this.physics.add.sprite(3150, 1680, "boat");
         this.jamajka = this.physics.add.sprite(3150, 1680 , "QPH");
         this.havana = this.physics.add.sprite(1670, 650 , "QPH");
         this.panama = this.physics.add.sprite(3250, 1580 , "QPH");
@@ -248,8 +248,8 @@ export class WorldMap extends Phaser.Scene {
         console.log("zmiana mapy1: " + this.gameScene.currentMap + " inzone: " + this.inZone);
         switch (this.region) {
             case 'jamajka':
-                this.gameScene.boatRespawnX = 1800;
-                this.gameScene.boatRespawnY = 1800;
+                this.gameScene.boatRespawnX = 600;
+                this.gameScene.boatRespawnY = 600;
                 this.gameScene.currentMap = 'jamajka';
                 this.scene.stop('worldMap');
                 this.scene.launch('jamajka');

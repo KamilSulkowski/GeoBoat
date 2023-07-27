@@ -56,16 +56,15 @@ export class Jamajka extends Phaser.Scene {
         this.birdGroup = this.physics.add.group()
         this.waves = this.physics.add.group();
 
-        this.boat = this.physics.add.sprite(370, 1320, "boat");
-        //this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
+        this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
         this.port = this.physics.add.sprite(1150, 350 , "PPH");
-        this.cityPort = this.physics.add.sprite(590, 1270, "QPH");
+        this.cityPort = this.physics.add.sprite(900, 370, "QPH");
         this.backToWorld = this.physics.add.sprite(1900, 1900, "backToWorld");
-        this.pirateTeacher = this.physics.add.sprite(385, 1265, "pirateTeacher");
+        this.pirateTeacher = this.physics.add.sprite(220, 1300, "pirateTeacher");
 
         // Zmiana obszaru kolizji dla npca naukowego
         this.pirateTeacher.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
-        this.pirateTeacher.body.setSize(120, 140, 0.5, 0.5); // Set the size and offset of the collision body
+        this.pirateTeacher.body.setSize(400, 170, 0.5, 0.5); // Set the size and offset of the collision body
         this.pirateTeacher.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
 
         // Zmiana obszaru kolizji dla npca quizowego
@@ -90,20 +89,6 @@ export class Jamajka extends Phaser.Scene {
         this.boat.play('boatAnimation');
         this.boat.anims.pause();
 
-        //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
-        //obiektem aktualnie może być łódka
-        this.physics.add.overlap(this.boat, this.port, () => {
-            this.inZone = true;
-            if (this.inZone === true && !this.text) {
-                this.text = this.add.text(this.port.x + 0 ,this.port.y - 50, 'Czy chcesz wejść na region ?')
-                    .setScale(1.5)
-                    .setBackgroundColor('#808080')
-                    .setColor('#000000')
-                    .setStyle({fontFamily: "Arial"});
-                this.inZoneKey = this.input.keyboard.addKey('E')
-                this.inZoneKey.on('down', () => {this.changeMap()});
-            }
-        });
         //Wpływanie na quizy, alert
         this.physics.add.overlap(this.boat, this.cityPort, () => {
             this.inZone = true;
@@ -192,13 +177,6 @@ export class Jamajka extends Phaser.Scene {
         this.gameScene.boatCurrentY = this.boat.y;
         // Sprawdzenie, czy łódka opuściła obszar kolizji
         this.inZone = false;
-        if (this.inZone === false && !this.physics.overlap(this.boat, this.port)) {
-            if (this.text) {
-                this.text.destroy();
-                this.text = null;
-                this.inZoneKey.destroy();
-            }
-        }
         if (!this.inZone && !this.physics.overlap(this.boat, this.cityPort)) {
             if (this.quizText) {
                 this.quizText.destroy();
