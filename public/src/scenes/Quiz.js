@@ -1,10 +1,10 @@
 import {setScore, lockQuestion, unlockQuestion, fetchData, updateUser} from '../data_access/data_access.js';
 
-export function startQuiz() {
+export function startQuiz(regionID) {
     console.log(this.user.punktyXP);
-    categorySelection.call(this);
+    categorySelection.call(this, regionID);
 }
-async function categorySelection() {
+async function categorySelection(regionID) {
     this.modalWidth = 800;
     this.modalHeight = 600;
     this.modalX = (this.bw - this.modalWidth) / 2;
@@ -20,7 +20,7 @@ async function categorySelection() {
     this.answers = await fetchData('dane/odpowiedzi').then((data) => this.answers = data);
     this.categoriesJSON = await fetchData('dane/kategorie').then((data) => this.categoriesJSON = data);
     //console.log(this.userData);
-    let regionId = 1;  //Jamajka
+    let regionId = regionID;  //REGION
 
     //Pobranie kategorii dla wybranego regionu
     this.categories = [];

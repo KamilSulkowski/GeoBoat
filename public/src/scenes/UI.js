@@ -26,7 +26,7 @@ export default class UI extends Phaser.Scene {
         });
     }
 
-    async create(data) {
+    create(data) {
         this.gameScene = this.scene.get('worldMap');
         this.sceneJam = this.scene.get('Jamajka');
         this.sceneHav = this.scene.get('Havana');
@@ -237,7 +237,7 @@ export default class UI extends Phaser.Scene {
         try {
             this.regionText.text = 'Region: ' + this.scene.currentMap;
         } catch (error) {
-            console.log("256 - UI -> tu jest błąd ale jednocześnie wszystko działa");
+            //console.log("256 - UI -> tu jest błąd ale jednocześnie wszystko działa");
         }
 
 
@@ -637,13 +637,13 @@ export default class UI extends Phaser.Scene {
         }
     }
 
-    toggleQuiz(){
+    toggleQuiz(regionID){
         if (this.quizOpen) {
             console.log("quiz close")
             closeQuiz.call(this);
         } else {
             console.log("quiz open")
-            startQuiz.call(this);
+            startQuiz.call(this, regionID);
         }
     }
 

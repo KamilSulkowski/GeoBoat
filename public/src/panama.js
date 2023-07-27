@@ -88,6 +88,14 @@ export class Panama extends Phaser.Scene {
                 //this.inZoneKey.on('down', () => {this.changeMap()});
             }
         });
+
+        //Wyświetlanie nazwy i poziomu gracza
+        if (this.uiScene.userData) {
+            this.uiScene.user = this.uiScene.userData.find((row) => row.nazwa === this.uiScene.userName);
+            this.uiScene.userText.setText(this.uiScene.userName);
+            this.uiScene.expText.setText('Level ' + this.uiScene.user.poziom);
+        }
+
         //Wpływanie na quizy, alert
         this.physics.add.overlap(this.boat, this.cityPort, () => {
             this.inZone = true;
@@ -98,7 +106,7 @@ export class Panama extends Phaser.Scene {
                     .setColor('#000000')
                     .setStyle({fontFamily: "Arial"});
                 this.inZoneKey = this.input.keyboard.addKey('Q');
-                this.inZoneKey.on('down', () => { this.uiScene.toggleQuiz()});
+                this.inZoneKey.on('down', () => { this.uiScene.toggleQuiz(2)});
             }
         });
 
