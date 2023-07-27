@@ -53,7 +53,7 @@ export class Jamajka extends Phaser.Scene {
         this.birdGroup = this.physics.add.group()
         this.waves = this.physics.add.group();
 
-        this.boat = this.physics.add.sprite(370, 1330, "boat");
+        this.boat = this.physics.add.sprite(530, 1330, "boat");
         //this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
         this.port = this.physics.add.sprite(1150, 350 , "PPH");
         this.cityPort = this.physics.add.sprite(590, 1270, "QPH");
@@ -105,12 +105,12 @@ export class Jamajka extends Phaser.Scene {
         this.physics.add.overlap(this.boat, this.cityPort, () => {
             this.inZone = true;
             if (this.inZone === true && !this.quizText) {
-                this.quizText = this.add.text(this.cityPort.x + 0 ,this.cityPort.y - 50, 'Wciśnij Q, żeby przejść do quizu.')
+                this.quizText = this.add.text(this.cityPort.x + 0 ,this.cityPort.y - 50, 'Wciśnij E, żeby przejść do quizu.')
                     .setScale(1.5)
                     .setBackgroundColor('#808080')
                     .setColor('#000000')
                     .setStyle({fontFamily: "Arial"});
-                this.inZoneKey = this.input.keyboard.addKey('Q');
+                this.inZoneKey = this.input.keyboard.addKey('E');
                 this.inZoneKey.on('down', () => { this.uiScene.toggleQuiz()});
             }
         });

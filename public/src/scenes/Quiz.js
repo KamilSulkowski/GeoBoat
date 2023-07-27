@@ -11,9 +11,8 @@ async function categorySelection() {
     this.modalY = (this.bh - this.modalHeight) / 2;
 
     this.quizOpen = true;
+    this.quizBackground = this.add.image(this.bw*0.5, this.bh*0.5, "modalBackgroundBig")
     this.modal = this.add.graphics();
-    this.modal.fillStyle(0xffffff, 0.95);
-    this.modal.fillRoundedRect(this.modalX, this.modalY, this.modalWidth, this.modalHeight, 25);
 
     //Pobranie danych z bazy
     this.questions = await fetchData('dane/pytania').then((data) => this.questions = data);
@@ -36,40 +35,52 @@ async function categorySelection() {
     //console.log([this.selectedCategories]);
 
     //Wypisanie nazw kategorii
-    const yOffset = 300;
+    const yOffset = 250;
     const yOffsetIncrement = 60;
     const wordWrapWidth = 760;
     this.categoriesTexts = [];
+    this.buttons = [];
     for (let i = 0; i < this.categories.length; i++) {
-        this.categoriesText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + yOffset + yOffsetIncrement * i, this.categories[i], {
-            fontFamily: 'Arial',
+        this.button = this.add.sprite(this.modalX + this.modalWidth / 2, this.modalY + yOffset + yOffsetIncrement * i, "buttonAnim")
+        this.button.scale = 1.75;
+        this.categoriesText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + yOffset + yOffsetIncrement * i -5, this.categories[i], {
+            fontFamily: 'ModalFont',
             fontSize: '24px',
-            fill: '#000000',
+            fill: '#ffffff',
+            padding: {
+                x: 20,
+                y: 10,
+            },
             wordWrap: { width: wordWrapWidth, useAdvancedWrap: true }
 
         });
         this.categoriesText.setOrigin(0.5);
-        this.categoriesText.setBackgroundColor('#f0f0f0');
         this.categoriesText.setInteractive({ useHandCursor: true });
         this.categoriesText.on('pointerdown', () => {
             handleAnswerClick(i);
         });
         this.categoriesTexts.push(this.categoriesText);
+        this.buttons.push(this.button);
     }
+
+
+
+
+
 
     //Wybieranie kategorii
     const handleAnswerClick = (index) => {
         for (let i = 0; i < this.categoriesTexts.length; i++) {
-            this.categoriesTexts[i].setBackgroundColor('#f0f0f0');
+            this.categoriesTexts[i].setColor('#ffffff');
         }
-        this.categoriesTexts[index].setBackgroundColor('#aaffaa');
+        this.categoriesTexts[index].setColor('#52a5ff');
         this.selectedAnswerIndex = index;
         this.categoryButton.visible = true;
     };
 
     //Przycisk zatwierdzania wyboru
     this.categoryButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Zatwierdź', {
-        fontFamily: 'Arial',
+        fontFamily: 'ModalFont',
         fontSize: '24px',
         fill: '#ffffff',
         backgroundColor: '#007bff',
@@ -86,6 +97,9 @@ async function categorySelection() {
             this.categoriesText.destroy();
         }
         this.categoryButton.destroy();
+        for(this.buttonDestroyer of this.buttons){
+            this.buttonDestroyer.destroy();
+        }
 
         console.log([this.selectedAnswerIndex]);
         showQuiz.call(this, this.selectedCategories[this.selectedAnswerIndex]);
@@ -142,13 +156,8 @@ function prepareQuiz(selectedCategory) {
 
 function showQuiz(categoryNumber){
     //Tytuł
-    this.menuText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + 20, 'Quiz', { fontFamily: 'Arial', fontSize: '24px', fill: '#000000' });
+    this.menuText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + 20, 'Quiz', { fontFamily: 'ModalFont', fontSize: '24px', fill: '#000000' });
     this.menuText.setOrigin(0.5);
-
-    // Linia oddzielająca
-    const LineSep = new Phaser.Geom.Line(this.modalX, this.modalY + 50, this.modalX + this.modalWidth, this.modalY + 50);
-    this.modal.lineStyle(2, 0x000000);
-    this.modal.strokeLineShape(LineSep);
 
     // Postać co będzie se ruszać ustami jak pytanie będzie lecieć
     this.quizCharacterImage = this.add.image(this.modalX + 110, this.modalY + 150, 'QTPH');
@@ -189,14 +198,8 @@ function drawQuestionAndAnswers(){
 
     this.quizQuestionTextContent = tempQuestion.question
     this.quizQuestionText = this.add.text(this.modalX + this.modalWidth / 2 + 380, this.modalY + 235, this.quizQuestionTextContent,
-        { fontFamily: 'Arial', fontSize: '24px', fill: '#000000', wordWrap: { width: 580, useAdvancedWrap: true }});
+        { fontFamily: 'ModalFont', fontSize: '24px', fill: '#ffffff', wordWrap: { width: 580, useAdvancedWrap: true }});
     this.quizQuestionText.setOrigin(1);
-    this.quizQuestionText.setBackgroundColor('#f0f0f0');
-
-    // Linia oddzielająca
-    const LineSep2 = new Phaser.Geom.Line(this.modalX, this.modalY + 250, this.modalX + this.modalWidth, this.modalY + 250);
-    this.modal.lineStyle(2, 0x000000);
-    this.modal.strokeLineShape(LineSep2);
 
     // Odpowiedzi
     const answerTexts = tempQuestion.answers
@@ -213,14 +216,14 @@ function drawQuestionAndAnswers(){
 
     for (let i = 0; i < answerTexts.length; i++) {
         this.quizAnswerText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + yOffset + yOffsetIncrement * i, answerTexts[i], {
-            fontFamily: 'Arial',
+            fontFamily: 'ModalFont',
             fontSize: fontSize,
             fill: textColor,
             wordWrap: { width: wordWrapWidth, useAdvancedWrap: true }
 
         });
         this.quizAnswerText.setOrigin(0.5);
-        this.quizAnswerText.setBackgroundColor(backgroundColor);
+        this.quizAnswerText.setColor(backgroundColor);
         this.quizAnswerText.setInteractive({ useHandCursor: true });
         this.quizAnswerText.on('pointerdown', () => {
             handleAnswerClick(i);
@@ -230,9 +233,9 @@ function drawQuestionAndAnswers(){
 
     const handleAnswerClick = (index) => {
         for (let i = 0; i < this.quizAnswerTexts.length; i++) {
-            this.quizAnswerTexts[i].setBackgroundColor(backgroundColor);
+            this.quizAnswerTexts[i].setColor(backgroundColor);
         }
-        this.quizAnswerTexts[index].setBackgroundColor('#aaffaa');
+        this.quizAnswerTexts[index].setColor('#aaffaa');
         this.selectedAnswerIndex = index; // Zapamiętanie indeksu wybranej odpowiedzi
         this.submitButton.visible = true;
     };
@@ -241,7 +244,7 @@ function drawQuestionAndAnswers(){
     this.QuestionNumberDisplayedContent = (this.currentQuestion) + " / " + (this.numberOfQuestions)
     console.log(this.QuestionNumberDisplayedContent)
     this.QuestionNumberDisplayed = this.add.text(this.modalX + this.modalWidth / 2 - 340, this.modalY + this.modalHeight - 45, this.QuestionNumberDisplayedContent, {
-        fontFamily: 'Arial',
+        fontFamily: 'ModalFont',
         fontSize: '24px',
         fill: '#000000',
         padding: {
@@ -253,7 +256,7 @@ function drawQuestionAndAnswers(){
 
     //Przycisk odpowiedzi
     this.submitButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Zatwierdź', {
-        fontFamily: 'Arial',
+        fontFamily: 'ModalFont',
         fontSize: '24px',
         fill: '#ffffff',
         backgroundColor: '#007bff',
@@ -332,13 +335,13 @@ function showResult() {
         information = 'Błędna odpowiedź';
     }
 
-    this.correctionText = this.add.text(this.modalX + this.modalWidth / 2 + 180, this.modalY + 555, information,
-        { fontFamily: 'Arial', fontSize: '24px', fill: '#000000', wordWrap: { width: 580, useAdvancedWrap: true }});
+    this.correctionText = this.add.text(this.modalX + this.modalWidth / 2 + 180,  this.modalY + this.modalHeight - 30, information,
+        { fontFamily: 'ModalFont', fontSize: '24px', fill: '#000000', wordWrap: { width: 580, useAdvancedWrap: true }});
     this.correctionText.setOrigin(1);
 
     //Przejście dalej
     this.nextQuestionButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Dalej', {
-        fontFamily: 'Arial',
+        fontFamily: 'ModalFont',
         fontSize: '24px',
         fill: '#ffffff',
         backgroundColor: '#007bff',
@@ -410,17 +413,17 @@ async function showEndScreen() {
     let header = 'Gratulacje, quiz ukończony'
 
     this.endText = this.add.text(this.modalX + this.modalWidth / 2 + 380, this.modalY + 235, header,
-        { fontFamily: 'Arial', fontSize: '24px', fill: '#000000', wordWrap: { width: 580, useAdvancedWrap: true }});
+        { fontFamily: 'ModalFont', fontSize: '24px', fill: '#ffffff', wordWrap: { width: 580, useAdvancedWrap: true }});
     this.endText.setOrigin(1);
 
     this.submitButton.visible = true;
 
     // Wynik
-    let points = "Wynik: \n " + (this.scoredPoints) + " / " + (this.numberOfQuestions)
-    this.points = this.add.text(this.modalX + this.modalWidth / 2 - 85, this.modalY + 350, points, {
-        fontFamily: 'Arial',
+    let points = "Wynik: " + (this.scoredPoints) + " / " + (this.numberOfQuestions)
+    this.points = this.add.text(this.modalX + this.modalWidth / 2 - 170, this.modalY+ 250, points, {
+        fontFamily: 'ModalFont',
         fontSize: '50px',
-        fill: '#000000',
+        fill: '#ffffff',
         padding: {
             x: 20,
             y: 10,
@@ -428,8 +431,8 @@ async function showEndScreen() {
     });
 
     //Zakończ
-    this.submitButton = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 45, 'Zakończ', {
-        fontFamily: 'Arial',
+    this.submitButton = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 70, 'Zakończ', {
+        fontFamily: 'ModalFont',
         fontSize: '40px',
         fill: '#ffffff',
         backgroundColor: '#007bff',
@@ -463,6 +466,7 @@ async function showEndScreen() {
             this.quizAnswerText.destroy();
             this.quizOpen = false;
         }
+        this.quizBackground.destroy();
 
         console.log('Selected answer index:', this.selectedAnswerIndex);
         console.log('Punkty zdobyte!: ', this.scoredPoints);
@@ -501,6 +505,20 @@ export function closeQuiz(){
             }
 
 
+        }
+        if(this.buttons.length > 0){
+            for(this.buttonDestroyer of this.buttons){
+                this.buttonDestroyer.destroy();
+            }
+        }
+        if(this.correctionText){
+            this.correctionText.destroy();
+        }
+        if(this.nextQuestionButton){
+            this.nextQuestionButton.destroy();
+        }
+        if(this.quizBackground){
+            this.quizBackground.destroy();
         }
         for (this.categoriesText of this.categoriesTexts) {
             this.categoriesText.destroy();

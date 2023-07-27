@@ -233,7 +233,7 @@ export default class UI extends Phaser.Scene {
         try {
             this.regionText.text = 'Region: ' + this.scene.currentMap;
         } catch (error) {
-            console.log("256 - UI -> tu jest błąd ale jednocześnie wszystko działa");
+            //console.log("256 - UI -> tu jest błąd ale jednocześnie wszystko działa");
         }
 
 
@@ -872,11 +872,12 @@ export default class UI extends Phaser.Scene {
             this.pirateTeacherHelloText.setText('Ahoj szczurze lądowy! Znajdujesz się na Kubie, to fantastyczne miejsce pełne egzotycznych przygód i barwnych kultur. Od zielonych dżungli po błękitne plaże, Havana zaprasza Cię do odkrycia jej sekretów i przeżycia niezapomnianych chwil!')
         }
 
-        this.categoryButton1 = this.add.text(this.modalX + this.modalWidth / 2 - 150, this.modalY + this.modalHeight - 100, 'Polityka', {
+        this.categoryButton1Sprite = this.add.sprite(this.modalX + this.modalWidth / 2 - 200, this.modalY + this.modalHeight - 100, "buttonAnim")
+        this.categoryButton1Sprite.scale = 1.75;
+        this.categoryButton1 = this.add.text(this.modalX + this.modalWidth / 2 - 200, this.modalY + this.modalHeight - 100, 'Polityka', {
             fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
-            backgroundColor: '#007bff',
             padding: {
                 x: 20,
                 y: 10,
@@ -886,18 +887,19 @@ export default class UI extends Phaser.Scene {
         this.categoryButton1.setInteractive({ useHandCursor: true });
         this.categoryButton1.visible = true;
         this.categoryButton1.on('pointerdown', () => {
-            this.categoryButton1.setBackgroundColor('#52a5ff');
-            this.categoryButton2.setBackgroundColor('#007bff');
-            this.categoryButton3.setBackgroundColor('#007bff');
+            this.categoryButton1.setColor('#52a5ff');
+            this.categoryButton2.setColor('#ffffff');
+            this.categoryButton3.setColor('#ffffff');
             this.category = "Polityka"
             this.nextScreenButton.visible = true;
         })
 
+        this.categoryButton2Sprite = this.add.sprite(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 100, "buttonAnim")
+        this.categoryButton2Sprite.scale = 1.75;
         this.categoryButton2 = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 100, 'Kultura', {
             fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
-            backgroundColor: '#007bff',
             padding: {
                 x: 20,
                 y: 10,
@@ -907,18 +909,19 @@ export default class UI extends Phaser.Scene {
         this.categoryButton2.setInteractive({ useHandCursor: true });
         this.categoryButton2.visible = true;
         this.categoryButton2.on('pointerdown', () => {
-            this.categoryButton1.setBackgroundColor('#007bff');
-            this.categoryButton2.setBackgroundColor('#52a5ff');
-            this.categoryButton3.setBackgroundColor('#007bff');
+            this.categoryButton1.setColor('#ffffff');
+            this.categoryButton2.setColor('#52a5ff');
+            this.categoryButton3.setColor('#ffffff');
             this.category = "Kultura"
             this.nextScreenButton.visible = true;
         })
 
-        this.categoryButton3 = this.add.text(this.modalX + this.modalWidth / 2 + 150, this.modalY + this.modalHeight - 100, 'Kuchnia', {
+        this.categoryButton3Sprite = this.add.sprite(this.modalX + this.modalWidth / 2 + 200, this.modalY + this.modalHeight - 100, "buttonAnim")
+        this.categoryButton3Sprite.scale = 1.75;
+        this.categoryButton3 = this.add.text(this.modalX + this.modalWidth / 2 + 200, this.modalY + this.modalHeight - 100, 'Kuchnia', {
             fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
-            backgroundColor: '#007bff',
             padding: {
                 x: 20,
                 y: 10,
@@ -928,9 +931,9 @@ export default class UI extends Phaser.Scene {
         this.categoryButton3.setInteractive({ useHandCursor: true });
         this.categoryButton3.visible = true;
         this.categoryButton3.on('pointerdown', () => {
-            this.categoryButton1.setBackgroundColor('#007bff');
-            this.categoryButton2.setBackgroundColor('#007bff');
-            this.categoryButton3.setBackgroundColor('#52a5ff');
+            this.categoryButton1.setColor('#ffffff');
+            this.categoryButton2.setColor('#ffffff');
+            this.categoryButton3.setColor('#52a5ff');
             this.category = "Kuchnia"
             this.nextScreenButton.visible = true;
         })
@@ -957,6 +960,9 @@ export default class UI extends Phaser.Scene {
                 this.categoryButton1.destroy();
                 this.categoryButton2.destroy();
                 this.categoryButton3.destroy();
+                this.categoryButton1Sprite.destroy();
+                this.categoryButton2Sprite.destroy();
+                this.categoryButton3Sprite.destroy();
                 this.drawLearning(this.pirateText, this.category);
             }
         });
@@ -1065,6 +1071,9 @@ export default class UI extends Phaser.Scene {
                 this.categoryButton1.destroy();
                 this.categoryButton2.destroy();
                 this.categoryButton3.destroy();
+                this.categoryButton1Sprite.destroy();
+                this.categoryButton2Sprite.destroy();
+                this.categoryButton3Sprite.destroy();
             }
             if (this.nextToLearnButton){
                 this.nextToLearnButton.destroy();

@@ -79,7 +79,7 @@ export class Panama extends Phaser.Scene {
         this.physics.add.overlap(this.boat, this.port, () => {
             this.inZone = true;
             if (this.inZone === true && !this.text) {
-                this.text = this.add.text(this.port.x + 0 ,this.port.y - 50, 'Wciśnij Q, żeby przejść do nauki')
+                this.text = this.add.text(this.port.x + 0 ,this.port.y - 50, 'Wciśnij E, żeby dowiedzieć się czegoś o tym miejscu.')
                     .setScale(1.5)
                     .setBackgroundColor('#808080')
                     .setColor('#000000')
@@ -92,12 +92,12 @@ export class Panama extends Phaser.Scene {
         this.physics.add.overlap(this.boat, this.cityPort, () => {
             this.inZone = true;
             if (this.inZone === true && !this.quizText) {
-                this.quizText = this.add.text(this.cityPort.x + 0 ,this.cityPort.y - 50, 'Wciśnij Q, żeby przejść do quizu.')
+                this.quizText = this.add.text(this.cityPort.x + 0 ,this.cityPort.y - 50, 'Wciśnij E, żeby przejść do quizu.')
                     .setScale(1.5)
                     .setBackgroundColor('#808080')
                     .setColor('#000000')
                     .setStyle({fontFamily: "Arial"});
-                this.inZoneKey = this.input.keyboard.addKey('Q');
+                this.inZoneKey = this.input.keyboard.addKey('E');
                 this.inZoneKey.on('down', () => { this.uiScene.toggleQuiz()});
             }
         });

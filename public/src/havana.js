@@ -93,7 +93,7 @@ export class Havana extends Phaser.Scene {
         this.physics.add.overlap(this.boat, this.cityPort, () => {
             this.inZone = true;
             if (this.inZone === true && !this.quizText) {
-                this.quizText = this.add.text(this.cityPort.x + 0 ,this.cityPort.y - 50, 'Wciśnij Q, żeby przejść do quizu.')
+                this.quizText = this.add.text(this.cityPort.x + 0 ,this.cityPort.y - 50, 'Wciśnij E, żeby przejść do quizu.')
                     .setScale(1.5)
                     .setBackgroundColor('#808080')
                     .setColor('#000000')
