@@ -296,12 +296,12 @@ export class WorldMap extends Phaser.Scene {
             }
         }
         // Obracanie
-        if(this.keys.left?.isDown){
+        if(this.input.keyboard.addKey('A').isDown){
             this.boat.angle -= changeAngle;
-        }else if(this.keys.right?.isDown){
+        }else if(this.input.keyboard.addKey('D').isDown){
             this.boat.angle += changeAngle;
         }
-        if(this.keys.up?.isDown){
+        if(this.input.keyboard.addKey('W').isDown){
             // Jeżeli łódź się cofa, zatrzymaj ją
             if(this.boatSpeed === -20 && this.gameScene.timer >= 500){
                 this.boatSpeed = 0;
@@ -315,14 +315,14 @@ export class WorldMap extends Phaser.Scene {
                     this.gameScene.timer = 0;
                 }
             }
-        }else if(this.keys.up?.isUp){
+        }else if(this.input.keyboard.addKey('W').isUp){
             //Utrzymanie prędkości
             this.engine = true;
         }
-        if(this.keys.down?.isDown){
+        if(this.input.keyboard.addKey('S').isDown){
             //Zatrzymywanie/cofanie łodzi
             this.boatStop()
-        }else if (this.keys.down?.isUp) {
+        }else if (this.input.keyboard.addKey('S').isUp) {
             // Zwolniono klawisz "down"
             if (this.boatSpeed < 0 && this.gameScene.timer >= 250) {
                 this.boatSpeed += 10;
