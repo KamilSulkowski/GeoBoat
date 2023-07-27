@@ -402,7 +402,7 @@ async function showEndScreen() {
     setScore(this.scoredPoints, this.numberOfQuestions, this.earnedXP, 0);
     console.log('zdobytexp: ', this.earnedXP);
     updateUser(this.user.punktyXP + this.earnedXP, this.user.poziom + i, this.user.wytrzymaloscLodzi,
-        this.user.maxPredkoscLodzi, water, 1);
+        this.user.maxPredkoscLodzi, water, this.user.id);
     this.userData = await fetchData('dane/uzytkownicy').then((data) => this.userData = data);
     console.log('nowy stan: ', this.user.punktyXP);
 
