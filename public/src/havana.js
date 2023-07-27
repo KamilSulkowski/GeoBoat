@@ -98,7 +98,7 @@ export class Havana extends Phaser.Scene {
                     .setBackgroundColor('#808080')
                     .setColor('#000000')
                     .setStyle({fontFamily: "Arial"});
-                this.inZoneKey = this.input.keyboard.addKey('E');
+                this.inZoneKey = this.input.keyboard.addKey('Q');
                 this.inZoneKey.on('down', () => { this.uiScene.toggleQuiz()});
             }
         });
@@ -122,9 +122,7 @@ export class Havana extends Phaser.Scene {
         // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
         this.physics.add.collider(this.boat, this.ground, this.handleCollision , null, this);
         this.physics.add.collider(this.boat, this.stones, this.handleCollision , null, this);
-        this.physics.world.setBounds(0, 0, 2000, 2000, true, true, true, true);
-        this.physics.add.existing(this.boat);
-        this.boat.body.setCollideWorldBounds(true);
+
 
     }
 
@@ -247,12 +245,12 @@ export class Havana extends Phaser.Scene {
             }
         }
         // Obracanie
-        if(this.input.keyboard.addKey('A').isDown){
+        if(this.keys.left?.isDown){
             this.boat.angle -= changeAngle;
-        }else if(this.input.keyboard.addKey('D').isDown){
+        }else if(this.keys.right?.isDown){
             this.boat.angle += changeAngle;
         }
-        if(this.input.keyboard.addKey('W').isDown){
+        if(this.keys.up?.isDown){
             // Jeżeli łódź się cofa, zatrzymaj ją
             if(this.boatSpeed === -20 && this.gameScene.timer >= 500){
                 this.boatSpeed = 0;
@@ -266,14 +264,14 @@ export class Havana extends Phaser.Scene {
                     this.gameScene.timer = 0;
                 }
             }
-        }else if(this.input.keyboard.addKey('W').isUp){
+        }else if(this.keys.up?.isUp){
             //Utrzymanie prędkości
             this.engine = true;
         }
-        if(this.input.keyboard.addKey('S').isDown){
+        if(this.keys.down?.isDown){
             //Zatrzymywanie/cofanie łodzi
             this.boatStop()
-        }else if (this.input.keyboard.addKey('S').isUp) {
+        }else if (this.keys.down?.isUp) {
             // Zwolniono klawisz "down"
             if (this.boatSpeed < 0 && this.gameScene.timer >= 250) {
                 this.boatSpeed += 10;
@@ -281,6 +279,11 @@ export class Havana extends Phaser.Scene {
                 this.gameScene.timer = 0;
             }
         }
+
+        // if (isOnDeepWater) {
+        //     this.gameScene.boatMaxReverseSpeed = -20;
+        //     this.gameScene.boatMaxSpeed = 50;
+        // }
 
     }
     // funkcja do zatrzymywania i cofania łodzi

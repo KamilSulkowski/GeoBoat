@@ -237,6 +237,7 @@ export default class UI extends Phaser.Scene {
         try {
             this.regionText.text = 'Region: ' + this.scene.currentMap;
         } catch (error) {
+            //console.log("256 - UI -> tu jest błąd ale jednocześnie wszystko działa");
         }
 
 

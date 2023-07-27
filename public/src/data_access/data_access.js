@@ -8,7 +8,7 @@ function fetchThen(sciezka, dane) {
     })
         .then(response => {
             if (response.ok) {
-                //console.log('Dane zapisano pomyślnie');
+                console.log('Dane zapisano pomyślnie');
             } else {
                 console.error('Error:', response.statusText);
             }
