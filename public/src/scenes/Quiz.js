@@ -306,7 +306,7 @@ function newQuestion() {
     // Ustawianie zdjęcia
     if (this.p.obraz !== null) {
         this.questionImage = this.add.image(this.modalX + this.modalWidth / 2, this.modalY + 140, this.p.obraz)
-        this.questionImage.setScale(0.25)
+        this.questionImage.setScale(0.3)
     }
 
     // Ustawienie indeksu poprawnej odpowiedzi

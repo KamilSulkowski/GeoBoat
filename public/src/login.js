@@ -1,9 +1,14 @@
+import {getUserData} from './data_access/data_access.js';
 export class Login extends Phaser.Scene {
     constructor() {
         super('login');
     }
     preload() {}
-    create() {
+    async create() {
+        //Pobranie bazy użytkowników
+        await getUserData.call(this);
+        console.log(this.userData);
+
         this.backgroundColor = '#1bd0fe';
         const form = document.createElement('form')
         form.setAttribute('id', 'form')
@@ -38,6 +43,7 @@ export class Login extends Phaser.Scene {
 
         const scene = this.scene;
         const t = this.add;
+        var userData = this.userData;
 
         form.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -49,8 +55,8 @@ export class Login extends Phaser.Scene {
             if (login === 'admin') {
                 form.remove();
                 scene.stop('login');
-                scene.start('worldMap');
-                scene.run('ui', login);
+                scene.run('ui', {login, userData});
+                scene.run('game', {login, userData});
                 scene.bringToTop('ui')
             }
             else {
