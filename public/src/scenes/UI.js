@@ -17,6 +17,7 @@ export default class UI extends Phaser.Scene {
         this.leftScrollScrolled = false;
         this.rightScrollScrolled = false;
         this.regionText = null;
+        this.HelloScreenSeen = false;
     }
     preload() {
         this.load.scenePlugin({
@@ -158,6 +159,9 @@ export default class UI extends Phaser.Scene {
         .setStyle({fontFamily: "CustomFont"});
 
         this.boatRepairAnimation();
+        if(this.HelloScreenSeen === false){
+            this.showHelloScreen()
+        }
     }
 
     onLeftScrollClick() {
@@ -1090,5 +1094,56 @@ export default class UI extends Phaser.Scene {
             this.learnerBackground.destroy();
             this.QuestionNumberDisplayed.destroy();
         }
+    }
+
+    //-------Hello Screen MODAL-------
+    showHelloScreen() {
+        this.HelloScreenSeen = true;
+        const modalWidth = 500;
+        const modalHeight = 500;
+        const modalX = (this.bw - modalWidth) / 2;
+        const modalY = (this.bh - modalHeight) / 2;
+        const textColor = '#ffffff';
+
+        this.HelloScreenBackground = this.add.image(this.bw*0.5, this.bh*0.5, "modalBackground")
+        this.modal = this.add.graphics();
+
+
+        this.HelloScreenImage = this.add.image(modalX + modalWidth / 2, modalY + 30, "geoboatLogo")
+        this.HelloScreenImage.setScale(0.2);
+
+        this.Text = this.add.text(modalX + modalWidth / 2, modalY + modalWidth/2.1, 'Ahoj, kapitanie! Witaj na pokładzie tej karaibskiej przygody, gdzie wodny świat należy do ciebie, a morze jest twoim sojusznikiem! Stań na czele swojego statku i wypłyń na pełne ciekawostek karaibskie wody! Na tym kursie dowiesz się wielu informacji o państwach karaibskich, a twoja wiedza będzie twoim największym skarbem. Czekają na ciebie fascynujące przygody, więc rozpocznij tę podróż już teraz!', {
+            fontFamily: 'ModalFont',
+            fontSize: '24px',
+            fill: textColor,
+            align: 'center',
+            wordWrap: { width: 480, useAdvancedWrap: true }
+        });
+        this.Text.setOrigin(0.5);
+
+
+
+        this.buttonSprite = this.add.sprite(modalX + modalWidth/2, modalY + modalHeight - 50, "buttonAnim")
+        this.buttonSprite.scale = 1.75;
+        this.buttonText = this.add.text(modalX + modalWidth/2, modalY + modalHeight - 53, 'Rozumiem!', {
+            fontFamily: 'ModalFont',
+            fontSize: '18px',
+            fill: '#ffffff',
+            padding: {
+                x: 20,
+                y: 10,
+            },
+        });
+        this.buttonText.setOrigin(0.5);
+        this.buttonSprite.setInteractive();
+        this.buttonSprite.on('pointerdown', () => {
+            this.HelloScreenBackground.destroy();
+            this.modal.destroy();
+            this.HelloScreenImage.destroy();
+            this.buttonSprite.destroy();
+            this.buttonText.destroy();
+            this.Text.destroy();
+
+        });
     }
 }
