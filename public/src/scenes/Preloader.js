@@ -47,6 +47,7 @@ export default class Preloader extends Phaser.Scene {
         });
         
         this.load.image("modalBackground", "assets/modalBcg.png");
+        this.load.image("modalBackgroundBig", "assets/modalBcgBig.png");
         this.load.image("scrollMap", "assets/scrollMap.png");
         this.load.image("scrollMapUI", "assets/globe.png");
         this.load.image("pirate", "assets/pirat.png");

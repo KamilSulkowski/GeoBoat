@@ -712,58 +712,109 @@ export default class UI extends Phaser.Scene {
         if(regionFlag = "Jamajka"){
             this.pirateText = [
                     {
-                        Polityka: 'a1',
-                        Kultura: '',
-                        Kuchnia: '',
+                        Polityka: 'W 2022 roku stopa bezrobocia na Jamajce wynosiła około 6%, co jest stosunkowo niskim wskaźnikiem w porównaniu z innymi krajami.',
+                        Kultura: 'Gdy przenosisz się do tajemniczej Jamajki, warto wiedzieć, że dominującą religią na tej wyspie jest protestantyzm. To religia, która odegrała ważną rolę w historii kraju i wpłynęła na kulturę oraz zwyczaje jego mieszkańców.',
+                        Kuchnia: 'Jamajka, znana jest nie tylko z pięknych plaż, ale także z wyjątkowej kuchni. Wśród tradycyjnych potraw, które stanowią dumę tego miejsca, jest pyszny ryż z grochem, czyli "rice and peas". To aromatyczne danie, w którym soczysty kurczak stanowi doskonałe towarzystwo dla ziarnistego ryżu i soczystego grochu.',
                     },
                     {
-                        Polityka: 'a2',
-                        Kultura: '',
-                        Kuchnia: '',
+                        Polityka: 'Podczas swojej przygody na Jamajce, pamiętaj o walucie, która obowiązuje na tej wyspie - dolarze jamajskim. To oficjalna jednostka monetarna kraju, która jest używana do dokonywania transakcji handlowych i zakupów.',
+                        Kultura: 'Kontynuując naszą wędrówkę po Jamajce, warto zatrzymać się na chwilę przed fascynującym budynkiem. Czy rozpoznajesz to miejsce na zdjęciu? To Rose Hall, imponujący biały dwór w stylu georgiańskim, który w przeszłości był rezydencją plantacji cukru. Obiekt ten ma bogatą historię i opowieści o duchach.',
+                        Kuchnia: 'Oprócz "rice and peas", musisz koniecznie spróbować ackee, charakterystycznego owocu Jamajki. Ackee ma kształt trójlistnej koniczyny i jest uważane za narodowy owoc kraju. Może wydawać się dziwaczne, ale po ugotowaniu przypomina smakiem i teksturą jajecznicę. To jeden z najbardziej rozpoznawalnych smaków Jamajki!',
                     },
                     {
-                        Polityka: 'a3',
-                        Kultura: '',
-                        Kuchnia: '',
+                        Polityka: 'Gospodarka Jamajki jest związana z różnymi organizacjami, ale jedną z najważniejszych jest CARICOM (Caribbean Community). Jest to organizacja gospodarcza, która skupia kraje karaibskie i promuje współpracę ekonomiczną i integrację regionalną.',
+                        Kultura: 'Gdy już weszliśmy do Rose Hall, przypominamy sobie słynnego artystę muzycznego z Jamajki - Boba Marleya. Jego muzyka, reggae, była głęboko zakorzeniona w kulturze kraju. Bob Marley był ikoną tego gatunku muzycznego, a jego teksty przekazywały ważne przesłania społeczne i polityczne.',
+                        Kuchnia: 'Kolejny przysmak, który warto poznać, to popularne jamajskie danie - placki z nadzieniem, czyli "patty". To rodzaj wytrawnego ciasta, wypełnionego różnorodnymi nadzieniami, takimi jak kurczak, mielony mięso, ryba czy warzywa. Patty to uliczny przysmak, którym często zajadają się zarówno mieszkańcy, jak i turyści.',
                     },
                     {
-                        Polityka: 'a4',
-                        Kultura: '',
-                        Kuchnia: '',
+                        Polityka: 'Wśród różnych sektorów gospodarki Jamajki, sektor usług odgrywa kluczową rolę. Stanowi on około 60% PKB kraju, co czyni go największym sektorem w gospodarce Jamajki.',
+                        Kultura: 'Czas poznać kilka znanych postaci związanych z Jamajką. Shericka Jackson, Bob Marley, Usain Bolt. Wszyscy wymienieni są rdzennymi Jamajczykami i z sukcesem promują to miejsce na całym świecie.',
+                        Kuchnia: 'Chciałbym Cię wprowadzić w tajemnice jamajskiej kuchni i opowiedzieć o kolejnym niezwykłym daniu - callaloo. To zupa przygotowywana z różnych rodzajów zielonych liści, które są gotowane z przyprawami, takimi jak cebula, czosnek, czerwona papryka i tymianek. To smaczne i pożywne danie, które świetnie komponuje się z innymi przysmakami Jamajki.',
                     },
                     {
-                        Polityka: 'a5',
-                        Kultura: '',
-                        Kuchnia: '',
+                        Polityka: 'Jamajka jest podzielona na 3 hrabstwa, które towarzyszą nam podczas tej wędrówki po kraju. Każde hrabstwo ma swoje unikalne cechy i atrakcje, które warto odkryć.',
+                        Kultura: 'Kontynuując temat muzyki, reggae jest nieodłącznie związane z Jamajką. To nie tylko gatunek muzyczny, ale także symbol kultury jamajskiej i ruchu Rastafari. Reggae wyrosło z lokalnych wpływów, takich jak ska i rocksteady, i stało się rozpoznawalne na całym świecie dzięki artystom, takim jak Bob Marley.',
+                        Kuchnia: 'Gdy pragniesz ochłodzenia w gorący dzień, spróbuj sorrel, napoju przygotowanego z kwiatu hibiskusa. Jest to popularny napój na Jamajce, szczególnie podawany w okresie świątecznym. Sorrel ma orzeźwiający smak i często jest przygotowywany z dodatkiem przypraw, takich jak goździki czy cynamon.',
                     },
                     {
-                        Polityka: 'a6',
-                        Kultura: '',
-                        Kuchnia: '',
+                        Polityka: 'Wiedziałeś, że eksport chemii nieorganicznej przyniósł Jamajce największe zyski w 2020 roku? To jeden z ważnych sektorów eksportowych kraju, który przyczynia się do jego rozwoju ekonomicznego.',
+                        Kultura: 'W tradycyjnej muzyce jamajskiej odgrywa kluczową rolę bęben. Ten instrument stanowi serce wielu rytmicznych utworów, które wabią do tańca i świętowania. Bębny są wykorzystywane również podczas różnych ceremonii i obrzędów na Jamajce.',
+                        Kuchnia: 'Podczas swojej podróży po Jamajce, nie zapomnij o smakowitych sałatkach. Wielkim hitem są sałatki z mango i ananasami, które dodają im egzotycznego smaku i soczystości. To idealne danie na upalne dni, które dostarcza mnóstwa witamin i pozytywnej energii.',
                     },
                     {
-                        Polityka: 'a7',
-                        Kultura: '',
-                        Kuchnia: '',
+                        Polityka: 'Wiedziałeś, że eksport chemii nieorganicznej przyniósł Jamajce największe zyski w 2020 roku? To jeden z ważnych sektorów eksportowych kraju, który przyczynia się do jego rozwoju ekonomicznego.',
+                        Kultura: 'Jamajczycy są znani nie tylko z muzyki, ale także z sukcesów sportowych. W szczególności, w lekkoatletyce zdobyli wiele olimpijskich medali, co uczyniło ich krajem znanym z utalentowanych biegaczy, skoczków i sprinterów.',
+                        Kuchnia: 'Jedno z najbardziej aromatycznych i smakowitych dań, które warto spróbować na Jamajce, to "run down". W tej tradycyjnej potrawie, ryba jest duszona z różnorodnymi warzywami i aromatycznymi przyprawami. To prawdziwy festiwal smaków, który przywołuje na myśl magię tej karaibskiej wyspy.',
                     },
                     {
-                        Polityka: 'a8',
-                        Kultura: '',
-                        Kuchnia: '',
+                        Polityka: 'Na stanowisku premiera Jamajki, w roku 2023, znajduje się Andrew Holness. Jego rządy wpływają na różnorodne aspekty życia na wyspie, w tym na ekonomię, kulturę i politykę.',
+                        Kultura: 'Rastafari to fascynujący ruch religijny wywodzący się z Jamajki. Jego wyznawcy, zwani Rastafarianami, kultywują różnorodne wierzenia i praktyki, a także łączą je z miłością do muzyki reggae i natury. To wyjątkowy ruch, który wywarł wpływ na kulturę jamajską.',
+                        Kuchnia: 'Jeśli masz ochotę na deser, nie możesz ominąć Sweet Potato Pudding. Jest to przepyszna słodka uczta, przygotowywana z gotowanych batatów i mleka kokosowego. Pudding jest doskonale doprawiony cynamonem, wanilią i goździkami, co sprawia, że każdy kęs to prawdziwa rozkosz dla podniebienia.',
                     },
                     {
-                        Polityka: 'a9',
-                        Kultura: '',
-                        Kuchnia: '',
+                        Polityka: 'Podczas swojej podróży, odwiedź stolicę Jamajki - Kingston. To dynamiczne miasto pełne kultury, muzyki i życia nocnego. Kingston to ważne centrum polityczne, gospodarcze i kulturalne kraju.',
+                        Kultura: 'Podczas festiwali i ważnych uroczystości na Jamajce, wiele osób ubiera się w tradycyjny strój o nazwie Dashiki. To kolorowa i luźna odzież, często zdobiona wzorami i haftami. Dashiki stanowi dumę i wyraz tożsamości dla wielu Jamajczyków.',
+                        Kuchnia: 'Gdy słyszysz słowo "jerk", pewnie od razu myślisz o wyjątkowym smaku i aromacie. I masz rację! Jamaiczyński Jerk to unikalna marynata, którą używa się do przyprawiania mięsa, głównie kurczaka i wieprzowiny. Charakteryzuje się intensywnymi przyprawami, takimi jak ostra papryka, cebula, czosnek i zioła.',
                     },
                     {
-                        Polityka: 'a10',
-                        Kultura: '',
-                        Kuchnia: '',
+                        Polityka: 'Podczas swojej podróży, odwiedź stolicę Jamajki - Kingston. To dynamiczne miasto pełne kultury, muzyki i życia nocnego. Kingston to ważne centrum polityczne, gospodarcze i kulturalne kraju.',
+                        Kultura: 'Na zakończenie naszej podróży po Jamajce, musimy wspomnieć o charakterystycznym tańcu z tego kraju - Dutty wine. To dynamiczny i pełen energii styl tańca, który wymaga szybkich ruchów bioder i całego ciała. Jest to popularny taniec, który często gości na imprezach i festiwalach na Karaibach.',
+                        Kuchnia: 'Podczas pobytu na Jamajce, nie zapomnij spróbować słynnego rumu, który jest jednym z najważniejszych produktów eksportowych kraju. Jamaika słynie z produkcji doskonałego rumu, który jest wspaniałym dodatkiem do wielu drinków i koktajli. To idealna okazja, by podziwiać zachody słońca nad karaibskim morzem, delektując się wspaniałym trunkiem.',
                     },
                 ]
         }else if(regionFlag = "Panama"){
-            this.pirateText = [{}]
+            this.pirateText = [
+             {
+                Polityka: 'W 2022 roku stopa bezrobocia na Jamajce wynosiła około 6%, co jest stosunkowo niskim wskaźnikiem w porównaniu z innymi krajami.',
+                Kultura: 'Gdy przenosisz się do tajemniczej Jamajki, warto wiedzieć, że dominującą religią na tej wyspie jest protestantyzm. To religia, która odegrała ważną rolę w historii kraju i wpłynęła na kulturę oraz zwyczaje jego mieszkańców.',
+                Kuchnia: 'Jamajka, znana jest nie tylko z pięknych plaż, ale także z wyjątkowej kuchni. Wśród tradycyjnych potraw, które stanowią dumę tego miejsca, jest pyszny ryż z grochem, czyli "rice and peas". To aromatyczne danie, w którym soczysty kurczak stanowi doskonałe towarzystwo dla ziarnistego ryżu i soczystego grochu.',
+            },
+            {
+                Polityka: 'Podczas swojej przygody na Jamajce, pamiętaj o walucie, która obowiązuje na tej wyspie - dolarze jamajskim. To oficjalna jednostka monetarna kraju, która jest używana do dokonywania transakcji handlowych i zakupów.',
+                Kultura: 'Kontynuując naszą wędrówkę po Jamajce, warto zatrzymać się na chwilę przed fascynującym budynkiem. Czy rozpoznajesz to miejsce na zdjęciu? To Rose Hall, imponujący biały dwór w stylu georgiańskim, który w przeszłości był rezydencją plantacji cukru. Obiekt ten ma bogatą historię i opowieści o duchach.',
+                Kuchnia: 'Oprócz "rice and peas", musisz koniecznie spróbować ackee, charakterystycznego owocu Jamajki. Ackee ma kształt trójlistnej koniczyny i jest uważane za narodowy owoc kraju. Może wydawać się dziwaczne, ale po ugotowaniu przypomina smakiem i teksturą jajecznicę. To jeden z najbardziej rozpoznawalnych smaków Jamajki!',
+            },
+            {
+                Polityka: 'Gospodarka Jamajki jest związana z różnymi organizacjami, ale jedną z najważniejszych jest CARICOM (Caribbean Community). Jest to organizacja gospodarcza, która skupia kraje karaibskie i promuje współpracę ekonomiczną i integrację regionalną.',
+                Kultura: 'Gdy już weszliśmy do Rose Hall, przypominamy sobie słynnego artystę muzycznego z Jamajki - Boba Marleya. Jego muzyka, reggae, była głęboko zakorzeniona w kulturze kraju. Bob Marley był ikoną tego gatunku muzycznego, a jego teksty przekazywały ważne przesłania społeczne i polityczne.',
+                Kuchnia: 'Kolejny przysmak, który warto poznać, to popularne jamajskie danie - placki z nadzieniem, czyli "patty". To rodzaj wytrawnego ciasta, wypełnionego różnorodnymi nadzieniami, takimi jak kurczak, mielony mięso, ryba czy warzywa. Patty to uliczny przysmak, którym często zajadają się zarówno mieszkańcy, jak i turyści.',
+            },
+            {
+                Polityka: 'Wśród różnych sektorów gospodarki Jamajki, sektor usług odgrywa kluczową rolę. Stanowi on około 60% PKB kraju, co czyni go największym sektorem w gospodarce Jamajki.',
+                Kultura: 'Czas poznać kilka znanych postaci związanych z Jamajką. Shericka Jackson, Bob Marley, Usain Bolt. Wszyscy wymienieni są rdzennymi Jamajczykami i z sukcesem promują to miejsce na całym świecie.',
+                Kuchnia: 'Chciałbym Cię wprowadzić w tajemnice jamajskiej kuchni i opowiedzieć o kolejnym niezwykłym daniu - callaloo. To zupa przygotowywana z różnych rodzajów zielonych liści, które są gotowane z przyprawami, takimi jak cebula, czosnek, czerwona papryka i tymianek. To smaczne i pożywne danie, które świetnie komponuje się z innymi przysmakami Jamajki.',
+            },
+            {
+                Polityka: 'Jamajka jest podzielona na 3 hrabstwa, które towarzyszą nam podczas tej wędrówki po kraju. Każde hrabstwo ma swoje unikalne cechy i atrakcje, które warto odkryć.',
+                Kultura: 'Kontynuując temat muzyki, reggae jest nieodłącznie związane z Jamajką. To nie tylko gatunek muzyczny, ale także symbol kultury jamajskiej i ruchu Rastafari. Reggae wyrosło z lokalnych wpływów, takich jak ska i rocksteady, i stało się rozpoznawalne na całym świecie dzięki artystom, takim jak Bob Marley.',
+                Kuchnia: 'Gdy pragniesz ochłodzenia w gorący dzień, spróbuj sorrel, napoju przygotowanego z kwiatu hibiskusa. Jest to popularny napój na Jamajce, szczególnie podawany w okresie świątecznym. Sorrel ma orzeźwiający smak i często jest przygotowywany z dodatkiem przypraw, takich jak goździki czy cynamon.',
+            },
+            {
+                Polityka: 'Wiedziałeś, że eksport chemii nieorganicznej przyniósł Jamajce największe zyski w 2020 roku? To jeden z ważnych sektorów eksportowych kraju, który przyczynia się do jego rozwoju ekonomicznego.',
+                Kultura: 'W tradycyjnej muzyce jamajskiej odgrywa kluczową rolę bęben. Ten instrument stanowi serce wielu rytmicznych utworów, które wabią do tańca i świętowania. Bębny są wykorzystywane również podczas różnych ceremonii i obrzędów na Jamajce.',
+                Kuchnia: 'Podczas swojej podróży po Jamajce, nie zapomnij o smakowitych sałatkach. Wielkim hitem są sałatki z mango i ananasami, które dodają im egzotycznego smaku i soczystości. To idealne danie na upalne dni, które dostarcza mnóstwa witamin i pozytywnej energii.',
+            },
+            {
+                Polityka: 'Wiedziałeś, że eksport chemii nieorganicznej przyniósł Jamajce największe zyski w 2020 roku? To jeden z ważnych sektorów eksportowych kraju, który przyczynia się do jego rozwoju ekonomicznego.',
+                Kultura: 'Jamajczycy są znani nie tylko z muzyki, ale także z sukcesów sportowych. W szczególności, w lekkoatletyce zdobyli wiele olimpijskich medali, co uczyniło ich krajem znanym z utalentowanych biegaczy, skoczków i sprinterów.',
+                Kuchnia: 'Jedno z najbardziej aromatycznych i smakowitych dań, które warto spróbować na Jamajce, to "run down". W tej tradycyjnej potrawie, ryba jest duszona z różnorodnymi warzywami i aromatycznymi przyprawami. To prawdziwy festiwal smaków, który przywołuje na myśl magię tej karaibskiej wyspy.',
+            },
+            {
+                Polityka: 'Na stanowisku premiera Jamajki, w roku 2023, znajduje się Andrew Holness. Jego rządy wpływają na różnorodne aspekty życia na wyspie, w tym na ekonomię, kulturę i politykę.',
+                Kultura: 'Rastafari to fascynujący ruch religijny wywodzący się z Jamajki. Jego wyznawcy, zwani Rastafarianami, kultywują różnorodne wierzenia i praktyki, a także łączą je z miłością do muzyki reggae i natury. To wyjątkowy ruch, który wywarł wpływ na kulturę jamajską.',
+                Kuchnia: 'Jeśli masz ochotę na deser, nie możesz ominąć Sweet Potato Pudding. Jest to przepyszna słodka uczta, przygotowywana z gotowanych batatów i mleka kokosowego. Pudding jest doskonale doprawiony cynamonem, wanilią i goździkami, co sprawia, że każdy kęs to prawdziwa rozkosz dla podniebienia.',
+            },
+            {
+                Polityka: 'Podczas swojej podróży, odwiedź stolicę Jamajki - Kingston. To dynamiczne miasto pełne kultury, muzyki i życia nocnego. Kingston to ważne centrum polityczne, gospodarcze i kulturalne kraju.',
+                Kultura: 'Podczas festiwali i ważnych uroczystości na Jamajce, wiele osób ubiera się w tradycyjny strój o nazwie Dashiki. To kolorowa i luźna odzież, często zdobiona wzorami i haftami. Dashiki stanowi dumę i wyraz tożsamości dla wielu Jamajczyków.',
+                Kuchnia: 'Gdy słyszysz słowo "jerk", pewnie od razu myślisz o wyjątkowym smaku i aromacie. I masz rację! Jamaiczyński Jerk to unikalna marynata, którą używa się do przyprawiania mięsa, głównie kurczaka i wieprzowiny. Charakteryzuje się intensywnymi przyprawami, takimi jak ostra papryka, cebula, czosnek i zioła.',
+            },
+            {
+                Polityka: 'Podczas swojej podróży, odwiedź stolicę Jamajki - Kingston. To dynamiczne miasto pełne kultury, muzyki i życia nocnego. Kingston to ważne centrum polityczne, gospodarcze i kulturalne kraju.',
+                Kultura: 'Na zakończenie naszej podróży po Jamajce, musimy wspomnieć o charakterystycznym tańcu z tego kraju - Dutty wine. To dynamiczny i pełen energii styl tańca, który wymaga szybkich ruchów bioder i całego ciała. Jest to popularny taniec, który często gości na imprezach i festiwalach na Karaibach.',
+                Kuchnia: 'Podczas pobytu na Jamajce, nie zapomnij spróbować słynnego rumu, który jest jednym z najważniejszych produktów eksportowych kraju. Jamaika słynie z produkcji doskonałego rumu, który jest wspaniałym dodatkiem do wielu drinków i koktajli. To idealna okazja, by podziwiać zachody słońca nad karaibskim morzem, delektując się wspaniałym trunkiem.',
+            },
+        ]
 
         }else if(regionFlag = "Havana"){
             this.pirateText = [{}]
@@ -775,37 +826,40 @@ export default class UI extends Phaser.Scene {
         this.modalY = (this.bh - this.modalHeight) / 2;
     
         this.learnerOpen = true;
+        this.learnerBackground = this.add.image(this.bw*0.5, this.bh*0.5, "modalBackgroundBig")
         this.modal = this.add.graphics();
-        this.modal.fillStyle(0xffffff, 0.95);
-        this.modal.fillRoundedRect(this.modalX, this.modalY, this.modalWidth, this.modalHeight, 25);
 
         const squareSize = 150;
-        this.teacherPic = this.add.image(this.modalX + this.modalWidth / 2, this.modalY+125, "profilePic");
+        this.teacherPic = this.add.image(this.modalX + this.modalWidth / 2, this.modalY+125, "pirateAnim");
         this.teacherPic.setScale(2)
         this.teacherPic.setDisplaySize(squareSize, squareSize)
 
         // Tekst tytułowy
-        this.pirateTeacherText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + 30, 'Pirat Wiedzorozdawacz', {
-            fontFamily: 'Arial',
+        this.pirateTeacherText = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + 30, 'Ponury Wiedzorozdawacz', {
+            fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#000000'
         });
         this.pirateTeacherText.setOrigin(0.5);
 
+        // Linia pod postacią
+        this.modal.fillStyle(0xffffff, 0.5);
+        this.modal.fillRect(this.modalX+10, this.modalY + 200, this.modalWidth-20,1);
+
         // Tekst górny
         this.pirateTeacherHelloText = this.add.text(this.modalX+30, this.modalY+210, '', {
-            fontFamily: 'Arial',
+            fontFamily: 'ModalFont',
             fontSize: '24px',
-            fill: '#000000',
+            fill: '#ffffff',
             wordWrap: { width: 740, useAdvancedWrap: true }
         });
         this.pirateTeacherHelloText.setOrigin(0);
 
         // Tekst dolny
-        this.pirateTeacherBottomText = this.add.text(this.modalX+30, this.modalY+350, 'Mogę Cię wiele nauczyć, ale ty wybierz czego chciałbyś się dzisiaj dowiedzieć!', {
-            fontFamily: 'Arial',
+        this.pirateTeacherBottomText = this.add.text(this.modalX+30, this.modalY+400, 'Mogę Cię wiele nauczyć, ale ty wybierz czego chciałbyś się dzisiaj dowiedzieć!', {
+            fontFamily: 'ModalFont',
             fontSize: '24px',
-            fill: '#000000',
+            fill: '#ffffff',
             wordWrap: { width: 740, useAdvancedWrap: true }
         });
         this.pirateTeacherBottomText.setOrigin(0);
@@ -818,8 +872,8 @@ export default class UI extends Phaser.Scene {
             this.pirateTeacherHelloText.setText('Ahoj szczurze lądowy! Znajdujesz się na Kubie, to fantastyczne miejsce pełne egzotycznych przygód i barwnych kultur. Od zielonych dżungli po błękitne plaże, Havana zaprasza Cię do odkrycia jej sekretów i przeżycia niezapomnianych chwil!')
         }
 
-        this.categoryButton1 = this.add.text(this.modalX + this.modalWidth / 2 - 150, this.modalY + this.modalHeight - 125, 'Polityka', {
-            fontFamily: 'Arial',
+        this.categoryButton1 = this.add.text(this.modalX + this.modalWidth / 2 - 150, this.modalY + this.modalHeight - 100, 'Polityka', {
+            fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
             backgroundColor: '#007bff',
@@ -839,8 +893,8 @@ export default class UI extends Phaser.Scene {
             this.nextScreenButton.visible = true;
         })
 
-        this.categoryButton2 = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 125, 'Kultura', {
-            fontFamily: 'Arial',
+        this.categoryButton2 = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 100, 'Kultura', {
+            fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
             backgroundColor: '#007bff',
@@ -860,8 +914,8 @@ export default class UI extends Phaser.Scene {
             this.nextScreenButton.visible = true;
         })
 
-        this.categoryButton3 = this.add.text(this.modalX + this.modalWidth / 2 + 150, this.modalY + this.modalHeight - 125, 'Kuchnia', {
-            fontFamily: 'Arial',
+        this.categoryButton3 = this.add.text(this.modalX + this.modalWidth / 2 + 150, this.modalY + this.modalHeight - 100, 'Kuchnia', {
+            fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
             backgroundColor: '#007bff',
@@ -884,7 +938,7 @@ export default class UI extends Phaser.Scene {
 
         //Przejście dalej
         this.nextScreenButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Dalej', {
-            fontFamily: 'Arial',
+            fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
             backgroundColor: '#007bff',
@@ -906,37 +960,56 @@ export default class UI extends Phaser.Scene {
                 this.drawLearning(this.pirateText, this.category);
             }
         });
+
+        // Liczba pytań
+        this.numberOfQuestions = this.pirateText.length
+        this.currentQuestion = 0;
+        this.QuestionNumberDisplayedContent = (this.currentQuestion) + " / " + (this.numberOfQuestions)
+        console.log(this.QuestionNumberDisplayedContent)
+        this.QuestionNumberDisplayed = this.add.text(this.modalX + this.modalWidth / 2 - 340, this.modalY + this.modalHeight - 45, this.QuestionNumberDisplayedContent, {
+            fontFamily: 'ModalFont',
+            fontSize: '24px',
+            fill: '#000000',
+            padding: {
+                x: 20,
+                y: 10,
+            },
+        });
+        this.QuestionNumberDisplayed.setOrigin(0.5);
+        this.QuestionNumberDisplayed.visible = false;
+
     }
     drawLearning(Content, Category){
         this.pirateTeacherText.setText(Category)
+        this.QuestionNumberDisplayed.visible = true;
         this.textFromContent = []
         this.indexForContent = 0
         if(Category === "Polityka"){
             for(let i = 0; i < Content.length; i++){
                 this.textFromContent.push(Content[i].Polityka);
 
-                this.pirateTeacherHelloText.setText('A więc chcesz się dowiedzieć czegoś o polityce Jamajki?')
+                this.pirateTeacherHelloText.setText('A więc chcesz się dowiedzieć czegoś o tutejszej polityce?')
                 this.pirateTeacherBottomText.setText('')
             }
         }else if(Category === "Kultura"){
             for(let i = 0; i < Content.length; i++){
                 this.textFromContent.push(Content[i].Kultura);
 
-                this.pirateTeacherHelloText.setText('A więc chcesz się dowiedzieć czegoś o kulturze Jamajki?')
+                this.pirateTeacherHelloText.setText('A więc chcesz się dowiedzieć czegoś o tutejszej kulturze?')
                 this.pirateTeacherBottomText.setText('')
             }
         }else if(Category === "Kuchnia"){
             for(let i = 0; i < Content.length; i++){
                 this.textFromContent.push(Content[i].Kuchnia);
 
-                this.pirateTeacherHelloText.setText('A więc chcesz się dowiedzieć czegoś o kuchni Jamajki?')
+                this.pirateTeacherHelloText.setText('A więc chcesz się dowiedzieć czegoś o tutejszej kuchni?')
                 this.pirateTeacherBottomText.setText('')
             }
         }
 
         //Przejście dalej
         this.nextToLearnButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Dalej', {
-            fontFamily: 'Arial',
+            fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
             backgroundColor: '#007bff',
@@ -953,6 +1026,19 @@ export default class UI extends Phaser.Scene {
             if (this.learnerOpen && this.indexForContent != this.textFromContent.length && this.textFromContent[this.indexForContent] != '') {
                 this.pirateTeacherHelloText.setText(this.textFromContent[this.indexForContent])
                 this.indexForContent += 1
+                this.currentQuestion += 1
+                this.QuestionNumberDisplayedContent = (this.currentQuestion) + " / " + (this.numberOfQuestions)
+                this.QuestionNumberDisplayed.setText(this.QuestionNumberDisplayedContent)
+                if (this.currentQuestion >= this.pirateText.length){
+                    this.nextToLearnButton.setText('Zakończ')
+                    if(Category === "Polityka"){
+                        this.pirateTeacherBottomText.setText('Zdobywaj wiedzę i poznawaj niecodzienną politykę związaną z tym miejscem! Powodzenia w rozwiązywaniu quizów!')
+                    }else if(Category === "Kultura"){
+                        this.pirateTeacherBottomText.setText('Zdobywaj wiedzę i czerp radość z odkrywania bogatej kultury tego miejsca! Powodzenia w rozwiązywaniu quizów!')
+                    }else if(Category === "Kuchnia"){
+                        this.pirateTeacherBottomText.setText('Zdobywaj wiedzę i smakuj kulinarne bogactwo tego miejsca! Powodzenia w rozwiązywaniu quizów!')
+                    }
+                }
             }else if(this.learnerOpen){
                 this.learnerOpen = false;
                 this.modal.destroy();
@@ -961,6 +1047,8 @@ export default class UI extends Phaser.Scene {
                 this.pirateTeacherHelloText.destroy();
                 this.pirateTeacherBottomText.destroy();
                 this.nextToLearnButton.destroy();
+                this.learnerBackground.destroy();
+                this.QuestionNumberDisplayed.destroy();
             }
         });
     }
@@ -981,6 +1069,8 @@ export default class UI extends Phaser.Scene {
             if (this.nextToLearnButton){
                 this.nextToLearnButton.destroy();
             }
+            this.learnerBackground.destroy();
+            this.QuestionNumberDisplayed.destroy();
         }
     }
 }
