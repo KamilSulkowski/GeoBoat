@@ -21,6 +21,7 @@ export class WorldMap extends Phaser.Scene {
         this.maxWaves = 100; // Maximum number of waves allowed on the screen
         this.waveDelay = 2000; // Delay between each wave appearance
         this.lastWaveTime = 0; // Timestamp of the last wave appearance
+        this.deepwaterIsClose = false;
     }
 
     preload() {
@@ -66,6 +67,7 @@ export class WorldMap extends Phaser.Scene {
         this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
         this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
 
+
         // Animacja fali
         this.anims.create({
             key: 'waveAnimation',
@@ -97,7 +99,7 @@ export class WorldMap extends Phaser.Scene {
         this.physics.add.overlap(this.boat, this.jamajka, () => {
             this.inZone = true;
             if (this.inZone === true && !this.text) {
-                this.text = this.add.text(this.jamajka.x + 0 ,this.jamajka.y - 50, 'Czy chcesz wejść na region ?')
+                this.text = this.add.text(this.jamajka.x + 0 ,this.jamajka.y - 50, 'Wciśnij E, żeby wejść na region')
                   .setScale(1.5)
                   .setBackgroundColor('#808080')
                   .setColor('#000000')
@@ -110,7 +112,7 @@ export class WorldMap extends Phaser.Scene {
         this.physics.add.overlap(this.boat, this.havana, () => {
             this.inZone = true;
             if (this.inZone === true && !this.text2) {
-                this.text2 = this.add.text(this.havana.x + 0 ,this.havana.y - 50, 'Czy chcesz wejść na region ?')
+                this.text2 = this.add.text(this.havana.x + 0 ,this.havana.y - 50, 'Wciśnij E, żeby wejść na region')
                   .setScale(1.5)
                   .setBackgroundColor('#808080')
                   .setColor('#000000')
@@ -124,7 +126,7 @@ export class WorldMap extends Phaser.Scene {
         this.physics.add.overlap(this.boat, this.panama, () => {
             this.inZone = true;
             if (this.inZone === true && !this.text3) {
-                this.text3 = this.add.text(this.panama.x + 0 ,this.panama.y - 50, 'Czy chcesz wejść na region ?')
+                this.text3 = this.add.text(this.panama.x + 0 ,this.panama.y - 50, 'Wciśnij E, żeby wejść na region')
                     .setScale(1.5)
                     .setBackgroundColor('#808080')
                     .setColor('#000000')
@@ -142,7 +144,10 @@ export class WorldMap extends Phaser.Scene {
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
 
-        this.physics.add.collider(this.boat, this.deepwater, this.handleCollision , null, this);
+        if (this.deepwaterIsClose) {
+            this.deepwater.setCollisionByProperty({collides: false});
+            this.physics.add.collider(this.boat, this.deepwater, this.handleCollision , null, this);
+        }
         this.physics.add.collider(this.boat, this.ground, this.handleCollision , null, this);
         this.physics.add.collider(this.boat, this.extra, this.handleCollision , null, this);
     }
@@ -156,6 +161,7 @@ export class WorldMap extends Phaser.Scene {
         if (this.waves.getLength() < 300) {
             this.createWaves();
         }
+        console.log(this.deepwaterIsClose + " " + this.physics.add.collider(this.boat, this.deepwater));
         // Cooldown debuffa (Naprawa łodzi w czasie)
         this.shipDebuff()
         // Zmiana strzałki kompasu w zależności od pozycji łodzi
@@ -276,7 +282,7 @@ export class WorldMap extends Phaser.Scene {
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
         const changeAngle = 1;
-        console.log(this.boat.x + " " + this.boat.y);
+
         //const isOnDeepWater = this.physics.overlap(this.boat, this.deepwater);
         // Wyhamowanie przy dryfowaniu (odbiciu od lądu)
         if(this.adrift === 1){

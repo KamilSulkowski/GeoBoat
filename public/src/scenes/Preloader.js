@@ -45,7 +45,11 @@ export default class Preloader extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32
         });
-        
+        this.load.spritesheet('scrollLvl', "assets/scroll2-Sheet.png", {
+            frameWidth: 255,
+            frameHeight: 384
+            });
+
         this.load.image("modalBackground", "assets/modalBcg.png");
         this.load.image("scrollMap", "assets/scrollMap.png");
         this.load.image("scrollMapUI", "assets/globe.png");
@@ -66,6 +70,7 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("tadeuszProfil", "assets/tadeuszpiratlvl100profilPic.png");
         this.load.image("tadeuszMiniProfil", "assets/tadeuszpiratlvl100Profil.png");
         this.load.image('geoboatLogo', "assets/geoboat.png");
+        this.load.image('backgroundImage', "assets/background.png");
 
         this.load.image('tiled', "assets/worldtiles.png");
         this.load.image('house_scaled', "assets/house_scaled.png");

@@ -93,12 +93,12 @@ export class Havana extends Phaser.Scene {
         this.physics.add.overlap(this.boat, this.cityPort, () => {
             this.inZone = true;
             if (this.inZone === true && !this.quizText) {
-                this.quizText = this.add.text(this.cityPort.x + 0 ,this.cityPort.y - 50, 'Wciśnij Q, żeby przejść do quizu.')
+                this.quizText = this.add.text(this.cityPort.x + 0 ,this.cityPort.y - 50, 'Wciśnij E, żeby przejść do quizu.')
                     .setScale(1.5)
                     .setBackgroundColor('#808080')
                     .setColor('#000000')
                     .setStyle({fontFamily: "Arial"});
-                this.inZoneKey = this.input.keyboard.addKey('Q');
+                this.inZoneKey = this.input.keyboard.addKey('E');
                 this.inZoneKey.on('down', () => { this.uiScene.toggleQuiz()});
             }
         });
@@ -122,7 +122,9 @@ export class Havana extends Phaser.Scene {
         // Kolizja z obiektem (Odpychanie łodzi od brzegu, aktualnie od łódki drugiej)
         this.physics.add.collider(this.boat, this.ground, this.handleCollision , null, this);
         this.physics.add.collider(this.boat, this.stones, this.handleCollision , null, this);
-
+        this.physics.world.setBounds(0, 0, 2000, 2000, true, true, true, true);
+        this.physics.add.existing(this.boat);
+        this.boat.body.setCollideWorldBounds(true);
 
     }
 

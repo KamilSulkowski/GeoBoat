@@ -395,6 +395,12 @@ async function showEndScreen() {
     //Czy głębokie wody będą dostępne
     if (this.user.poziom > 1)
         water = 1
+
+    // if (this.user.poziom >= 2) {
+    //     this.worldMapScene = this.scene.get('worldMap');
+    //     this.worldMapScene.deepwaterIsClosed = false;
+    // }
+
     //Ekran nowego poziomu
     //////////////////////////
 
@@ -464,6 +470,20 @@ async function showEndScreen() {
             this.quizOpen = false;
         }
 
+        if (i === 1) {
+            this.scroll = this.physics.add.sprite(this.modalX+480, this.modalY+400, "scrollLvl");
+            this.anims.create({
+                key: 'scrollAnimation',
+                frames: this.anims.generateFrameNumbers('scrollLvl', { start: 0, end: 5 }),
+                frameRate: 7,
+            });
+            this.scroll.play('scrollAnimation');
+            setTimeout(() => {
+                this.scroll.destroy();
+            }, 2000);
+
+        }
+        console.log("lvlUp: ", i);
         console.log('Selected answer index:', this.selectedAnswerIndex);
         console.log('Punkty zdobyte!: ', this.scoredPoints);
     });

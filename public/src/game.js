@@ -14,11 +14,14 @@ export default class Game extends Phaser.Scene {
         this.HP = 3; //Zmienna do przechowywania aktualnej ilości HP
         this.boatCurrentX = 0;
         this.boatCurrentY = 0;
+
     }
     preload(){
     }
 
     create(){
+
+
     }
     update(time, delta) {
         super.update(time, delta);
