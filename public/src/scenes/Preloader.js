@@ -21,9 +21,9 @@ export default class Preloader extends Phaser.Scene {
             frameWidth: 256,
             frameHeight: 256
         });
-        this.load.spritesheet("mapAnim", "assets/animation/scrollMapSheet.png", {
-            frameWidth: 376,
-            frameHeight: 188
+        this.load.spritesheet("mapAnim", "assets/animation/scrollMapSheetDoUpdatea.png", {
+            frameWidth: 1880,
+            frameHeight: 940
         });
         this.load.spritesheet("buttonAnim", "assets/animation/buttonSheet.png", {
             frameWidth: 94,

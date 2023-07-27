@@ -228,7 +228,7 @@ export default class UI extends Phaser.Scene {
         this.menu.angle += this.scene.currentBoatSpeed/300;
         // Update paska szybkości
         this.updateSpeedBar();
-        this.coords.setText('Lat - ' + this.gameScene.boat.x + ' Long - ' + this.gameScene.boat.y);
+        this.coords.setText('Lat - ' + Math.floor(this.gameScene.boat.x) + ' Long - ' + Math.floor(this.gameScene.boat.y));
         this.regionTextProfil.text = 'Region: ' + this.scene.currentMap;
         try {
             this.regionText.text = 'Region: ' + this.scene.currentMap;
@@ -253,9 +253,6 @@ export default class UI extends Phaser.Scene {
         }else{
             this.boatRepair.setVisible(false);
         }
-
-        this.coords.setText('Lat - ' + this.gameScene.boat.x + ' Long - ' + this.gameScene.boat.y)
-        //this.regionText.setText('Region: ' + this.scene.currentMap)
 
         // Update tekstu pod HP
         if(this.scene.HP != 3){
@@ -666,11 +663,12 @@ export default class UI extends Phaser.Scene {
 
     }
     drawMap(){
-        this.scrollMap = this.add.sprite(this.bw*0.5, this.bh*0.6, "scrollMap")
-        this.scrollMap.scale = 4;
+        this.scale = 0.75;
+        this.scrollMap = this.add.sprite(this.bw*0.5, this.bh*0.5, "scrollMap")
+        this.scrollMap.scale = this.scale;
 
         this.scrollMap.play('mapOpen');
-        this.scrollMap.scale=4;
+        this.scrollMap.scale= this.scale;
 
         // Kompas
         this.compassH = this.add.image(this.bw*0.95, this.bh*0.9, "compassHead")
@@ -681,7 +679,7 @@ export default class UI extends Phaser.Scene {
     }
     closeMap() {
         this.scrollMap.play('mapClose');
-        this.scrollMap.scale=4;
+        this.scrollMap.scale= this.scale;
         if (this.mapOpen) {
             this.scrollMap.on('animationcomplete', () => {
                 this.mapOpen = false;

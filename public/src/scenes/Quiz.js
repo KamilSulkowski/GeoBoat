@@ -417,7 +417,7 @@ async function showEndScreen() {
 
     // Wynik
     let points = "Wynik: \n " + (this.scoredPoints) + " / " + (this.numberOfQuestions)
-    this.points = this.add.text(this.modalWidth / 2 + 50, this.modalHeight / 2 + 50, points, {
+    this.points = this.add.text(this.modalX + this.modalWidth / 2 - 85, this.modalY + 350, points, {
         fontFamily: 'Arial',
         fontSize: '50px',
         fill: '#000000',
@@ -487,10 +487,18 @@ export function closeQuiz(){
             if(this.submitButton){
                 this.submitButton.destroy();
             }
-            this.points.destroy();
-            this.QuestionNumberDisplayed.destroy();
-            this.quizCharacterImage.destroy();
-            this.quizQuestionText.destroy();
+            if(this.points){
+                this.points.destroy();
+            }
+            if(this.QuestionNumberDisplayed){
+                this.QuestionNumberDisplayed.destroy();
+            }
+            if(this.quizCharacterImage){
+                this.quizCharacterImage.destroy();
+            }
+            if(this.quizQuestionText){
+                this.quizQuestionText.destroy();
+            }
 
 
         }

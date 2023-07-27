@@ -53,7 +53,7 @@ export class Jamajka extends Phaser.Scene {
         this.birdGroup = this.physics.add.group()
         this.waves = this.physics.add.group();
 
-        this.boat = this.physics.add.sprite(370, 1320, "boat");
+        this.boat = this.physics.add.sprite(370, 1330, "boat");
         //this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
         this.port = this.physics.add.sprite(1150, 350 , "PPH");
         this.cityPort = this.physics.add.sprite(590, 1270, "QPH");
