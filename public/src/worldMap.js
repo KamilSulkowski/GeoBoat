@@ -58,7 +58,7 @@ export class WorldMap extends Phaser.Scene {
         this.waves = this.physics.add.group();
 
         // ładowanie łódki
-        this.boat = this.physics.add.sprite(3150, 1680, "boat");
+        this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
         this.jamajka = this.physics.add.sprite(3150, 1680 , "QPH");
         this.havana = this.physics.add.sprite(1670, 650 , "QPH");
         this.panama = this.physics.add.sprite(3250, 1580 , "QPH");
