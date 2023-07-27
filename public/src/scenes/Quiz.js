@@ -76,14 +76,17 @@ async function categorySelection() {
         this.categoriesTexts[index].setColor('#52a5ff');
         this.selectedAnswerIndex = index;
         this.categoryButton.visible = true;
+        this.categoryButtonSprite.visible = true;
     };
 
     //Przycisk zatwierdzania wyboru
-    this.categoryButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Zatwierdź', {
+    this.categoryButtonSprite = this.add.sprite(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, "buttonAnim")
+    this.categoryButtonSprite.scale = 1.75;
+    this.categoryButtonSprite.visible = false;
+    this.categoryButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 48, 'Zatwierdź', {
         fontFamily: 'ModalFont',
         fontSize: '24px',
         fill: '#ffffff',
-        backgroundColor: '#007bff',
         padding: {
             x: 20,
             y: 10,
@@ -97,6 +100,7 @@ async function categorySelection() {
             this.categoriesText.destroy();
         }
         this.categoryButton.destroy();
+        this.categoryButtonSprite.destroy();
         for(this.buttonDestroyer of this.buttons){
             this.buttonDestroyer.destroy();
         }
@@ -238,6 +242,7 @@ function drawQuestionAndAnswers(){
         this.quizAnswerTexts[index].setColor('#aaffaa');
         this.selectedAnswerIndex = index; // Zapamiętanie indeksu wybranej odpowiedzi
         this.submitButton.visible = true;
+        this.submitButtonnSprite.visible = true;
     };
 
     // Liczba pytań
@@ -255,11 +260,13 @@ function drawQuestionAndAnswers(){
     this.QuestionNumberDisplayed.setOrigin(0.5);
 
     //Przycisk odpowiedzi
-    this.submitButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Zatwierdź', {
+    this.submitButtonnSprite = this.add.sprite(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, "buttonAnim")
+    this.submitButtonnSprite.scale = 1.75;
+    this.submitButtonnSprite.visible = false;
+    this.submitButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 48, 'Zatwierdź', {
         fontFamily: 'ModalFont',
         fontSize: '24px',
         fill: '#ffffff',
-        backgroundColor: '#007bff',
         padding: {
             x: 20,
             y: 10,
@@ -275,6 +282,7 @@ function drawQuestionAndAnswers(){
             this.scoredPoints += 1;
         if(this.submitButton)
             this.submitButton.destroy();
+            this.submitButtonnSprite.destroy();
 
         console.log('Selected answer index:', this.selectedAnswerIndex);
         console.log('Punkty zdobyte: ', this.scoredPoints);
@@ -340,11 +348,13 @@ function showResult() {
     this.correctionText.setOrigin(1);
 
     //Przejście dalej
-    this.nextQuestionButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Dalej', {
+    this.nextQuestionButtonSprite = this.add.sprite(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, "buttonAnim")
+    this.nextQuestionButtonSprite.scale = 1.75;
+    this.nextQuestionButtonSprite.visible = true;
+    this.nextQuestionButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 48, 'Dalej', {
         fontFamily: 'ModalFont',
         fontSize: '24px',
         fill: '#ffffff',
-        backgroundColor: '#007bff',
         padding: {
             x: 20,
             y: 10,
@@ -368,6 +378,7 @@ function showResult() {
                 this.QuestionNumberDisplayed.destroy();
                 if(this.nextQuestionButton)
                     this.nextQuestionButton.destroy();
+                    this.nextQuestionButtonSprite.destroy();
             }
             this.correctionText.destroy();
 
@@ -383,6 +394,7 @@ function showResult() {
                 this.questionImage.destroy();
             if (this.nextQuestionButton)
                 this.nextQuestionButton.destroy();
+                this.nextQuestionButtonSprite.destroy();
             this.QuestionNumberDisplayed.destroy();
 
             drawQuestionAndAnswers.call(this);
@@ -431,11 +443,13 @@ async function showEndScreen() {
     });
 
     //Zakończ
-    this.submitButton = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 70, 'Zakończ', {
+    this.submitButtonSprite = this.add.sprite(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 70, "buttonAnim")
+    this.submitButtonSprite.scale = 2;
+    this.submitButtonSprite.visible = true;
+    this.submitButton = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 72, 'Zakończ', {
         fontFamily: 'ModalFont',
         fontSize: '40px',
         fill: '#ffffff',
-        backgroundColor: '#007bff',
         padding: {
             x: 20,
             y: 10,
@@ -451,6 +465,8 @@ async function showEndScreen() {
         }
         if(this.submitButton){
             this.submitButton.destroy();
+            this.submitButtonnSprite.destroy();
+            this.submitButtonSprite.destroy();
         }
         this.QuestionNumberDisplayed.destroy();
 
@@ -462,6 +478,8 @@ async function showEndScreen() {
             this.endText.destroy();
             if(this.submitButton){
                 this.submitButton.destroy();
+                this.submitButtonnSprite.destroy();
+                this.submitButtonSprite.destroy();
             }
             this.quizAnswerText.destroy();
             this.quizOpen = false;
@@ -490,6 +508,8 @@ export function closeQuiz(){
                 this.questionImage.destroy();
             if(this.submitButton){
                 this.submitButton.destroy();
+                this.submitButtonnSprite.destroy();
+                this.submitButtonSprite.destroy();
             }
             if(this.points){
                 this.points.destroy();
@@ -516,6 +536,7 @@ export function closeQuiz(){
         }
         if(this.nextQuestionButton){
             this.nextQuestionButton.destroy();
+            this.nextQuestionButtonSprite.destroy();
         }
         if(this.quizBackground){
             this.quizBackground.destroy();
@@ -524,6 +545,7 @@ export function closeQuiz(){
             this.categoriesText.destroy();
         }
         this.categoryButton.destroy();
+        this.categoryButtonSprite.destroy();
         this.quizOpen = false;
     }
 }

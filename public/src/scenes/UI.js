@@ -874,7 +874,7 @@ export default class UI extends Phaser.Scene {
 
         this.categoryButton1Sprite = this.add.sprite(this.modalX + this.modalWidth / 2 - 200, this.modalY + this.modalHeight - 100, "buttonAnim")
         this.categoryButton1Sprite.scale = 1.75;
-        this.categoryButton1 = this.add.text(this.modalX + this.modalWidth / 2 - 200, this.modalY + this.modalHeight - 100, 'Polityka', {
+        this.categoryButton1 = this.add.text(this.modalX + this.modalWidth / 2 - 200, this.modalY + this.modalHeight - 103, 'Polityka', {
             fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
@@ -892,11 +892,12 @@ export default class UI extends Phaser.Scene {
             this.categoryButton3.setColor('#ffffff');
             this.category = "Polityka"
             this.nextScreenButton.visible = true;
+            this.nextScreenButtonSprite.visible = true;
         })
 
         this.categoryButton2Sprite = this.add.sprite(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 100, "buttonAnim")
         this.categoryButton2Sprite.scale = 1.75;
-        this.categoryButton2 = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 100, 'Kultura', {
+        this.categoryButton2 = this.add.text(this.modalX + this.modalWidth / 2, this.modalY + this.modalHeight - 103, 'Kultura', {
             fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
@@ -914,11 +915,12 @@ export default class UI extends Phaser.Scene {
             this.categoryButton3.setColor('#ffffff');
             this.category = "Kultura"
             this.nextScreenButton.visible = true;
+            this.nextScreenButtonSprite.visible = true;
         })
 
         this.categoryButton3Sprite = this.add.sprite(this.modalX + this.modalWidth / 2 + 200, this.modalY + this.modalHeight - 100, "buttonAnim")
         this.categoryButton3Sprite.scale = 1.75;
-        this.categoryButton3 = this.add.text(this.modalX + this.modalWidth / 2 + 200, this.modalY + this.modalHeight - 100, 'Kuchnia', {
+        this.categoryButton3 = this.add.text(this.modalX + this.modalWidth / 2 + 200, this.modalY + this.modalHeight - 103, 'Kuchnia', {
             fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
@@ -936,15 +938,18 @@ export default class UI extends Phaser.Scene {
             this.categoryButton3.setColor('#52a5ff');
             this.category = "Kuchnia"
             this.nextScreenButton.visible = true;
+            this.nextScreenButtonSprite.visible = true;
         })
 
 
         //Przejście dalej
-        this.nextScreenButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Dalej', {
+        this.nextScreenButtonSprite = this.add.sprite(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, "buttonAnim")
+        this.nextScreenButtonSprite.scale = 1.75;
+        this.nextScreenButtonSprite.visible = false;
+        this.nextScreenButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 48, 'Dalej', {
             fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
-            backgroundColor: '#007bff',
             padding: {
                 x: 20,
                 y: 10,
@@ -957,6 +962,7 @@ export default class UI extends Phaser.Scene {
         this.nextScreenButton.on('pointerdown', () => {
             if (this.learnerOpen) {
                 this.nextScreenButton.destroy();
+                this.nextScreenButtonSprite.destroy();
                 this.categoryButton1.destroy();
                 this.categoryButton2.destroy();
                 this.categoryButton3.destroy();
@@ -1014,11 +1020,12 @@ export default class UI extends Phaser.Scene {
         }
 
         //Przejście dalej
-        this.nextToLearnButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, 'Dalej', {
+        this.nextToLearnButtonSprite = this.add.sprite(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 45, "buttonAnim")
+        this.nextToLearnButtonSprite.scale = 1.75;
+        this.nextToLearnButton = this.add.text(this.modalX + this.modalWidth / 2 + 303, this.modalY + this.modalHeight - 48, 'Dalej', {
             fontFamily: 'ModalFont',
             fontSize: '24px',
             fill: '#ffffff',
-            backgroundColor: '#007bff',
             padding: {
                 x: 20,
                 y: 10,
@@ -1053,6 +1060,7 @@ export default class UI extends Phaser.Scene {
                 this.pirateTeacherHelloText.destroy();
                 this.pirateTeacherBottomText.destroy();
                 this.nextToLearnButton.destroy();
+                this.nextToLearnButtonSprite.destroy();
                 this.learnerBackground.destroy();
                 this.QuestionNumberDisplayed.destroy();
             }
@@ -1077,6 +1085,7 @@ export default class UI extends Phaser.Scene {
             }
             if (this.nextToLearnButton){
                 this.nextToLearnButton.destroy();
+                this.nextToLearnButtonSprite.destroy();
             }
             this.learnerBackground.destroy();
             this.QuestionNumberDisplayed.destroy();
