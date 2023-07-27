@@ -471,7 +471,7 @@ async function showEndScreen() {
         }
 
         if (i === 1) {
-            this.scroll = this.physics.add.sprite(this.modalX+480, this.modalY+400, "scrollLvl");
+            this.scroll = this.physics.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY, "scrollLvl");
             this.anims.create({
                 key: 'scrollAnimation',
                 frames: this.anims.generateFrameNumbers('scrollLvl', { start: 0, end: 5 }),
