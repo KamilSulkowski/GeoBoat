@@ -53,7 +53,7 @@ export class Panama extends Phaser.Scene {
         this.birdGroup = this.physics.add.group()
         this.waves = this.physics.add.group();
 
-        this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
+        this.boat = this.physics.add.sprite(3150, 1750, "boat");
         this.port = this.physics.add.sprite(125, 940 , "PPH");
         this.cityPort = this.physics.add.sprite(520, 580, "QPH");
         this.backToWorld = this.physics.add.sprite(1900, 1900, "backToWorld");
@@ -93,13 +93,6 @@ export class Panama extends Phaser.Scene {
                 this.inZoneKey = this.input.keyboard.addKey('E')
             }
         });
-
-        //Wyświetlanie nazwy i poziomu gracza
-        if (this.uiScene.userData) {
-            this.uiScene.user = this.uiScene.userData.find((row) => row.nazwa === this.uiScene.userName);
-            this.uiScene.userText.setText(this.uiScene.userName);
-            this.uiScene.expText.setText('Level ' + this.uiScene.user.poziom);
-        }
 
         //Wpływanie na quizy, alert
         this.physics.add.overlap(this.boat, this.cityPort, () => {
@@ -160,6 +153,14 @@ export class Panama extends Phaser.Scene {
         if (this.waves.getLength() < 100) {
             this.createWaves();
         }
+
+        //Wyświetlanie nazwy i poziomu gracza
+        if (this.uiScene.userData) {
+            this.uiScene.user = this.uiScene.userData.find((row) => row.nazwa === this.uiScene.userName);
+            this.uiScene.userText.setText(this.uiScene.userName);
+            this.uiScene.expText.setText('Level ' + this.uiScene.user.poziom);
+        }
+
         // Cooldown debuffa (Naprawa łodzi w czasie)
         this.shipDebuff()
         // Zmiana strzałki kompasu w zależności od pozycji łodzi
