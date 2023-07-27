@@ -57,12 +57,6 @@ export class Havana extends Phaser.Scene {
         this.port = this.physics.add.sprite(1280, 125 , "PPH");
         this.cityPort = this.physics.add.sprite(440, 265, "QPH");
         this.backToWorld = this.physics.add.sprite(1900, 1900, "backToWorld");
-        this.pirateTeacher = this.physics.add.sprite(1100, 1100, "pirateTeacher");
-
-        // Zmiana obszaru kolizji dla npca naukowego
-        this.pirateTeacher.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
-        this.pirateTeacher.body.setSize(300, 140, 0.5, 0.5); // Set the size and offset of the collision body
-        this.pirateTeacher.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
         // Zmiana obszaru kolizji dla gracza
         this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
@@ -160,7 +154,20 @@ export class Havana extends Phaser.Scene {
         this.gameScene.boatCurrentY = this.boat.y;
         // Sprawdzenie, czy łódka opuściła obszar kolizji
         this.inZone = false;
-
+        if (this.inZone === false && !this.physics.overlap(this.boat, this.port)) {
+            if (this.text) {
+                this.text.destroy();
+                this.text = null;
+                this.inZoneKey.destroy();
+            }
+        }
+        if (!this.inZone && !this.physics.overlap(this.boat, this.cityPort)) {
+            if (this.quizText) {
+                this.quizText.destroy();
+                this.quizText = null;
+                this.inZoneKey.destroy();
+            }
+        }
         if (!this.inZone && !this.physics.overlap(this.boat, this.backToWorld)) {
             if (this.backToWorldText) {
                 this.backToWorldText.destroy();

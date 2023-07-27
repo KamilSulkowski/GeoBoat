@@ -57,10 +57,10 @@ export class WorldMap extends Phaser.Scene {
         this.waves = this.physics.add.group();
 
         // ładowanie łódki
-        this.boat = this.physics.add.sprite(3150, 1680, "boat");
-        this.jamajka = this.physics.add.sprite(3150, 1680 , "QPH");
-        this.havana = this.physics.add.sprite(1670, 650 , "QPH");
-        this.panama = this.physics.add.sprite(3250, 1580 , "QPH");
+        this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
+        this.jamajka = this.physics.add.sprite(3150, 1700 , "PPH");
+        this.havana = this.physics.add.sprite(3050, 1780 , "PPH");
+        this.panama = this.physics.add.sprite(3250, 1580 , "PPH");
         // Zmiana obszaru kolizji dla gracza
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
         this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
@@ -242,8 +242,8 @@ export class WorldMap extends Phaser.Scene {
         console.log("zmiana mapy1: " + this.gameScene.currentMap + " inzone: " + this.inZone);
         switch (this.region) {
             case 'jamajka':
-                this.gameScene.boatRespawnX = 600;
-                this.gameScene.boatRespawnY = 600;
+                this.gameScene.boatRespawnX = 1800;
+                this.gameScene.boatRespawnY = 1800;
                 this.gameScene.currentMap = 'jamajka';
                 this.scene.stop('worldMap');
                 this.scene.launch('jamajka');

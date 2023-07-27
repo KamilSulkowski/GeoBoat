@@ -57,12 +57,6 @@ export class Panama extends Phaser.Scene {
         this.port = this.physics.add.sprite(125, 940 , "PPH");
         this.cityPort = this.physics.add.sprite(520, 580, "QPH");
         this.backToWorld = this.physics.add.sprite(1900, 1900, "backToWorld");
-        this.pirateTeacher = this.physics.add.sprite(80, 850, "pirateTeacher");
-
-        // Zmiana obszaru kolizji dla npca naukowego
-        this.pirateTeacher.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
-        this.pirateTeacher.body.setSize(300, 140, 0.5, 0.5); // Set the size and offset of the collision body
-        this.pirateTeacher.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
         // Zmiana obszaru kolizji dla gracza
         this.boat.setOrigin(0.5, 0.5); // Set the origin to the center of the sprite
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
@@ -120,19 +114,6 @@ export class Panama extends Phaser.Scene {
                 this.inZoneKey.on('down', () => {this.changeMap()});
             }
         });
-
-        this.physics.add.overlap(this.boat, this.pirateTeacher, () => {
-            this.inZone = true;
-            if (this.inZone === true && !this.learnText) {
-                this.learnText = this.add.text(this.pirateTeacher.x + 0 ,this.pirateTeacher.y - 50, 'Wciśnij E, żeby dowiedzieć się czegoś o tym miejscu.')
-                    .setScale(1.5)
-                    .setBackgroundColor('#808080')
-                    .setColor('#000000')
-                    .setStyle({fontFamily: "Arial"});
-                this.inZoneKey = this.input.keyboard.addKey('E');
-                this.inZoneKey.on('down', () => { this.uiScene.toggleLearning(this.regionFlag)});
-            }
-        });
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
 
@@ -171,7 +152,13 @@ export class Panama extends Phaser.Scene {
         this.gameScene.boatCurrentY = this.boat.y;
         // Sprawdzenie, czy łódka opuściła obszar kolizji
         this.inZone = false;
-
+        if (this.inZone === false && this.physics.overlap(this.boat, this.port) === false) {
+            if (this.text) {
+                this.text.destroy();
+                this.text = null;
+                this.inZoneKey.destroy();
+            }
+        }
         if (!this.inZone && !this.physics.overlap(this.boat, this.cityPort)) {
             if (this.quizText) {
                 this.quizText.destroy();
@@ -183,13 +170,6 @@ export class Panama extends Phaser.Scene {
             if (this.backToWorldText) {
                 this.backToWorldText.destroy();
                 this.backToWorldText = null;
-                this.inZoneKey.destroy();
-            }
-        }
-        if (!this.inZone && !this.physics.overlap(this.boat, this.pirateTeacher)) {
-            if (this.learnText) {
-                this.learnText.destroy();
-                this.learnText = null;
                 this.inZoneKey.destroy();
             }
         }
