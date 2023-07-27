@@ -4,7 +4,12 @@ export class Login extends Phaser.Scene {
     }
     preload() {}
     create() {
-        this.backgroundColor = '#1bd0fe';
+        this.background = this.add.image(0, 0, 'backgroundImage').setOrigin(0, 0);
+
+        // Ustawienie skalowania obrazu tła na cały ekran
+        const scaleX = window.innerWidth / this.background.width;
+        const scaleY = window.innerHeight / this.background.height;
+        this.background.setScale(scaleX, scaleY);
         const form = document.createElement('form')
         form.setAttribute('id', 'form')
 
