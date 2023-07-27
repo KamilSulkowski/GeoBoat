@@ -91,7 +91,7 @@ export default class Preloader extends Phaser.Scene {
         this.load.image('FPH', "assets/finPH.png");
 
         this.load.image("roseHall", "assets/roseHall.png");
-
+        this.load.image("logoPanama", "assets/logoPanama.png");
     }
     create() {
         this.scene.start('login');

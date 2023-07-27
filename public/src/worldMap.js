@@ -360,9 +360,7 @@ export class WorldMap extends Phaser.Scene {
         if (engine = 1){
             this.boat.setVelocity(-this.boatSpeed *dx, -this.boatSpeed *dy);
         }
-    }
-    deepWaterHandleCollision() {
-        console.log("deepwater");
+
 
     }
     // Function to manage birds

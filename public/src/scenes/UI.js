@@ -1,5 +1,5 @@
 import {startQuiz, closeQuiz} from "./Quiz.js";
-import {getUserData, updateLocation} from '../data_access/data_access.js';
+import {updateLocation} from '../data_access/data_access.js';
 
 export default class UI extends Phaser.Scene {
     constructor() {
@@ -27,19 +27,23 @@ export default class UI extends Phaser.Scene {
         });
     }
 
-    async create(login) {
+    create(data) {
         this.gameScene = this.scene.get('worldMap');
         this.sceneJam = this.scene.get('Jamajka');
         this.sceneHav = this.scene.get('Havana');
         this.scenePan = this.scene.get('Panama');
 
-        this.userName = login;
+        this.userName = data.login;
         console.log("UserName: ", this.userName);
 
-        getUserData.call(this);
-        //console.log(this.userData);
+        this.userData = data.userData;
+        console.log(this.userData);
 
         this.scene = this.scene.get('game');
+        console.log('hp: ', this.scene.HP);
+        console.log('x: ', this.scene.boatRespawnX);
+        console.log('y: ', this.scene.boatRespawnY);
+
         // Pobranie wysokości/długości sceny
         this.bw = this.cameras.main.width; // width main kamery
         this.bh = this.cameras.main.height;// height main kamery
@@ -229,7 +233,7 @@ export default class UI extends Phaser.Scene {
     }
 
     update(time, delta) {
-        this.menu.angle += this.scene.currentBoatSpeed/300;
+        this.menu.angle += this.scene.currentBoatSpeed / 300;
         // Update paska szybkości
         this.updateSpeedBar();
         this.coords.setText('Lat - ' + Math.floor(this.gameScene.boat.x) + ' Long - ' + Math.floor(this.gameScene.boat.y));
@@ -238,9 +242,6 @@ export default class UI extends Phaser.Scene {
             this.regionText.text = 'Region: ' + this.scene.currentMap;
         } catch (error) {
         }
-
-
-
 
 
         //Wyświetlanie nazwy i poziomu gracza
@@ -252,22 +253,21 @@ export default class UI extends Phaser.Scene {
 
         //Pobieranie położenia gracza
         if (this.userData)
-            updateLocation(this.user.lokalizacjaX, this.user.lokalizacjaY, this.user.id);
+            updateLocation(Math.round(this.gameScene.boat.x), Math.round(this.gameScene.boat.y), this.user.id);
 
         // Update tekstu stanu łodzi
-        if(this.scene.HP === 0){
+        if (this.scene.HP === 0) {
             this.boatRepair.setVisible(true);
-        }else{
+        } else {
             this.boatRepair.setVisible(false);
         }
 
         // Update tekstu pod HP
-        if(this.scene.HP != 3){
-            this.stateText.setText("Repaired in: " + Math.floor(((this.scene.shipRepairTime - this.scene.shipCooldown)/1000))+ "s");
-        }else{
+        if (this.scene.HP != 3) {
+            this.stateText.setText("Repaired in: " + Math.floor(((this.scene.shipRepairTime - this.scene.shipCooldown) / 1000)) + "s");
+        } else {
             this.stateText.setText("Fully repaired");
         }
-
 
     }
 
@@ -277,11 +277,11 @@ export default class UI extends Phaser.Scene {
             this.scene.shipDamaged = true;
             this.scene.HP -= 1;
             const temp = this.heartsArray[this.scene.HP];
-            temp.setTexture('emptyHeart'); 
+            temp.setTexture('emptyHeart');
             if(this.scene.HP < 1){
                 this.gameScene.shipWrecked()
             }
-            
+
         }
         // Odnowienie serduszek życia w czasie
         recoverHeart(){
@@ -434,7 +434,7 @@ export default class UI extends Phaser.Scene {
             width: 20,
             height: 340,
             orientation: 'y',
-            
+
             thumb: this.rexUI.add.roundRectangle(0, 0, 0, 100, 10, '0x000000'),
 
             valuechangeCallback: (value) => {
@@ -637,13 +637,13 @@ export default class UI extends Phaser.Scene {
         }
     }
 
-    toggleQuiz(){
+    toggleQuiz(regionID){
         if (this.quizOpen) {
             console.log("quiz close")
             closeQuiz.call(this);
         } else {
             console.log("quiz open")
-            startQuiz.call(this);
+            startQuiz.call(this, regionID);
         }
     }
 
@@ -661,14 +661,14 @@ export default class UI extends Phaser.Scene {
         this.anims.create({
             key: 'mapOpen',
             frames: this.anims.generateFrameNumbers('mapAnim', { start: 0, end: 4 }),
-            frameRate: 30, 
+            frameRate: 30,
             repeat: 0
         });
         this.anims.create({
             key: 'mapClose',
             frames: this.anims.generateFrameNumbers('mapAnim', { start: 4, end: 0 }),
-            frameRate: 60, 
-            repeat: 0 
+            frameRate: 60,
+            repeat: 0
         });
         this.drawMap();
 
@@ -827,7 +827,7 @@ export default class UI extends Phaser.Scene {
         this.modalHeight = 600;
         this.modalX = (this.bw - this.modalWidth) / 2;
         this.modalY = (this.bh - this.modalHeight) / 2;
-    
+
         this.learnerOpen = true;
         this.learnerBackground = this.add.image(this.bw*0.5, this.bh*0.5, "modalBackgroundBig")
         this.modal = this.add.graphics();

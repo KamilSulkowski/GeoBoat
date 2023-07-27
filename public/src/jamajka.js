@@ -89,6 +89,28 @@ export class Jamajka extends Phaser.Scene {
         this.boat.play('boatAnimation');
         this.boat.anims.pause();
 
+        //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
+        //obiektem aktualnie może być łódka
+        this.physics.add.overlap(this.boat, this.port, () => {
+            this.inZone = true;
+            if (this.inZone === true && !this.text) {
+                this.text = this.add.text(this.port.x + 0 ,this.port.y - 50, 'Czy chcesz wejść na region ?')
+                    .setScale(1.5)
+                    .setBackgroundColor('#808080')
+                    .setColor('#000000')
+                    .setStyle({fontFamily: "Arial"});
+                this.inZoneKey = this.input.keyboard.addKey('E')
+                this.inZoneKey.on('down', () => {this.changeMap()});
+            }
+        });
+
+        //Wyświetlanie nazwy i poziomu gracza
+        if (this.uiScene.userData) {
+            this.uiScene.user = this.uiScene.userData.find((row) => row.nazwa === this.uiScene.userName);
+            this.uiScene.userText.setText(this.uiScene.userName);
+            this.uiScene.expText.setText('Level ' + this.uiScene.user.poziom);
+        }
+
         //Wpływanie na quizy, alert
         this.physics.add.overlap(this.boat, this.cityPort, () => {
             this.inZone = true;
@@ -99,7 +121,7 @@ export class Jamajka extends Phaser.Scene {
                     .setColor('#000000')
                     .setStyle({fontFamily: "Arial"});
                 this.inZoneKey = this.input.keyboard.addKey('E');
-                this.inZoneKey.on('down', () => { this.uiScene.toggleQuiz()});
+                this.inZoneKey.on('down', () => { this.uiScene.toggleQuiz(1)});
             }
         });
         this.physics.add.overlap(this.boat, this.backToWorld, () => {

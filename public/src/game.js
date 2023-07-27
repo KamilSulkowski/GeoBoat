@@ -1,8 +1,8 @@
 export default class Game extends Phaser.Scene {
     constructor() {
         super('game');
-        this.boatRespawnX = 3150; //Współrzędne respawnu łodzi
-        this.boatRespawnY = 1720; //Współrzędne respawnu łodzi
+        this.boatRespawnX = null; //Współrzędne respawnu łodzi
+        this.boatRespawnY = null; //Współrzędne respawnu łodzi
         this.shipDamaged = false; //Zmienna określająca czy statek został zniszczony
         this.shipRepairTime = 10000; //Czas naprawy statku
         this.shipCooldown = 0;//Zmienna do sprawdzania czasu naprawy
@@ -12,16 +12,18 @@ export default class Game extends Phaser.Scene {
         this.currentBoatSpeed = 0; //Zmienna do ustawiania prędkości łódki
         this.currentMap = 'worldmap'; //Zmienna do przechowywania aktualnej mapy
         this.HP = 3; //Zmienna do przechowywania aktualnej ilości HP
-        this.boatCurrentX = 0;
-        this.boatCurrentY = 0;
-
     }
     preload(){
     }
 
-    create(){
-
-
+    create(data){
+        var user = data.userData.find((row) => row.nazwa === data.login);
+        this.boatRespawnX = user.lokalizacjaX; //Współrzędne respawnu łodzi
+        this.boatRespawnY = user.lokalizacjaY; //Współrzędne respawnu łodzi
+        console.log('hp: ', this.HP);
+        console.log('x: ', this.boatRespawnX);
+        console.log('y: ', this.boatRespawnY);
+        this.scene.start('worldMap');
     }
     update(time, delta) {
         super.update(time, delta);
