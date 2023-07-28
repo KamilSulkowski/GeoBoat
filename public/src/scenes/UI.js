@@ -18,6 +18,7 @@ export default class UI extends Phaser.Scene {
         this.rightScrollScrolled = false;
         this.regionText = null;
         this.HelloScreenSeen = false;
+        this.oldXP = 0;
     }
     preload() {
         this.load.scenePlugin({
@@ -249,7 +250,13 @@ export default class UI extends Phaser.Scene {
             this.user = this.userData.find((row) => row.nazwa === this.userName);
             this.userText.setText(this.userName);
             this.expText.setText('Level ' + this.user.poziom);
+            this.oldXP = this.user.punktyXP
+            this.updateExpBar();
+        } 
+        if(this.oldXP != this.user.punktyXP){
+            this.updateExpBar();
         }
+
 
         //Pobieranie położenia gracza
         if (this.userData)
@@ -288,6 +295,14 @@ export default class UI extends Phaser.Scene {
             const temp = this.heartsArray[this.scene.HP];
             temp.setTexture('fullHeart');
             this.scene.HP += 1;
+        }
+        // Update paska expa
+        updateExpBar(){
+            this.fillExpBarValue = this.user.punktyXP % 50;
+            // console.log(this.user.punktyXP); //50 expa na lv
+            // console.log(this.fillExpBarValue); 
+            this.fillExpBar.fillStyle(0x7dff45, 1)
+            this.fillExpBar.fillRect(this.bw-(this.bw - 25), this.bh-(this.bh-88), this.fillExpBarValue*2.6, this.bh-(this.bh-20)); // 130 max
         }
         // Update paska szybkości
         updateSpeedBar(){
