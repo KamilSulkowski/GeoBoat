@@ -529,6 +529,8 @@ export function closeQuiz(){
             if(this.submitButton){
                 this.submitButton.destroy();
                 this.submitButtonnSprite.destroy();
+            }
+            if(this.submitButtonSprite){
                 this.submitButtonSprite.destroy();
             }
             if(this.points){
@@ -546,9 +548,11 @@ export function closeQuiz(){
 
 
         }
-        if(this.buttons.length > 0){
-            for(this.buttonDestroyer of this.buttons){
-                this.buttonDestroyer.destroy();
+        if(this.buttons){
+            if(this.buttons.length > 0){
+                for(this.buttonDestroyer of this.buttons){
+                    this.buttonDestroyer.destroy();
+                }
             }
         }
         if(this.correctionText){
