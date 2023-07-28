@@ -728,12 +728,13 @@ export default class UI extends Phaser.Scene {
         if (this.learnerOpen) {
             this.closeLearning();
         } else {
+            console.log(regionFlag)
             this.showLearning(regionFlag);
         }
     }
     showLearning(regionFlag) {
         console.log(regionFlag)
-        if(regionFlag = "Jamajka"){
+        if(regionFlag === "Jamajka"){
             this.pirateText = [
                     {
                         Polityka: 'W 2022 roku stopa bezrobocia na Jamajce wynosiła około 6%, co jest stosunkowo niskim wskaźnikiem w porównaniu z innymi krajami.',
@@ -786,61 +787,61 @@ export default class UI extends Phaser.Scene {
                         Kuchnia: 'Podczas pobytu na Jamajce, nie zapomnij spróbować słynnego rumu, który jest jednym z najważniejszych produktów eksportowych kraju. Jamaika słynie z produkcji doskonałego rumu, który jest wspaniałym dodatkiem do wielu drinków i koktajli. To idealna okazja, by podziwiać zachody słońca nad karaibskim morzem, delektując się wspaniałym trunkiem.',
                     },
                 ]
-        }else if(regionFlag = "Panama"){
+        }else if(regionFlag === "Panama"){
             this.pirateText = [
-             {
-                Polityka: 'W 2022 roku stopa bezrobocia na Jamajce wynosiła około 6%, co jest stosunkowo niskim wskaźnikiem w porównaniu z innymi krajami.',
-                Kultura: 'Gdy przenosisz się do tajemniczej Jamajki, warto wiedzieć, że dominującą religią na tej wyspie jest protestantyzm. To religia, która odegrała ważną rolę w historii kraju i wpłynęła na kulturę oraz zwyczaje jego mieszkańców.',
-                Kuchnia: 'Jamajka, znana jest nie tylko z pięknych plaż, ale także z wyjątkowej kuchni. Wśród tradycyjnych potraw, które stanowią dumę tego miejsca, jest pyszny ryż z grochem, czyli "rice and peas". To aromatyczne danie, w którym soczysty kurczak stanowi doskonałe towarzystwo dla ziarnistego ryżu i soczystego grochu.',
+            {
+                Polityka: 'Witaj w tajemniczej Panamie, kapitanie! Na naszej wyprawie poznasz wiele ciekawostek o tym niezwykłym kraju. Chciałbym podzielić się z tobą informacją o kanałowi panamskim - majestatycznej arterii wodnej o długości około 80 km, łączącej Ocean Spokojny z Oceanem Atlantyckim.',
+                Kultura: 'W świecie Panamy, nieodłącznie związanej z odkrywaniem i podróżami, pamiętajmy o Vasco Nunez de Balboa, założycielu pierwszej stałej europejskiej kolonii w tym regionie. Jego śmiała wyprawa przyczyniła się do istotnych zmian w historii tego kraju.',
+                Kuchnia: 'Kiedy poznajemy smakowite potrawy Panamy, warto wspomnieć o tradycyjnym daniu z mięsem marynowanym w sosie pomidorowym z cebulą, papryką i przyprawami. Nazywa się ono Bistec Picado, a jego wyrazisty smak sprawia, że staje się ono jednym z ulubionych dań mieszkańców.',
             },
             {
-                Polityka: 'Podczas swojej przygody na Jamajce, pamiętaj o walucie, która obowiązuje na tej wyspie - dolarze jamajskim. To oficjalna jednostka monetarna kraju, która jest używana do dokonywania transakcji handlowych i zakupów.',
-                Kultura: 'Kontynuując naszą wędrówkę po Jamajce, warto zatrzymać się na chwilę przed fascynującym budynkiem. Czy rozpoznajesz to miejsce na zdjęciu? To Rose Hall, imponujący biały dwór w stylu georgiańskim, który w przeszłości był rezydencją plantacji cukru. Obiekt ten ma bogatą historię i opowieści o duchach.',
-                Kuchnia: 'Oprócz "rice and peas", musisz koniecznie spróbować ackee, charakterystycznego owocu Jamajki. Ackee ma kształt trójlistnej koniczyny i jest uważane za narodowy owoc kraju. Może wydawać się dziwaczne, ale po ugotowaniu przypomina smakiem i teksturą jajecznicę. To jeden z najbardziej rozpoznawalnych smaków Jamajki!',
+                Polityka: 'Teraz jesteśmy gotowi na kolejną ciekawostkę - zakończenie budowy kanału panamskiego. To wydarzenie miało miejsce w roku 1914, kiedy to potężne śluzy otworzyły drogę dla statków na nową trasę przez Amerykę Środkową.',
+                Kultura: 'Podczas naszej wyprawy do Panamy, odkrywamy również skarby kultury i zabytki wpisane na listę UNESCO. Jednym z nich jest park narodowy Darien, który zachwyca swoją dziką naturą i jest ważnym miejscem dla bioróżnorodności.',
+                Kuchnia: 'Czas na kolejne kulinarnie wyzwanie! Czy potrafisz odgadnąć, co charakteryzuje danie o nazwie "Carimanola"? To delikatne ciasto z mielonym mięsem jako charakterystycznym składnikiem, które jest doskonałym smakołykiem, by cieszyć się nim w towarzystwie.',
             },
             {
-                Polityka: 'Gospodarka Jamajki jest związana z różnymi organizacjami, ale jedną z najważniejszych jest CARICOM (Caribbean Community). Jest to organizacja gospodarcza, która skupia kraje karaibskie i promuje współpracę ekonomiczną i integrację regionalną.',
-                Kultura: 'Gdy już weszliśmy do Rose Hall, przypominamy sobie słynnego artystę muzycznego z Jamajki - Boba Marleya. Jego muzyka, reggae, była głęboko zakorzeniona w kulturze kraju. Bob Marley był ikoną tego gatunku muzycznego, a jego teksty przekazywały ważne przesłania społeczne i polityczne.',
-                Kuchnia: 'Kolejny przysmak, który warto poznać, to popularne jamajskie danie - placki z nadzieniem, czyli "patty". To rodzaj wytrawnego ciasta, wypełnionego różnorodnymi nadzieniami, takimi jak kurczak, mielony mięso, ryba czy warzywa. Patty to uliczny przysmak, którym często zajadają się zarówno mieszkańcy, jak i turyści.',
+                Polityka: 'Podczas naszej podróży po historii Panamy, warto wspomnieć o roku, w którym kraj uzyskał niepodległość. Stało się to w 1903 roku, kiedy Panama odłączyła się od Kolumbii i stała się suwerennym państwem.',
+                Kultura: 'W duchu poznawania różnorodności Panamy, warto wiedzieć, że katolicyzm jest dominującą religią w kraju. Wiele tradycji i świąt panamskich związanych jest z tym wyznaniem.',
+                Kuchnia: 'Odkrywamy kolejną fascynującą historię kulinarnej podróży w Panamie! Danie Jampao przybyło tu z Chin, przynosząc ze sobą wyjątkowe smaki i tradycje, które wzbogacają kulinarną mozaikę kraju.',
             },
             {
-                Polityka: 'Wśród różnych sektorów gospodarki Jamajki, sektor usług odgrywa kluczową rolę. Stanowi on około 60% PKB kraju, co czyni go największym sektorem w gospodarce Jamajki.',
-                Kultura: 'Czas poznać kilka znanych postaci związanych z Jamajką. Shericka Jackson, Bob Marley, Usain Bolt. Wszyscy wymienieni są rdzennymi Jamajczykami i z sukcesem promują to miejsce na całym świecie.',
-                Kuchnia: 'Chciałbym Cię wprowadzić w tajemnice jamajskiej kuchni i opowiedzieć o kolejnym niezwykłym daniu - callaloo. To zupa przygotowywana z różnych rodzajów zielonych liści, które są gotowane z przyprawami, takimi jak cebula, czosnek, czerwona papryka i tymianek. To smaczne i pożywne danie, które świetnie komponuje się z innymi przysmakami Jamajki.',
+                Polityka: 'Obecnie, czyli w roku 2023, prezydentem Panamy jest Laurentino Cortizo. Jego rządy wpływają na rozwój kraju i kształtują jego politykę zagraniczną.',
+                Kultura: 'Kiedy będziemy świętować i tańczyć na naszych pirackich przyjęciach, nie zapomnij o tradycyjnej muzyce i tańcu Panamy - Tamborito. To wspaniałe widowisko często występuje podczas festiwali, a rytmiczne bębny sprawiają, że nikt nie stoi w miejscu.',
+                Kuchnia: 'Podczas naszej podróży po różnorodności napojów Panamy, warto poznać tajemnice napoju Saril. Niektóre warianty tego napoju mają w składzie cynamon, który nadaje mu nie tylko smaku, ale także charakterystycznego aromatu.',
             },
             {
-                Polityka: 'Jamajka jest podzielona na 3 hrabstwa, które towarzyszą nam podczas tej wędrówki po kraju. Każde hrabstwo ma swoje unikalne cechy i atrakcje, które warto odkryć.',
-                Kultura: 'Kontynuując temat muzyki, reggae jest nieodłącznie związane z Jamajką. To nie tylko gatunek muzyczny, ale także symbol kultury jamajskiej i ruchu Rastafari. Reggae wyrosło z lokalnych wpływów, takich jak ska i rocksteady, i stało się rozpoznawalne na całym świecie dzięki artystom, takim jak Bob Marley.',
-                Kuchnia: 'Gdy pragniesz ochłodzenia w gorący dzień, spróbuj sorrel, napoju przygotowanego z kwiatu hibiskusa. Jest to popularny napój na Jamajce, szczególnie podawany w okresie świątecznym. Sorrel ma orzeźwiający smak i często jest przygotowywany z dodatkiem przypraw, takich jak goździki czy cynamon.',
+                Polityka: 'Podczas naszej podróży finansowej, zauważysz, że oficjalną walutą Panamy jest balboa. Chociaż ma ona taką samą wartość jak dolar amerykański, to rzadko jest używana, a dolar amerykański jest szeroko akceptowany w kraju.',
+                Kultura: 'Podczas naszej podróży w głąb historii Panamy, warto poznać znaczenie Río Chagres. Ta najdłuższa rzeka w kraju odgrywała ważną rolę w dziejach, a jej znaczenie wciąż wpływa na życie mieszkańców.',
+                Kuchnia: 'W kulinarnym zderzeniu kontynentów, danie "Ropa Vieja" reprezentuje potrawę o pochodzeniu europejskim. Jego tradycje kulinarnego dziedzictwa sięgają odległych czasów, wpływając na smaki Panamy.',
             },
             {
-                Polityka: 'Wiedziałeś, że eksport chemii nieorganicznej przyniósł Jamajce największe zyski w 2020 roku? To jeden z ważnych sektorów eksportowych kraju, który przyczynia się do jego rozwoju ekonomicznego.',
-                Kultura: 'W tradycyjnej muzyce jamajskiej odgrywa kluczową rolę bęben. Ten instrument stanowi serce wielu rytmicznych utworów, które wabią do tańca i świętowania. Bębny są wykorzystywane również podczas różnych ceremonii i obrzędów na Jamajce.',
-                Kuchnia: 'Podczas swojej podróży po Jamajce, nie zapomnij o smakowitych sałatkach. Wielkim hitem są sałatki z mango i ananasami, które dodają im egzotycznego smaku i soczystości. To idealne danie na upalne dni, które dostarcza mnóstwa witamin i pozytywnej energii.',
+                Polityka: 'Gdy nasz statek wpływa do portu w Panamie, witamy w jej stolicy, która nosi tę samą nazwę - Panama. To dynamiczne miasto pełne kontrastów, gdzie nowoczesna architektura splata się z kolonialnymi wpływami.',
+                Kultura: 'W takt muzyki i tańca, przenosimy się na kulturalne wydarzenie w Panamie, które nie może nas ominąć - karnawał Las Tablas. To jedno z najważniejszych świąt w kraju, pełne barwnych parad, radości i tradycyjnych przebrań.',
+                Kuchnia: 'Kiedy delektujemy się smakiem dania "Bistec Picado", jego głównym składnikiem jest grillowana wołowina, która dzięki odpowiedniemu marynowaniu jest wyjątkowo soczysta i aromatyczna.',
             },
             {
-                Polityka: 'Wiedziałeś, że eksport chemii nieorganicznej przyniósł Jamajce największe zyski w 2020 roku? To jeden z ważnych sektorów eksportowych kraju, który przyczynia się do jego rozwoju ekonomicznego.',
-                Kultura: 'Jamajczycy są znani nie tylko z muzyki, ale także z sukcesów sportowych. W szczególności, w lekkoatletyce zdobyli wiele olimpijskich medali, co uczyniło ich krajem znanym z utalentowanych biegaczy, skoczków i sprinterów.',
-                Kuchnia: 'Jedno z najbardziej aromatycznych i smakowitych dań, które warto spróbować na Jamajce, to "run down". W tej tradycyjnej potrawie, ryba jest duszona z różnorodnymi warzywami i aromatycznymi przyprawami. To prawdziwy festiwal smaków, który przywołuje na myśl magię tej karaibskiej wyspy.',
+                Polityka: 'Panama graniczy z jednym państwem, a mianowicie z Kolumbią. Granica między tymi krajami przebiega na wschód od kanału panamskiego.',
+                Kultura: 'Podczas naszej morskiej wyprawy, warto odkryć największą wyspę Panamy - Coiba. To piękne miejsce o bogatej florze i faunie, które stanowi naturalny skarb kraju.',
+                Kuchnia: 'Na pirackim stole nie może zabraknąć dania "Patacon". Jest to potrawa przygotowywana z zielonego plantana, który jest krojony w plastry i smażony do chrupkości, nadając mu niepowtarzalny smak i teksturę.',
             },
             {
-                Polityka: 'Na stanowisku premiera Jamajki, w roku 2023, znajduje się Andrew Holness. Jego rządy wpływają na różnorodne aspekty życia na wyspie, w tym na ekonomię, kulturę i politykę.',
-                Kultura: 'Rastafari to fascynujący ruch religijny wywodzący się z Jamajki. Jego wyznawcy, zwani Rastafarianami, kultywują różnorodne wierzenia i praktyki, a także łączą je z miłością do muzyki reggae i natury. To wyjątkowy ruch, który wywarł wpływ na kulturę jamajską.',
-                Kuchnia: 'Jeśli masz ochotę na deser, nie możesz ominąć Sweet Potato Pudding. Jest to przepyszna słodka uczta, przygotowywana z gotowanych batatów i mleka kokosowego. Pudding jest doskonale doprawiony cynamonem, wanilią i goździkami, co sprawia, że każdy kęs to prawdziwa rozkosz dla podniebienia.',
+                Polityka: 'Podczas naszej ekonomicznej podróży, warto zauważyć, że jeden z głównych towarów eksportowych Panamy to banany. Te pyszne owoce stanowią ważny składnik gospodarki kraju.',
+                Kultura: 'Różnorodność kulturowa Panamy jest niesamowita! Na tych ziemiach spotkamy różne etniczne grupy, takie jak Mestizo, Indianie i Afro-Panamczycy, które współtworzą fascynującą mozaikę kulturową kraju.',
+                Kuchnia: 'Czas odkryć kolejne skarby kulinarnego dziedzictwa Panamy! W daniu "Tamales" głównym składnikiem są liście bananowca, które nadają temu smakowitemu pakunkowi nie tylko wyjątkowego smaku, ale także charakterystycznego aromatu.',
             },
             {
-                Polityka: 'Podczas swojej podróży, odwiedź stolicę Jamajki - Kingston. To dynamiczne miasto pełne kultury, muzyki i życia nocnego. Kingston to ważne centrum polityczne, gospodarcze i kulturalne kraju.',
-                Kultura: 'Podczas festiwali i ważnych uroczystości na Jamajce, wiele osób ubiera się w tradycyjny strój o nazwie Dashiki. To kolorowa i luźna odzież, często zdobiona wzorami i haftami. Dashiki stanowi dumę i wyraz tożsamości dla wielu Jamajczyków.',
-                Kuchnia: 'Gdy słyszysz słowo "jerk", pewnie od razu myślisz o wyjątkowym smaku i aromacie. I masz rację! Jamaiczyński Jerk to unikalna marynata, którą używa się do przyprawiania mięsa, głównie kurczaka i wieprzowiny. Charakteryzuje się intensywnymi przyprawami, takimi jak ostra papryka, cebula, czosnek i zioła.',
+                Polityka: 'Wśród różnych organizacji międzynarodowych, do których Panama należy, nie znajdziemy organizacji o nazwie OMOC. Może to być dobra okazja, byś dowiedział się, jakie organizacje międzynarodowe są związane z Panamą.',
+                Kultura: 'Wśród tajemnic Panamy, oto zagadka do rozwiązania - jak nazywa się zabytek przedstawiony na zdjęciu? To Panama Viejo, ruiny historycznego miasta, które zachowują piękno i historię minionych wieków.',
+                Kuchnia: 'W trakcie naszej kulinarno-historycznej wyprawy, warto zwrócić uwagę na składnik, który jest używany do nadania smaku i koloru tradycyjnym potrawom panamskim. To papryka, która wprowadza wyraziste akcenty smakowe do wielu dań.',
             },
             {
-                Polityka: 'Podczas swojej podróży, odwiedź stolicę Jamajki - Kingston. To dynamiczne miasto pełne kultury, muzyki i życia nocnego. Kingston to ważne centrum polityczne, gospodarcze i kulturalne kraju.',
-                Kultura: 'Na zakończenie naszej podróży po Jamajce, musimy wspomnieć o charakterystycznym tańcu z tego kraju - Dutty wine. To dynamiczny i pełen energii styl tańca, który wymaga szybkich ruchów bioder i całego ciała. Jest to popularny taniec, który często gości na imprezach i festiwalach na Karaibach.',
-                Kuchnia: 'Podczas pobytu na Jamajce, nie zapomnij spróbować słynnego rumu, który jest jednym z najważniejszych produktów eksportowych kraju. Jamaika słynie z produkcji doskonałego rumu, który jest wspaniałym dodatkiem do wielu drinków i koktajli. To idealna okazja, by podziwiać zachody słońca nad karaibskim morzem, delektując się wspaniałym trunkiem.',
+                Polityka: 'Na koniec, chciałbym podzielić się zagadką związaną z Panamą. Co to jest? To symbol panamskich sił powietrznych. Może to być interesująca zagadka do rozwiązania podczas naszej podróży. Czy potrafisz odgadnąć, co to jest?',
+                Kultura: 'Kiedy już zgłębimy wiedzę o Panamie, warto wrócić do początków jej odkrycia. W roku 1502, Krzysztof Kolumb przypłynął do Panamy i odbył pierwsze europejskie podróże w tym regionie, otwierając nowe rozdziały w historii geografii.',
+                Kuchnia: 'Podczas naszej kulinarno-kulturowej wyprawy, nie możemy zapomnieć o narodowym daniu Panamy - Sancocho. To pyszne danie z bogactwem smaków, które odzwierciedla różnorodność kulturową kraju i jest wielkim źródłem dumy dla Panamczyków.',
             },
         ]
 
-        }else if(regionFlag = "Havana"){
+        }else if(regionFlag === "Havana"){
             this.pirateText = [{}]
         }
 
