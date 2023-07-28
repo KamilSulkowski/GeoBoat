@@ -18,6 +18,7 @@ export default class UI extends Phaser.Scene {
         this.rightScrollScrolled = false;
         this.regionText = null;
         this.HelloScreenSeen = false;
+        this.hitSound = null;
     }
     preload() {
         this.load.scenePlugin({
@@ -28,7 +29,7 @@ export default class UI extends Phaser.Scene {
     }
 
     create(data) {
-
+        this.hitSound = this.sound.add('hit', {loop: false, volume: 0.5});
         this.gameScene = this.scene.get('worldMap');
         this.sceneJam = this.scene.get('Jamajka');
         this.sceneHav = this.scene.get('Havana');
@@ -221,7 +222,16 @@ export default class UI extends Phaser.Scene {
 
     boatRepairAnimation(){
         // Identyfikator zniszczonej łodzi
-        this.boatRepair = this.add.sprite(this.bw*0.5, this.bh*0.5, "repairAnim")
+        if (this.scene.currentMap === 'worldMap') {
+            this.boatRepair = this.add.sprite(this.scene.boatCurrentX, this.scene.boatCurrentY, "repairAnim")
+        } else if (this.scene.currentMap === 'jamajka') {
+            this.boatRepair = this.add.sprite(this.sceneJam.boat.x, this.sceneJam.boat.y, "repairAnim")
+        } else if (this.scene.currentMap === 'havana') {
+            this.boatRepair = this.add.sprite(this.sceneHav.boat.x, this.sceneHav.boat.y, "repairAnim")
+        } else if (this.scene.currentMap === 'panama') {
+            this.boatRepair = this.add.sprite(this.scenePan.boat.x, this.scenePan.boat.y, "repairAnim")
+        }
+
         this.anims.create({
             key: 'hammerAnimation',
             frames: this.anims.generateFrameNumbers('repairAnim', { start: 0, end: 3 }),
@@ -276,6 +286,8 @@ export default class UI extends Phaser.Scene {
         setHeartState(collision){
             this.scene.shipCooldown = 0;
             this.scene.shipDamaged = true;
+
+            this.hitSound.play();
             this.scene.HP -= 1;
             const temp = this.heartsArray[this.scene.HP];
             temp.setTexture('emptyHeart');

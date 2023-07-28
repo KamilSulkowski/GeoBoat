@@ -493,6 +493,8 @@ async function showEndScreen() {
         this.quizBackground.destroy();
 
         if (i === 1) {
+            const lvlupSound = this.sound.add('lvlup', {loop: false, volume: 0.5});
+            lvlupSound.play();
             this.scroll = this.physics.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY, "scrollLvl");
             this.anims.create({
                 key: 'scrollAnimation',

@@ -283,8 +283,7 @@ export class Jamajka extends Phaser.Scene {
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
         const changeAngle = 1;
-        //const isOnDeepWater = this.physics.overlap(this.boat, this.deepwater);
-        // Wyhamowanie przy dryfowaniu (odbiciu od lądu)
+
         if(this.adrift === 1){
             if(this.gameScene.timer >= 100){
                 this.boatSpeed += 10;

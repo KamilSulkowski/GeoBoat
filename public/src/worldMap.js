@@ -36,10 +36,10 @@ export class WorldMap extends Phaser.Scene {
         this.gameScene = this.scene.get('game');
 
         this.seagullSound = this.sound.add('seagulWorld', {loop: true});
-        this.windSound = this.sound.add('windWorld', {loop: true, volume: 0.3 });
+        this.windSound = this.sound.add('windWorld', {loop: true, volume: 0.1 });
 
-        this.windSound.play();
-        this.seagullSound.play();
+        this.playSoundWithRandomDelay(this.windSound, 5, 15);
+        this.playSoundWithRandomDelay(this.seagullSound, 5, 15);
         // Ładowanie mapy
         const worldMap = this.make.tilemap({key: 'worldMap'});
 
@@ -162,6 +162,7 @@ export class WorldMap extends Phaser.Scene {
         this.gameScene.timer += delta;
         this.gameScene.shipCooldown += delta;
         this.manageBirds();
+
         if (this.waves.getLength() < 300) {
             this.createWaves();
         }
@@ -452,5 +453,12 @@ export class WorldMap extends Phaser.Scene {
             });
         }
     }
+    playSoundWithRandomDelay(sound, minDelay, maxDelay) {
+        const delay = Phaser.Math.Between(minDelay, maxDelay) * 1000; // Zamiana sekund na milisekundy
+        setTimeout(() => {
+            sound.play();
+        }, delay);
+    }
+
 }
 

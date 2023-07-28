@@ -97,6 +97,9 @@ export default class Preloader extends Phaser.Scene {
         this.load.audio('seagulWorld', 'assets/music/MountainPeak.wav');
         this.load.audio('seagulRegion', 'assets/music/Seagulls-sound.mp3');
         this.load.audio('windWorld', 'assets/music/WindDeep.wav');
+        this.load.audio('lvlup', 'assets/music/lvlup.wav');
+        this.load.audio('hit', 'assets/music/hit.wav');
+        this.load.audio('background', 'assets/music/background.wav');
     }
     create() {
         this.scene.start('login');
