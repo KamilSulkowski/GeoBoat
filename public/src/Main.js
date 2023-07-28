@@ -20,7 +20,7 @@ export default new Phaser.Game({
         arcade: {
             gravity: { y: 0 },
             pixelArt: true,
-            debug: true
+            debug: false
         },
     },
     scene: [Preloader, Login, UI, Game, WorldMap, Jamajka, Havana, Panama],
