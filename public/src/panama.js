@@ -17,6 +17,7 @@ export class Panama extends Phaser.Scene {
         this.waveDelay = 2000; // Delay between each wave appearance
         this.lastWaveTime = 0; // Timestamp of the last wave appearance
         this.regionFlag = "Panama";
+        this.seagullSound = null;
     }
     preload(){
 
@@ -26,6 +27,9 @@ export class Panama extends Phaser.Scene {
         this.gameScene.currentMap = 'panama';
         //Pobranie wartości z pliku UI.js
         this.uiScene = this.scene.get('ui');
+
+        this.seagullSound = this.sound.add('seagulRegion', {loop: true, volume: 0.1});
+        this.seagullSound.play();
 
         const panama = this.make.tilemap({key: 'panama'});
 
@@ -177,8 +181,6 @@ export class Panama extends Phaser.Scene {
         this.boatEngine(this.engine, this.gameScene.timer);
         this.gameScene.currentBoatSpeed = this.boatSpeed;
         this.cameras.main.startFollow(this.boat);
-        this.gameScene.boatCurrentX = this.boat.x;
-        this.gameScene.boatCurrentY = this.boat.y;
         // Sprawdzenie, czy łódka opuściła obszar kolizji
         this.inZone = false;
 
@@ -207,7 +209,6 @@ export class Panama extends Phaser.Scene {
     handleCollision(){
         if (this.gameScene.timer >= 100) {
             console.log("KOLIZJA");
-            this.boat.setTint(0xff0000);
             this.boatSpeed = this.gameScene.boatMaxSpeed;
 
             this.adrift = 1;
@@ -242,6 +243,7 @@ export class Panama extends Phaser.Scene {
         console.log("zmiana mapy1: " + this.gameScene.currentMap + " inzone: " + this.inZone);
         switch (this.gameScene.currentMap) {
             case 'panama':
+                this.seagullSound.stop();
                 this.gameScene.boatRespawnX = 3150;
                 this.gameScene.boatRespawnY = 1750;
                 this.gameScene.currentMap = 'worldMap';
@@ -260,8 +262,7 @@ export class Panama extends Phaser.Scene {
         const dx = direction.x; //Kierunek rotacji x
         const dy = direction.y; //Kierunek rotacji y
         const changeAngle = 1;
-        //const isOnDeepWater = this.physics.overlap(this.boat, this.deepwater);
-        // Wyhamowanie przy dryfowaniu (odbiciu od lądu)
+
         if(this.adrift === 1){
             if(this.gameScene.timer >= 100){
                 this.boatSpeed += 10;

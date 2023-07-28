@@ -5,6 +5,11 @@ export class Login extends Phaser.Scene {
     }
     preload() {}
     async create() {
+        const seagullSound = this.sound.add('seagulWorld', {loop: true, volume: 0.5});
+        const background = this.sound.add('background', {loop: true, volume: 0.1 });
+
+        background.play();
+        seagullSound.play();
         //Pobranie bazy użytkowników
         await getUserData.call(this);
         console.log(this.userData);
@@ -60,6 +65,7 @@ export class Login extends Phaser.Scene {
             console.log('Login:', login);
 
             if (login === 'admin') {
+                seagullSound.stop();
                 form.remove();
                 scene.stop('login');
                 scene.run('ui', {login, userData});

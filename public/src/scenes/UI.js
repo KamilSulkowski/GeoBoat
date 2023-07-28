@@ -19,6 +19,7 @@ export default class UI extends Phaser.Scene {
         this.regionText = null;
         this.HelloScreenSeen = false;
         this.oldXP = 0;
+        this.hitSound = null;
     }
     preload() {
         this.load.scenePlugin({
@@ -29,6 +30,7 @@ export default class UI extends Phaser.Scene {
     }
 
     create(data) {
+        this.hitSound = this.sound.add('hit', {loop: false, volume: 0.5});
         this.gameScene = this.scene.get('worldMap');
         this.sceneJam = this.scene.get('Jamajka');
         this.sceneHav = this.scene.get('Havana');
@@ -222,7 +224,16 @@ export default class UI extends Phaser.Scene {
 
     boatRepairAnimation(){
         // Identyfikator zniszczonej łodzi
-        this.boatRepair = this.add.sprite(this.bw*0.5, this.bh*0.5, "repairAnim")
+        if (this.scene.currentMap === 'worldMap') {
+            this.boatRepair = this.add.sprite(this.scene.boatCurrentX, this.scene.boatCurrentY, "repairAnim")
+        } else if (this.scene.currentMap === 'jamajka') {
+            this.boatRepair = this.add.sprite(this.sceneJam.boat.x, this.sceneJam.boat.y, "repairAnim")
+        } else if (this.scene.currentMap === 'havana') {
+            this.boatRepair = this.add.sprite(this.sceneHav.boat.x, this.sceneHav.boat.y, "repairAnim")
+        } else if (this.scene.currentMap === 'panama') {
+            this.boatRepair = this.add.sprite(this.scenePan.boat.x, this.scenePan.boat.y, "repairAnim")
+        }
+
         this.anims.create({
             key: 'hammerAnimation',
             frames: this.anims.generateFrameNumbers('repairAnim', { start: 0, end: 3 }),
@@ -238,7 +249,7 @@ export default class UI extends Phaser.Scene {
         this.menu.angle += this.scene.currentBoatSpeed / 300;
         // Update paska szybkości
         this.updateSpeedBar();
-        this.coords.setText('Lat - ' + Math.floor(this.gameScene.boat.x) + ' Long - ' + Math.floor(this.gameScene.boat.y));
+        this.coords.setText('Lat - ' + Math.floor(this.scene.boatCurrentX) + ' Long - ' + Math.floor(this.scene.boatCurrentY));
         this.regionTextProfil.text = 'Region: ' + this.scene.currentMap;
         try {
             this.regionText.text = 'Region: ' + this.scene.currentMap;
@@ -266,7 +277,7 @@ export default class UI extends Phaser.Scene {
 
         //Pobieranie położenia gracza
         if (this.userData)
-            updateLocation(Math.round(this.gameScene.boat.x), Math.round(this.gameScene.boat.y), this.user.id);
+            updateLocation(Math.round(this.scene.boatCurrentX), Math.round(this.scene.boatCurrentY), this.user.id);
 
         // Update tekstu stanu łodzi
         if (this.scene.HP === 0) {
@@ -288,6 +299,8 @@ export default class UI extends Phaser.Scene {
         setHeartState(collision){
             this.scene.shipCooldown = 0;
             this.scene.shipDamaged = true;
+
+            this.hitSound.play();
             this.scene.HP -= 1;
             const temp = this.heartsArray[this.scene.HP];
             temp.setTexture('emptyHeart');
