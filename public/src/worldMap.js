@@ -68,7 +68,7 @@ export class WorldMap extends Phaser.Scene {
         this.boat = this.physics.add.sprite(this.gameScene.boatRespawnX, this.gameScene.boatRespawnY, "boat");
         this.jamajka = this.physics.add.sprite(3150, 1680 , "QPH");
         this.havana = this.physics.add.sprite(1670, 650 , "QPH");
-        this.panama = this.physics.add.sprite(3250, 1580 , "QPH");
+        this.panama = this.physics.add.sprite(2267, 3690 , "QPH");
         // Zmiana obszaru kolizji dla gracza
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
         this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
