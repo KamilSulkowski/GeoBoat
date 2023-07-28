@@ -22,6 +22,8 @@ export class WorldMap extends Phaser.Scene {
         this.waveDelay = 2000; // Delay between each wave appearance
         this.lastWaveTime = 0; // Timestamp of the last wave appearance
         this.deepwaterIsClose = false;
+        this.seagullSound = null;
+        this.windSound = null;
     }
 
     preload() {
@@ -33,6 +35,11 @@ export class WorldMap extends Phaser.Scene {
         this.uiScene = this.scene.get('ui');
         this.gameScene = this.scene.get('game');
 
+        this.seagullSound = this.sound.add('seagulWorld', {loop: true});
+        this.windSound = this.sound.add('windWorld', {loop: true, volume: 0.3 });
+
+        this.windSound.play();
+        this.seagullSound.play();
         // Ładowanie mapy
         const worldMap = this.make.tilemap({key: 'worldMap'});
 
@@ -144,10 +151,7 @@ export class WorldMap extends Phaser.Scene {
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
 
-        if (this.deepwaterIsClose) {
-            this.deepwater.setCollisionByProperty({collides: false});
-            this.physics.add.collider(this.boat, this.deepwater, this.handleCollision , null, this);
-        }
+        this.physics.add.collider(this.boat, this.deepwater, this.handleCollision , null, this);
         this.physics.add.collider(this.boat, this.ground, this.handleCollision , null, this);
         this.physics.add.collider(this.boat, this.extra, this.handleCollision , null, this);
     }
@@ -161,13 +165,9 @@ export class WorldMap extends Phaser.Scene {
         if (this.waves.getLength() < 300) {
             this.createWaves();
         }
-        console.log(this.deepwaterIsClose + " " + this.physics.add.collider(this.boat, this.deepwater));
         // Cooldown debuffa (Naprawa łodzi w czasie)
         this.shipDebuff()
-        // Zmiana strzałki kompasu w zależności od pozycji łodzi
-        // if(this.uiScene){
-        //     this.uiScene.setCompassArrowAngle(this.boat.angle - 90);
-        // }
+
         if(this.boatSpeed !== 0){
             this.boat.anims.resume();
         }else{
@@ -204,11 +204,6 @@ export class WorldMap extends Phaser.Scene {
                 this.text3 = null;
                 this.inZoneKey.destroy();
             }
-        }
-        this.inDeepWaterZone = false;
-        if (this.inDeepWaterZone === false && this.physics.overlap(this.boat, this.deepwater) === false) {
-            this.gameScene.boatMaxSpeed = 150;
-            this.gameScene.boatMaxReverseSpeed = -50;
         }
     }
     handleCollision(){
@@ -248,14 +243,18 @@ export class WorldMap extends Phaser.Scene {
         console.log("zmiana mapy1: " + this.gameScene.currentMap + " inzone: " + this.inZone);
         switch (this.region) {
             case 'jamajka':
-                this.gameScene.boatRespawnX = 600;
-                this.gameScene.boatRespawnY = 600;
+                this.windSound.stop();
+                this.seagullSound.stop();
+                this.gameScene.boatRespawnX = 1800;
+                this.gameScene.boatRespawnY = 1800;
                 this.gameScene.currentMap = 'jamajka';
                 this.scene.stop('worldMap');
                 this.scene.launch('jamajka');
                 this.scene.sendToBack('jamajka');
                 break;
             case 'havana':
+                this.windSound.stop();
+                this.seagullSound.stop();
                 this.gameScene.boatRespawnX = 1800;
                 this.gameScene.boatRespawnY = 1800;
                 this.gameScene.currentMap = 'havana';
@@ -264,6 +263,8 @@ export class WorldMap extends Phaser.Scene {
                 this.scene.sendToBack('havana');
                 break;
             case 'panama':
+                this.windSound.stop();
+                this.seagullSound.stop();
                 this.gameScene.boatRespawnX = 1800;
                 this.gameScene.boatRespawnY = 1800;
                 this.gameScene.currentMap = 'panama';

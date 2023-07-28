@@ -28,6 +28,7 @@ export default class UI extends Phaser.Scene {
     }
 
     create(data) {
+
         this.gameScene = this.scene.get('worldMap');
         this.sceneJam = this.scene.get('Jamajka');
         this.sceneHav = this.scene.get('Havana');
@@ -236,7 +237,7 @@ export default class UI extends Phaser.Scene {
         this.menu.angle += this.scene.currentBoatSpeed / 300;
         // Update paska szybkości
         this.updateSpeedBar();
-        this.coords.setText('Lat - ' + Math.floor(this.gameScene.boat.x) + ' Long - ' + Math.floor(this.gameScene.boat.y));
+        this.coords.setText('Lat - ' + Math.floor(this.scene.boatCurrentX) + ' Long - ' + Math.floor(this.scene.boatCurrentY));
         this.regionTextProfil.text = 'Region: ' + this.scene.currentMap;
         try {
             this.regionText.text = 'Region: ' + this.scene.currentMap;
@@ -253,7 +254,7 @@ export default class UI extends Phaser.Scene {
 
         //Pobieranie położenia gracza
         if (this.userData)
-            updateLocation(Math.round(this.gameScene.boat.x), Math.round(this.gameScene.boat.y), this.user.id);
+            updateLocation(Math.round(this.scene.boatCurrentX), Math.round(this.scene.boatCurrentY), this.user.id);
 
         // Update tekstu stanu łodzi
         if (this.scene.HP === 0) {

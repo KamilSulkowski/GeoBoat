@@ -17,6 +17,7 @@ export class Jamajka extends Phaser.Scene {
         this.waveDelay = 2000; // Delay between each wave appearance
         this.lastWaveTime = 0; // Timestamp of the last wave appearance
         this.regionFlag = "Jamajka";
+        this.seagullSound = null;
     }
     preload(){
 
@@ -28,6 +29,10 @@ export class Jamajka extends Phaser.Scene {
         this.gameScene = this.scene.get('game');
         this.gameScene.currentMap = 'jamajka';
         this.uiScene = this.scene.get('ui');
+
+        this.seagullSound = this.sound.add('seagulRegion', {loop: true, volume: 0.1});
+        this.seagullSound.play();
+
         const jamajka = this.make.tilemap({key: 'jamajka'});
 
         this.tileSetWorld = jamajka.addTilesetImage('tile', 'tiled',16,16);
@@ -77,6 +82,16 @@ export class Jamajka extends Phaser.Scene {
         this.boat.setPipeline('TextureTintPipeline'); // Enable the Texture Tint Pipeline
         this.boat.body.setSize(28, 22, 0.5, 0.5); // Set the size and offset of the collision body
 
+        // Animacja łódki gracza
+        this.anims.create({
+            key: 'boatAnimation',
+            frames: this.anims.generateFrameNumbers('boatAnim', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.boat.play('boatAnimation');
+        this.boat.anims.pause();
+
         //Animacja strzałki
         this.anims.create({
             key: 'backToWorldAnimation',
@@ -86,8 +101,7 @@ export class Jamajka extends Phaser.Scene {
         });
         this.backToWorld.play('backToWorldAnimation');
 
-        this.boat.play('boatAnimation');
-        this.boat.anims.pause();
+
 
         //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
         //obiektem aktualnie może być łódka
@@ -142,15 +156,8 @@ export class Jamajka extends Phaser.Scene {
             }
         });
 
-        // Animacja łódki gracza
-        this.anims.create({
-            key: 'boatAnimation',
-            frames: this.anims.generateFrameNumbers('boatAnim', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        });
-        this.boat.play('boatAnimation');
-        this.boat.anims.pause();
+
+
 
         // Zmienna do ustawienia sterowania
         this.keys = this.input.keyboard.createCursorKeys();
@@ -196,8 +203,6 @@ export class Jamajka extends Phaser.Scene {
         this.boatEngine(this.engine, this.gameScene.timer);
         this.gameScene.currentBoatSpeed = this.boatSpeed;
         this.cameras.main.startFollow(this.boat);
-        this.gameScene.boatCurrentX = this.boat.x;
-        this.gameScene.boatCurrentY = this.boat.y;
         // Sprawdzenie, czy łódka opuściła obszar kolizji
         this.inZone = false;
         if (!this.inZone && !this.physics.overlap(this.boat, this.cityPort)) {
@@ -225,7 +230,6 @@ export class Jamajka extends Phaser.Scene {
     handleCollision(){
         if (this.gameScene.timer >= 100) {
             console.log("KOLIZJA");
-            this.boat.setTint(0xff0000);
             this.boatSpeed = this.gameScene.boatMaxSpeed;
 
             this.adrift = 1;
@@ -260,6 +264,7 @@ export class Jamajka extends Phaser.Scene {
         console.log("zmiana mapy1: " + this.gameScene.currentMap + " inzone: " + this.inZone);
         switch (this.gameScene.currentMap) {
             case 'jamajka':
+                this.seagullSound.stop();
                 this.gameScene.boatRespawnX = 3150;
                 this.gameScene.boatRespawnY = 1750;
                 this.gameScene.currentMap = 'worldMap';
@@ -357,10 +362,6 @@ export class Jamajka extends Phaser.Scene {
         if (engine = 1){
             this.boat.setVelocity(-this.boatSpeed *dx, -this.boatSpeed *dy);
         }
-    }
-    deepWaterHandleCollision() {
-        console.log("deepwater");
-
     }
     // Function to manage birds
     manageBirds() {

@@ -92,6 +92,11 @@ export default class Preloader extends Phaser.Scene {
 
         this.load.image("roseHall", "assets/roseHall.png");
         this.load.image("logoPanama", "assets/logoPanama.png");
+
+        //MUSIC
+        this.load.audio('seagulWorld', 'assets/music/MountainPeak.wav');
+        this.load.audio('seagulRegion', 'assets/music/Seagulls-sound.mp3');
+        this.load.audio('windWorld', 'assets/music/WindDeep.wav');
     }
     create() {
         this.scene.start('login');
