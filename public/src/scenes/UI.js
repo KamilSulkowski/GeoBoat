@@ -20,6 +20,7 @@ export default class UI extends Phaser.Scene {
         this.HelloScreenSeen = false;
         this.oldXP = 0;
         this.hitSound = null;
+
     }
     preload() {
         this.load.scenePlugin({
@@ -41,6 +42,7 @@ export default class UI extends Phaser.Scene {
 
         this.userData = data.userData;
         console.log(this.userData);
+        this.user = this.userData.find((row) => row.nazwa === this.userName);
 
         this.scene = this.scene.get('game');
         console.log('hp: ', this.scene.HP);
@@ -145,7 +147,7 @@ export default class UI extends Phaser.Scene {
         this.ExpBar = this.add.graphics();
         this.ExpBar.fillStyle(0x222222, 0.3);
         this.ExpBar.fillRect(this.bw-(this.bw-20), this.bh-(this.bh-84), this.bw-(this.bw-140), this.bh-(this.bh-28));
-        this.expText = this.add.text(this.bw-(this.bw-90), this.bh-(this.bh-98), 'Level 1')
+        this.expText = this.add.text(this.bw-(this.bw-90), this.bh-(this.bh-98), 'Level ' + this.user.poziom)
         .setOrigin(0.5)
         .setScale(1)
         .setFontSize(14)
