@@ -86,17 +86,6 @@ export class Panama extends Phaser.Scene {
 
         //wpływanie na obiekt wyświetla się alert czy chce zmienić region po kliknięciu E zmienia się region
         //obiektem aktualnie może być łódka
-        this.physics.add.overlap(this.boat, this.port, () => {
-            this.inZone = true;
-            if (this.inZone === true && !this.text) {
-                this.text = this.add.text(this.port.x + 0 ,this.port.y - 50, 'Wciśnij E, żeby dowiedzieć się czegoś o tym miejscu.')
-                    .setScale(1.5)
-                    .setBackgroundColor('#808080')
-                    .setColor('#000000')
-                    .setStyle({fontFamily: "Arial"});
-                this.inZoneKey = this.input.keyboard.addKey('E')
-            }
-        });
 
         //Wpływanie na quizy, alert
         this.physics.add.overlap(this.boat, this.cityPort, () => {
