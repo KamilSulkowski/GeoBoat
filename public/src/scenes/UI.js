@@ -149,6 +149,7 @@ export default class UI extends Phaser.Scene {
         .setFontSize(14)
         .setColor('#ffffff')
         .setStyle({fontFamily: "CustomFont"});
+        this.expText.setInteractive();
 
         // Speedbar
         this.fillSpeedBar = this.add.graphics();
@@ -249,7 +250,12 @@ export default class UI extends Phaser.Scene {
         if (this.userData) {
             this.user = this.userData.find((row) => row.nazwa === this.userName);
             this.userText.setText(this.userName);
-            this.expText.setText('Level ' + this.user.poziom);
+            this.expText.on('pointerover', () => {
+                this.expText.setText('XP: ' + this.user.punktyXP);
+            });
+            this.expText.on('pointerout', () => {
+                this.expText.setText('Level ' + this.user.poziom);
+            });
             this.oldXP = this.user.punktyXP
             this.updateExpBar();
         } 
