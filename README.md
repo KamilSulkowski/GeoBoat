@@ -24,7 +24,8 @@ Projekt GeoBoat został stworzony przy użyciu szeregu zaawansowanych technologi
 3. Wykonaj polecenie npm install w celu zainstalowania niezbędnych modułów.
 ### Uruchomienie
 1. W terminalu wykonaj polecenie npm start, aby uruchomić serwer gry.
-2. Otwórz przeglądarkę i przejdź pod adres http://localhost:8081/game.
+2. Otwórz przeglądarkę i przejdź pod adres http://localhost:8081/.
+3. Kiedy pojawi się ekran logowania, w pole loginu wpisz: admin.
 ### Rozgrywka
 1. Steruj postacią kapitana żaglowca za pomocą klawiszy WSAD.
 2. Przemierzaj tajemnicze regiony na mapie, aby zdobywać punkty doświadczenia (XP).
