@@ -18,7 +18,7 @@
     "fs": "^0.0.1-security",
     "md5": "^2.3.0",
     "phaser": "^3.60.0",
-    "phaser3-rex-plugins": "^1.60.3",
+    "phaser3-rex-plugins": "^1.60.4",
     "sqlite3": "^5.1.6"
   }
 }
