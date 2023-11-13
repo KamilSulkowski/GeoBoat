@@ -38,6 +38,7 @@ Ten projekt jest objęty licencją MIT. Szczegóły znajdują się w pliku LICEN
 - Kamil Sulkowski - https://github.com/KamilSulkowski
 - Kamil Oglęcki - https://github.com/koglecki
 - Bartosz Sobański - https://github.com/striker1523
+- Oliwia Raciborska - https://github.com/Olciara
 
 ## Podziękowania
 
